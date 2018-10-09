@@ -12,6 +12,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    //TODO: RecyclerView
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Snackbar.make(findViewById(android.R.id.content), "Not yet implemented", Snackbar.LENGTH_LONG).show();
             return true;
         }
 

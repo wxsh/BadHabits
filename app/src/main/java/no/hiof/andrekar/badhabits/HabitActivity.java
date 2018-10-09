@@ -2,6 +2,7 @@ package no.hiof.andrekar.badhabits;
 
 import android.app.DatePickerDialog;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,8 +18,8 @@ import model.Habit;
 
 public class HabitActivity extends AppCompatActivity {
 
-    //TODO 01: https://developer.android.com/guide/topics/ui/controls/pickers#java - Time/date picker for date field
-    //TODO 02: Cast Date field
+    //DONE 01: https://developer.android.com/guide/topics/ui/controls/pickers#java - Time/date picker for date field
+    //TODO 02: Cast Date field, or change field to accept string / Integers?
     //TODO 03: Save data
     //TODO 04: Logic to dynamically change fields to reflect type of habit
 
@@ -26,7 +27,7 @@ public class HabitActivity extends AppCompatActivity {
     private String description;
     private Date startDate;
     private EditText dateEditText;
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendarPick = Calendar.getInstance();
 
 
     @Override
@@ -42,16 +43,17 @@ public class HabitActivity extends AppCompatActivity {
                 //title = getText(R.id.newHabit_name);
                 //description = getText(R.id.newHabit_description);
                 //startDate = getText(R.id.newHabit_startDate);
-                Habit habit = new Habit(title, description, startDate);
+                //Habit habit = new Habit(title, description, startDate);
+                Snackbar.make(v, "Not yet implemented", Snackbar.LENGTH_LONG).show();
             }
         });
 
         dateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(HabitActivity.this, date, calendar
-                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(HabitActivity.this, date, calendarPick
+                        .get(Calendar.YEAR), calendarPick.get(Calendar.MONTH),
+                        calendarPick.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
@@ -60,9 +62,9 @@ public class HabitActivity extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            calendarPick.set(Calendar.YEAR, year);
+            calendarPick.set(Calendar.MONTH, month);
+            calendarPick.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             updateLabel();
         }
     };
@@ -70,10 +72,10 @@ public class HabitActivity extends AppCompatActivity {
 
     private void updateLabel() {
         dateEditText = (EditText) findViewById(R.id.newHabit_startDate);
-        String myFormat = "MM/dd/yy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        String myFormat = "dd/MM/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
 
-        dateEditText.setText(sdf.format(calendar.getTime()));
+        dateEditText.setText(sdf.format(calendarPick.getTime()));
     }
 
 

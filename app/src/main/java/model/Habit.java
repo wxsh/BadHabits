@@ -10,7 +10,7 @@ public class Habit {
     //Favourite boolean?
     private boolean isFavourite;
 
-    //Start date?
+    //Start date? - Maybe this is better as a String and cast it later?
     private Date startDate;
 
 
