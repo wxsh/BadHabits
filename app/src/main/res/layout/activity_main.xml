@@ -20,6 +20,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <!-- TODO: Do we need to have external content handling? Cleaner? -->
     <include layout="@layout/content_main" />
 
     <android.support.design.widget.FloatingActionButton
