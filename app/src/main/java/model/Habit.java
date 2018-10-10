@@ -1,9 +1,15 @@
 package model;
 //import no.hiof.andrekar.badhabits.R;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Habit {
+    //An ArrayList to contain all habits when they are created
+
+    //TODO: make this list create itself from stored files
+    public ArrayList<Habit> habits = new ArrayList<Habit>();
+
     //We need a title and description for our main class.
     private String title;
     private String description;
@@ -20,6 +26,8 @@ public class Habit {
         this.description = description;
         this.startDate = startDate;
         this.isFavourite = false;
+
+        habits.add(this);
     }
 
     //Getters
