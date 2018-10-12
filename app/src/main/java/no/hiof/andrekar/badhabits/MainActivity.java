@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import model.Habit;
+import model.SaveData;
+
 public class MainActivity extends AppCompatActivity {
 
     //TODO: RecyclerView

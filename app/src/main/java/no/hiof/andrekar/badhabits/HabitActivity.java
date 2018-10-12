@@ -9,12 +9,15 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import model.Habit;
+import model.SaveData;
 
 public class HabitActivity extends AppCompatActivity {
 
@@ -40,10 +43,17 @@ public class HabitActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //title = getText(R.id.newHabit_name);
-                //description = getText(R.id.newHabit_description);
-                //startDate = getText(R.id.newHabit_startDate);
-                //Habit habit = new Habit(title, description, startDate);
+                title = getText(R.id.newHabit_name).toString();
+                description = getText(R.id.newHabit_description).toString();
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
+                try {
+                    startDate = format.parse(getText(R.id.newHabit_startDate).toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Habit habit = new Habit(title, description, startDate);
+                SaveData saveData = new SaveData();
+                saveData.saveToFile(habit,"testers.txt");
                 Snackbar.make(v, "Not yet implemented", Snackbar.LENGTH_LONG).show();
             }
         });
