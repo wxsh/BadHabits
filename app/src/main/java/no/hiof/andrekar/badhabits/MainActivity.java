@@ -21,13 +21,6 @@ import model.Habit;
 
 public class MainActivity extends AppCompatActivity {
 
-    //TODO: RecyclerView
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
-    private ArrayList<String> mNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

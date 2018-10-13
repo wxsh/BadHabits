@@ -42,9 +42,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         //holder.habitGoal.setText(Habit.habits.get(position).getGoal());
 
 
-
-
-
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
