@@ -8,7 +8,7 @@ public class Habit {
     //An ArrayList to contain all habits when they are created
 
     //TODO: make this list create itself from stored files
-    public ArrayList<Habit> habits = new ArrayList<Habit>();
+    public static ArrayList<Habit> habits = new ArrayList<Habit>();
 
     //We need a title and description for our main class.
     private String title;

@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <android.support.v4.widget.CircleImageView
-        android:id="@+id/item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:src="@mipmap/ic_launcher" />
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:id="@+id/parent_layout">
 
     <TextView
+
+        android:id="@+id/habit_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="41dp"
-        android:layout_marginEnd="160dp"
-        android:layout_toStartOf="@+id/item"
         android:text="Habit"
-        android:textColor="@android:color/black"
+        android:textAlignment="textStart"
+        android:textColor="#000"
         android:textSize="24sp" />
+
+    <TextView
+
+        android:id="@+id/habit_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:text="5 days"
+        android:textAlignment="textEnd"
+        android:textColor="#000"
+        android:textSize="24sp" />
+
 
 </RelativeLayout>
