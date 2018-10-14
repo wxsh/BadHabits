@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         //holder.habitGoal.setText(Habit.habits.get(position).getGoal());
 
 
+        if (Habit.habits.get(position).getIsFavourite()){
+            holder.favoriteButton.setImageResource(R.drawable.star_on);
+        }
+        else {
+            holder.favoriteButton.setImageResource(R.drawable.star_off);
+        }
+
+
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,6 +58,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                 Toast.makeText(mContext, Habit.habits.get(position).getTitle(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImageButton imgB = view.findViewById(R.id.favoriteBtn);
+
+                if (Habit.habits.get(position).getIsFavourite()){
+                    Habit.habits.get(position).setFavourite(false);
+                    imgB.setImageResource(R.drawable.star_off);
+                }
+                else {
+                    Habit.habits.get(position).setFavourite(true);
+                    imgB.setImageResource(R.drawable.star_on);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -62,6 +88,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         TextView habitName;
         TextView habitGoal;
         TextView habitDescription;
+        ImageButton favoriteButton;
         RelativeLayout parentLayout;
 
         public ViewHolder(View itemView) {
@@ -69,6 +96,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             habitName = itemView.findViewById(R.id.habit_name);
             habitGoal = itemView.findViewById(R.id.habit_goal);
             habitDescription = itemView.findViewById(R.id.habit_description);
+            favoriteButton = itemView.findViewById(R.id.favoriteBtn);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }
