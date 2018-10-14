@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="10dp"
@@ -28,6 +29,28 @@
         android:textAlignment="textEnd"
         android:textColor="#000"
         android:textSize="24sp" />
+
+    <TextView
+
+        android:id="@+id/habit_description"
+        android:layout_width="278dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/habit_name"
+        android:layout_alignStart="@+id/habit_name"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="0dp"
+        android:text="Description"
+        android:textAlignment="textStart"
+        android:textColor="#000"
+        android:textSize="14dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/habit_description"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:background="@android:color/black" />
 
 
 </RelativeLayout>

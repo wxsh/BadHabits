@@ -34,9 +34,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        //holder.habitName.setText(habitNames.get(position));
-
-        holder.habitName.setText(Habit.habits.get(position).getTitle());
+        holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
+        holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
         //TODO: reminder
         //holder.habitGoal.setText(Habit.habits.get(position).getGoal());
@@ -62,12 +61,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
         TextView habitName;
         TextView habitGoal;
+        TextView habitDescription;
         RelativeLayout parentLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
             habitName = itemView.findViewById(R.id.habit_name);
             habitGoal = itemView.findViewById(R.id.habit_goal);
+            habitDescription = itemView.findViewById(R.id.habit_description);
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }

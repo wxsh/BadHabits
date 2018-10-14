@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         Habit.habits.clear();
         Habit gumHabit  = new EconomicHabit("Gum", "stop with gum",new Date(),"kr",10,100,10);
         Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date(),10);
-        Habit poop  = new EconomicHabit("poop", "stop with gum",new Date(),"kr",10,100,10);
-        Habit scoop = new DateHabit("scoop", "Stop drinking soda", new Date(),10);
+        Habit Poop  = new EconomicHabit("Poop", "stop with poop",new Date(),"kr",10,100,10);
+        Habit Scoop = new DateHabit("Scoop", "Stop drinking scoop", new Date(),10);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addHabit);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         initRecyclerView();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
