@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
     android:id="@+id/parent_layout">
 
@@ -12,6 +13,8 @@
         android:id="@+id/habit_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
         android:text="Habit"
         android:textAlignment="textStart"
         android:textColor="#000"
@@ -22,9 +25,9 @@
         android:id="@+id/habit_goal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="9dp"
+        android:layout_toStartOf="@+id/imageButton"
         android:text="5 days"
         android:textAlignment="textEnd"
         android:textColor="#000"
@@ -33,23 +36,40 @@
     <TextView
 
         android:id="@+id/habit_description"
-        android:layout_width="278dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/habit_name"
         android:layout_alignStart="@+id/habit_name"
         android:layout_marginStart="1dp"
         android:layout_marginTop="0dp"
+        android:layout_marginEnd="27dp"
+        android:layout_toStartOf="@+id/habit_goal"
         android:text="Description"
         android:textAlignment="textStart"
         android:textColor="#000"
         android:textSize="14dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@+id/habit_description"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="6dp"
         android:background="@android:color/black" />
 
 
