@@ -58,14 +58,6 @@ public class HabitActivity extends AppCompatActivity {
                 startDate = convertToDate(dateEditText.getText().toString());
 
                 Habit habit = new Habit(title, description, startDate);
-//                Snackbar.make(v, (Habit.habits.get(Habit.habits.size()-1).getTitle()), Snackbar.LENGTH_LONG).show();
-
-
-                Log.d("HabitAct title", title);
-                Log.d("HabitAct desc", description);
-                Log.d("HabitAct Date",  dateEditText.getText().toString());
-
-
 
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(intent);
