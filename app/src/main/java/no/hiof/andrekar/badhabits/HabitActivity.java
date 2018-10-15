@@ -1,14 +1,20 @@
 package no.hiof.andrekar.badhabits;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,17 +49,24 @@ public class HabitActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
                 title = getText(R.id.newHabit_name).toString();
                 description = getText(R.id.newHabit_description).toString();
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
+
                 try {
                     startDate = format.parse(getText(R.id.newHabit_startDate).toString());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 Habit habit = new Habit(title, description, startDate);
+                //testhabit
+                Habit habit2 = new Habit("a","test",new Date());
+
+
                 SaveData saveData = new SaveData();
                 saveData.saveToFile(habit,"testers.txt");
+                saveData.saveToFile(habit2,"testers.txt");
                 Snackbar.make(v, "Not yet implemented", Snackbar.LENGTH_LONG).show();
             }
         });
