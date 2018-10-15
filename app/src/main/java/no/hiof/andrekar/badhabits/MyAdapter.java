@@ -1,6 +1,7 @@
 package no.hiof.andrekar.badhabits;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,9 +54,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: finish onClikListner
                 Log.d(TAG, "onClick: clicked on: " + Habit.habits.get(position).getTitle());
-                Toast.makeText(mContext, Habit.habits.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                ShowHabitActivity.setCurrentNumber(position);
+                Intent intent = new Intent(mContext, ShowHabitActivity.class);
+                mContext.startActivity(intent);
             }
         });
 
