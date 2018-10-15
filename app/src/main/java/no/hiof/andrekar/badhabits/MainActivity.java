@@ -21,23 +21,27 @@ import model.Habit;
 
 public class MainActivity extends AppCompatActivity {
 
+    static boolean firstRun = false;
 
-    @Override
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //temp: adding some habits - will be replaced with stored files
-        Habit.habits.clear();
-        Habit gumHabit  = new EconomicHabit("Gum", "stop with gum",new Date(),"kr",10,100,10);
-        Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date(),10);
-        Habit poop  = new EconomicHabit("Poop", "stop with poop",new Date(),"kr",10,100,10);
-        Habit scoop = new DateHabit("Scoop", "Stop drinking scoop", new Date(),10);
-
-        gumHabit.setFavourite(true);
-        scoop.setFavourite(true);
+        if (!firstRun) {
+            //temp: adding some habits - will be replaced with stored files
+            Habit.habits.clear();
+            Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date(), "kr", 10, 100, 10);
+            Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date(), 10);
+            Habit poop = new EconomicHabit("Poop", "Stop with poop", new Date(), "kr", 10, 100, 10);
+            Habit scoop = new DateHabit("Scoop", "Stop drinking scoop", new Date(), 10);
+            gumHabit.setFavourite(true);
+            scoop.setFavourite(true);
+            firstRun = true;
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addHabit);
         fab.setOnClickListener(new View.OnClickListener() {
