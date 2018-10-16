@@ -44,21 +44,15 @@ public class HabitActivity extends AppCompatActivity {
     private String title;
     private String description;
     private Date startDate;
-    private EditText dateEditText;
+    //Title and description
+    private EditText editTitle, editDesc, dateEditText;
     private String currency;
-    private float initialValue;
-    private float goalValue;
-    private float price;
 
-    //For goals
+    //Date habits
     private EditText dateGoalEditText;
-    private EditText economicGoalEditText;
-    private EditText economicCurrencyEditText;
-    private EditText economicInitialValueEditText;
-    private EditText economicPriceEditText;
-
-    private EditText editTitle;
-    private EditText editDesc;
+    //Economic Habits
+    private EditText economicGoalEditText, economicCurrencyEditText, economicAlternativePriceEditText, economicPriceEditText;
+    private float alternativePrice, goalValue, price;
 
     private RadioGroup typeHabitRG;
 
@@ -84,15 +78,10 @@ public class HabitActivity extends AppCompatActivity {
         dateGoalEditText = findViewById(R.id.newHabit_dateHabit_goal);
         economicCurrencyEditText = findViewById(R.id.newHabit_economicHabit_currency);
         economicGoalEditText = findViewById(R.id.newHabit_economicHabit_goal);
-        economicInitialValueEditText = findViewById(R.id.newHabit_economicHabit_initialValue);
+        economicAlternativePriceEditText = findViewById(R.id.newHabit_economicHabit_alternativePrice);
         economicPriceEditText = findViewById(R.id.newHabit_economicHabit_price);
 
-        dateGoalEditText.setVisibility(View.INVISIBLE);
-        economicPriceEditText.setVisibility(View.INVISIBLE);
-        economicGoalEditText.setVisibility(View.INVISIBLE);
-        economicInitialValueEditText.setVisibility(View.INVISIBLE);
-        economicCurrencyEditText.setVisibility(View.INVISIBLE);
-
+        updateUI(typeHabit);
 
 
         typeHabitRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -107,6 +96,7 @@ public class HabitActivity extends AppCompatActivity {
                     showTextNotification("Date Checked");
                     typeHabit = 2;
                     updateUI(typeHabit);
+
                 }
             }
         });
@@ -123,27 +113,35 @@ public class HabitActivity extends AppCompatActivity {
                 startDate = convertToDate(dateEditText.getText().toString());
 
 
-                //TODO: Check variable from radiogroup
+                //DONE: Check variable from radiogroup
                 if (typeHabit == 1) {
-                    currency = economicCurrencyEditText.getText().toString();
-                    initialValue = Float.parseFloat(economicInitialValueEditText.getText().toString());
-                    goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
-                    price = Float.parseFloat(economicPriceEditText.getText().toString());
-                    EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, initialValue, goalValue, price);
-                    saveHabit(habit);
+                    boolean fieldsOK = checkFields(new EditText[] { economicCurrencyEditText, economicAlternativePriceEditText, economicGoalEditText, economicPriceEditText, editTitle, editDesc, dateEditText  });
+                    if (fieldsOK == true) {
+                        currency = economicCurrencyEditText.getText().toString();
+                        alternativePrice = Float.parseFloat(economicAlternativePriceEditText.getText().toString());
+                        goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
+                        price = Float.parseFloat(economicPriceEditText.getText().toString());
+                        EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, alternativePrice, goalValue, price);
+                        saveHabit(habit);
+                    } else {
+                        showTextNotification("Fields are empty");
+                    }
                 } else if (typeHabit == 2) {
-                    dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
-                    DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue);
-                    saveHabit(habit);
+                    boolean fieldsOK = checkFields(new EditText[] { dateGoalEditText, editTitle, editDesc, dateEditText });
+                    if(fieldsOK == true) {
+                        dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
+                        DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue);
+                        saveHabit(habit);
+                    } else {
+                        showTextNotification("Fields are empty");
+                    }
+
                 } else {
                     showTextNotification("Please select a type of habit");
                 }
-
-
                 //Habit habit = new Habit(title, description, startDate);
                 //testhabit
                 //Habit habit2 = new Habit("a","test",new Date());
-
             }
         });
 
@@ -157,21 +155,35 @@ public class HabitActivity extends AppCompatActivity {
         });
     }
 
+    private boolean checkFields(EditText[] fields) {
+        for(int i = 0; i < fields.length; i++){
+            EditText currentField = fields[i];
+            if(currentField.getText().toString().length() <= 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void updateUI(int typeHabit) {
         if (typeHabit == 1) {
             dateGoalEditText.setVisibility(View.INVISIBLE);
             economicPriceEditText.setVisibility(View.VISIBLE);
             economicGoalEditText.setVisibility(View.VISIBLE);
-            economicInitialValueEditText.setVisibility(View.VISIBLE);
+            economicAlternativePriceEditText.setVisibility(View.VISIBLE);
             economicCurrencyEditText.setVisibility(View.VISIBLE);
         } else if (typeHabit == 2) {
             dateGoalEditText.setVisibility(View.VISIBLE);
             economicPriceEditText.setVisibility(View.INVISIBLE);
             economicGoalEditText.setVisibility(View.INVISIBLE);
-            economicInitialValueEditText.setVisibility(View.INVISIBLE);
+            economicAlternativePriceEditText.setVisibility(View.INVISIBLE);
             economicCurrencyEditText.setVisibility(View.INVISIBLE);
         } else {
-            showTextNotification("Something is wrong");
+            dateGoalEditText.setVisibility(View.INVISIBLE);
+            economicPriceEditText.setVisibility(View.INVISIBLE);
+            economicGoalEditText.setVisibility(View.INVISIBLE);
+            economicAlternativePriceEditText.setVisibility(View.INVISIBLE);
+            economicCurrencyEditText.setVisibility(View.INVISIBLE);
         }
 
     }

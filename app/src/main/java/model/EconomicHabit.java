@@ -7,15 +7,16 @@ import java.util.Date;
 
 public class EconomicHabit extends Habit {
     private String currency;
-    private float initialValue;
     private float goalValue;
     private float price;
+    private float alternativePrice;
+
 
     // Constructor
-    public EconomicHabit(String title, String description, Date startDate, String currency, float initialValue, float goalValue, float price) {
+    public EconomicHabit(String title, String description, Date startDate, String currency, float alternativePrice, float goalValue, float price) {
         super(title, description, startDate);
         this.currency = currency;
-        this.initialValue = initialValue;
+        this.alternativePrice = alternativePrice;
         this.goalValue = goalValue;
         this.price = price;
     }
@@ -28,16 +29,16 @@ public class EconomicHabit extends Habit {
 
     public float getGoalValue() { return goalValue; }
 
-    public float getInitialValue() {
-        return initialValue;
+    public float getAlternativePrice() {
+        return alternativePrice;
     }
 
     public void setCurrency(String currency) {
         this.currency = currency;
     }
 
-    public void setInitialValue(float initialValue) {
-        this.initialValue = initialValue;
+    public void setAlternativePrice(float alternativePrice) {
+        this.alternativePrice = alternativePrice;
     }
 
     public void setPrice(float price) {

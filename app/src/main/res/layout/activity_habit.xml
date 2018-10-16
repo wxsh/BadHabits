@@ -161,7 +161,7 @@
         app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_currency" />
 
     <EditText
-        android:id="@+id/newHabit_economicHabit_initialValue"
+        android:id="@+id/newHabit_economicHabit_alternativePrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
