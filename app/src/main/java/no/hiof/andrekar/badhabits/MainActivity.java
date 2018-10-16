@@ -1,9 +1,11 @@
 package no.hiof.andrekar.badhabits;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import model.SaveData;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (!firstRun) {
             //temp: adding some habits - will be replaced with stored files
-            Habit.habits.clear();
+            //Habit.habits.clear();
             Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date(), "kr", 10, 100, 10);
             Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date(), 10);
             Habit poop = new EconomicHabit("Poop", "Stop with poop", new Date(), "kr", 10, 100, 10);
@@ -42,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
             scoop.setFavourite(true);
             firstRun = true;
         }
+
+        //code to ask user for permission to store data.
+        int REQUEST_CODE=1;
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        }, REQUEST_CODE);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addHabit);
         fab.setOnClickListener(new View.OnClickListener() {

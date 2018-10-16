@@ -1,10 +1,13 @@
 package no.hiof.andrekar.badhabits;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +15,10 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,13 +26,15 @@ import java.util.Date;
 import java.util.Locale;
 
 import model.Habit;
+import model.SaveData;
 
 public class HabitActivity extends AppCompatActivity {
 
     //DONE 01: https://developer.android.com/guide/topics/ui/controls/pickers#java - Time/date picker for date field
-    //TODO 02: Cast Date field, or change field to accept string / Integers?
+    //DONE 02: Cast Date field, or change field to accept string / Integers?
     //TODO 03: Save data
     //TODO 04: Logic to dynamically change fields to reflect type of habit
+    //TODO 05: Make sure fields are filled out
 
     private String title;
     private String description;
@@ -53,16 +62,23 @@ public class HabitActivity extends AppCompatActivity {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
+
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
                 title = editTitle.getText().toString();
                 description = editDesc.getText().toString();
                 startDate = convertToDate(dateEditText.getText().toString());
 
                 Habit habit = new Habit(title, description, startDate);
+                //testhabit
+                //Habit habit2 = new Habit("a","test",new Date());
+
+
+                SaveData saveData = new SaveData();
+                saveData.saveToFile(habit,"testers.txt");
+                //saveData.saveToFile(habit2,"testers.txt");
 
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(intent);
-
-
             }
         });
 
