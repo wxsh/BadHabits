@@ -31,9 +31,10 @@ import model.SaveData;
 public class HabitActivity extends AppCompatActivity {
 
     //DONE 01: https://developer.android.com/guide/topics/ui/controls/pickers#java - Time/date picker for date field
-    //TODO 02: Cast Date field, or change field to accept string / Integers?
+    //DONE 02: Cast Date field, or change field to accept string / Integers?
     //TODO 03: Save data
     //TODO 04: Logic to dynamically change fields to reflect type of habit
+    //TODO 05: Make sure fields are filled out
 
     private String title;
     private String description;
@@ -63,23 +64,21 @@ public class HabitActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
-                title = getText(R.id.newHabit_name).toString();
-                description = getText(R.id.newHabit_description).toString();
+                title = editTitle.getText().toString();
+                description = editDesc.getText().toString();
+                startDate = convertToDate(dateEditText.getText().toString());
 
-                try {
-                    startDate = format.parse(getText(R.id.newHabit_startDate).toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
                 Habit habit = new Habit(title, description, startDate);
                 //testhabit
-                Habit habit2 = new Habit("a","test",new Date());
+                //Habit habit2 = new Habit("a","test",new Date());
 
 
                 SaveData saveData = new SaveData();
                 saveData.saveToFile(habit,"testers.txt");
-                saveData.saveToFile(habit2,"testers.txt");
-                Snackbar.make(v, "Not yet implemented", Snackbar.LENGTH_LONG).show();
+                //saveData.saveToFile(habit2,"testers.txt");
+
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(intent);
             }
         });
 

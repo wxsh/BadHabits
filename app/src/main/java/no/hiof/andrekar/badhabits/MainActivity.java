@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (!firstRun) {
             //temp: adding some habits - will be replaced with stored files
-            Habit.habits.clear();
+            //Habit.habits.clear();
             Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date(), "kr", 10, 100, 10);
             Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date(), 10);
             Habit poop = new EconomicHabit("Poop", "Stop with poop", new Date(), "kr", 10, 100, 10);

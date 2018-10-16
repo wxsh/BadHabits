@@ -23,6 +23,8 @@ public class SaveData {
 
     public void saveToFile(Habit habit, String fileName) {
 
+        //TODO: Read existing data from file
+
         try {
             File targetDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             if(!targetDir.exists())

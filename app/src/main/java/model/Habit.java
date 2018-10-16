@@ -7,6 +7,8 @@ import java.util.Date;
 public class Habit {
     //An ArrayList to contain all habits when they are created
 
+    //TODO: implement Math for habits. Return progress values.
+
     //TODO: make this list create itself from stored files
     public static ArrayList<Habit> habits = new ArrayList<Habit>();
 
