@@ -1,13 +1,16 @@
 package no.hiof.andrekar.badhabits;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -36,6 +39,10 @@ public class HabitActivity extends AppCompatActivity {
     private String description;
     private Date startDate;
     private EditText dateEditText;
+
+    private EditText editTitle;
+    private EditText editDesc;
+
     Calendar calendarPick = Calendar.getInstance();
 
 
@@ -43,10 +50,15 @@ public class HabitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit);
-        EditText dateEditText = (EditText) findViewById(R.id.newHabit_startDate);
+        final EditText dateEditText = findViewById(R.id.newHabit_startDate);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.newHabit_saveFab);
+        editTitle = findViewById(R.id.newHabit_name);
+        editDesc = findViewById(R.id.newHabit_description);
+
+
+        FloatingActionButton fab = findViewById(R.id.newHabit_saveFab);
         fab.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
 
@@ -101,5 +113,18 @@ public class HabitActivity extends AppCompatActivity {
         dateEditText.setText(sdf.format(calendarPick.getTime()));
     }
 
+
+    private Date convertToDate(String dateToConvert) {
+        Date convertedDate = new Date();
+
+        try {
+            convertedDate = new SimpleDateFormat("dd/MM/yy").parse(dateToConvert);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
+
+    }
 
 }
