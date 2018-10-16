@@ -1,5 +1,8 @@
 package no.hiof.andrekar.badhabits;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,12 +32,26 @@ public class ShowHabitActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Habit.habits.remove(currentNumber);
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                startActivity(intent);
-            }
+                AlertDialog.Builder builder = new AlertDialog.Builder(ShowHabitActivity.this);
+                builder.setMessage("This can not be reversed!")
+                        .setTitle("Delete habit?")
+                        .setPositiveButton("Yes, I Confirm", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Habit.habits.remove(currentNumber);
+                                Intent intent = new Intent(ShowHabitActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // CANCEL AND DO NOTHING
+                            }
+                        });
+                // Create the AlertDialog object and return it
+                AlertDialog dialog = builder.create();
+                dialog.show();
+           }
         });
-
 
     }
 
