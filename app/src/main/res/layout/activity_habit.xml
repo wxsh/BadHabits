@@ -101,6 +101,8 @@
             app:layout_constraintTop_toBottomOf="@+id/newHabit_startDate" />
     </RadioGroup>
 
+    <!-- Extra UI elements depending on type of Habit-->
+    <!-- Date Habit -->
     <EditText
         android:id="@+id/newHabit_dateHabit_goal"
         android:layout_width="wrap_content"
@@ -108,13 +110,68 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:clickable="true"
         android:ems="10"
-        android:focusable="true"
         android:hint="Mål i antall dager"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radiogroup_typeHabit" />
+
+    <!-- Economic Habit -->
+    <EditText
+        android:id="@+id/newHabit_economicHabit_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Sparingsmål"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radiogroup_typeHabit" />
+
+    <EditText
+        android:id="@+id/newHabit_economicHabit_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Valuta"
+        android:inputType="textCapCharacters"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_goal" />
+
+    <EditText
+        android:id="@+id/newHabit_economicHabit_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Pris per dag"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_currency" />
+
+    <EditText
+        android:id="@+id/newHabit_economicHabit_initialValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Alternativets Pris Per Dag"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_price" />
 
 </android.support.constraint.ConstraintLayout>

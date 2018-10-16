@@ -37,28 +37,30 @@ public class HabitActivity extends AppCompatActivity {
     //DONE 01: https://developer.android.com/guide/topics/ui/controls/pickers#java - Time/date picker for date field
     //DONE 02: Cast Date field, or change field to accept string / Integers?
     //TODO 03: Save data
-    //TODO 04: Logic to dynamically change fields to reflect type of habit
+    //DONE 04: Logic to dynamically change fields to reflect type of habit
     //TODO 05: Make sure fields are filled out
-    //TODO 06: Make sure date picker is available for all date fields.
+    //NOT_NEEDED 06: Make sure date picker is available for all date fields.
 
     private String title;
     private String description;
     private Date startDate;
     private EditText dateEditText;
+    private String currency;
+    private float initialValue;
+    private float goalValue;
+    private float price;
 
     //For goals
     private EditText dateGoalEditText;
+    private EditText economicGoalEditText;
+    private EditText economicCurrencyEditText;
+    private EditText economicInitialValueEditText;
+    private EditText economicPriceEditText;
 
     private EditText editTitle;
     private EditText editDesc;
 
     private RadioGroup typeHabitRG;
-
-    //Temporary variables
-    private String currency = "NOK";
-    private float initialValue = 200;
-    private float goalValue = 300;
-    private float price = 50;
 
     private int dateGoalValue;
 
@@ -80,7 +82,18 @@ public class HabitActivity extends AppCompatActivity {
 
         //Extra UI items
         dateGoalEditText = findViewById(R.id.newHabit_dateHabit_goal);
+        economicCurrencyEditText = findViewById(R.id.newHabit_economicHabit_currency);
+        economicGoalEditText = findViewById(R.id.newHabit_economicHabit_goal);
+        economicInitialValueEditText = findViewById(R.id.newHabit_economicHabit_initialValue);
+        economicPriceEditText = findViewById(R.id.newHabit_economicHabit_price);
+
         dateGoalEditText.setVisibility(View.INVISIBLE);
+        economicPriceEditText.setVisibility(View.INVISIBLE);
+        economicGoalEditText.setVisibility(View.INVISIBLE);
+        economicInitialValueEditText.setVisibility(View.INVISIBLE);
+        economicCurrencyEditText.setVisibility(View.INVISIBLE);
+
+
 
         typeHabitRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -108,13 +121,18 @@ public class HabitActivity extends AppCompatActivity {
                 title = editTitle.getText().toString();
                 description = editDesc.getText().toString();
                 startDate = convertToDate(dateEditText.getText().toString());
-                dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
+
 
                 //TODO: Check variable from radiogroup
                 if (typeHabit == 1) {
+                    currency = economicCurrencyEditText.getText().toString();
+                    initialValue = Float.parseFloat(economicInitialValueEditText.getText().toString());
+                    goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
+                    price = Float.parseFloat(economicPriceEditText.getText().toString());
                     EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, initialValue, goalValue, price);
                     saveHabit(habit);
                 } else if (typeHabit == 2) {
+                    dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
                     DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue);
                     saveHabit(habit);
                 } else {
@@ -142,8 +160,16 @@ public class HabitActivity extends AppCompatActivity {
     private void updateUI(int typeHabit) {
         if (typeHabit == 1) {
             dateGoalEditText.setVisibility(View.INVISIBLE);
+            economicPriceEditText.setVisibility(View.VISIBLE);
+            economicGoalEditText.setVisibility(View.VISIBLE);
+            economicInitialValueEditText.setVisibility(View.VISIBLE);
+            economicCurrencyEditText.setVisibility(View.VISIBLE);
         } else if (typeHabit == 2) {
             dateGoalEditText.setVisibility(View.VISIBLE);
+            economicPriceEditText.setVisibility(View.INVISIBLE);
+            economicGoalEditText.setVisibility(View.INVISIBLE);
+            economicInitialValueEditText.setVisibility(View.INVISIBLE);
+            economicCurrencyEditText.setVisibility(View.INVISIBLE);
         } else {
             showTextNotification("Something is wrong");
         }
