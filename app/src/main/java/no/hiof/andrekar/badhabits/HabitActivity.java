@@ -38,8 +38,10 @@ public class HabitActivity extends AppCompatActivity {
     //DONE 02: Cast Date field, or change field to accept string / Integers?
     //TODO 03: Save data
     //DONE 04: Logic to dynamically change fields to reflect type of habit
-    //TODO 05: Make sure fields are filled out
+    //DONE 05: Make sure fields are filled out
     //NOT_NEEDED 06: Make sure date picker is available for all date fields.
+
+    //TODO: SavedInstanceState on rotate? - Not needed?
 
     private String title;
     private String description;
@@ -83,11 +85,10 @@ public class HabitActivity extends AppCompatActivity {
 
         updateUI(typeHabit);
 
-
         typeHabitRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                //TODO: Show fields when selecting habit, and create a variable to hold type of Habit
+                //DONE: Show fields when selecting habit, and create a variable to hold type of Habit
                 if (checkedId == R.id.newHabit_radioEconomic) {
                     showTextNotification("Economic Checked");
                     typeHabit = 1;
@@ -96,7 +97,6 @@ public class HabitActivity extends AppCompatActivity {
                     showTextNotification("Date Checked");
                     typeHabit = 2;
                     updateUI(typeHabit);
-
                 }
             }
         });
@@ -115,7 +115,7 @@ public class HabitActivity extends AppCompatActivity {
 
                 //DONE: Check variable from radiogroup
                 if (typeHabit == 1) {
-                    boolean fieldsOK = checkFields(new EditText[] { economicCurrencyEditText, economicAlternativePriceEditText, economicGoalEditText, economicPriceEditText, editTitle, editDesc, dateEditText  });
+                    boolean fieldsOK = checkFields(new EditText[] { economicCurrencyEditText, economicAlternativePriceEditText, economicGoalEditText, economicPriceEditText, editTitle, editDesc, dateEditText });
                     if (fieldsOK == true) {
                         currency = economicCurrencyEditText.getText().toString();
                         alternativePrice = Float.parseFloat(economicAlternativePriceEditText.getText().toString());
