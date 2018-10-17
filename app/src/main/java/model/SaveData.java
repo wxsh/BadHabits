@@ -129,6 +129,26 @@ public class SaveData {
         }
     }
 
+    public void updateData(int typeHabit) {
+        Gson gson = new Gson();
+
+        try {
+            if (typeHabit == 1) {
+                String jsonString = gson.toJson(EconomicHabit.ecohabits);
+                FileWriter fileWriter = new FileWriter(filename + "Eco.txt");
+                fileWriter.write(jsonString);
+                fileWriter.close();
+            } else if (typeHabit == 2) {
+                String jsonString = gson.toJson(DateHabit.dateHabits);
+                FileWriter fileWriter = new FileWriter(filename + "Date.txt");
+                fileWriter.write(jsonString);
+                fileWriter.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public JSONObject toJSon(Habit habit){
         JSONObject jsonObject = new JSONObject();
         try {

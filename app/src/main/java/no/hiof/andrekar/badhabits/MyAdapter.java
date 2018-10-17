@@ -18,6 +18,7 @@ import java.util.Date;
 import model.DateHabit;
 import model.EconomicHabit;
 import model.Habit;
+import model.SaveData;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
@@ -81,6 +82,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                     Habit.habits.get(position).setFavourite(true);
                     imgB.setImageResource(R.drawable.star_on);
                 }
+                //This currently just duplicates data.
+                SaveData saveData = new SaveData();
+                if (Habit.habits.get(position).getClass() == DateHabit.class) {
+                    saveData.updateData(2);
+                } else if(Habit.habits.get(position).getClass() == EconomicHabit.class) {
+                    saveData.updateData(1);
+                }
+                notifyDataSetChanged();
+                //saveData.saveToFile(habit2,"testers.txt");
             }
         });
 
