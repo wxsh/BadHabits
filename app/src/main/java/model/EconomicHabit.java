@@ -1,9 +1,11 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 //TODO: Implement maths in class? IE: getters for progress?
 //TODO: Rename variables? ie. Price and InitialValue / GoalValue? - DO we need both or should ie. initialValue be renamed to price for alternative?
+
 
 public class EconomicHabit extends Habit {
     private String currency;
@@ -11,6 +13,7 @@ public class EconomicHabit extends Habit {
     private float price;
     private float alternativePrice;
 
+    public static ArrayList<EconomicHabit> ecohabits = new ArrayList<EconomicHabit>();
 
     // Constructor
     public EconomicHabit(String title, String description, Date startDate, String currency, float alternativePrice, float goalValue, float price) {

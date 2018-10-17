@@ -43,41 +43,86 @@ import no.hiof.andrekar.badhabits.MainActivity;
 
 public class SaveData {
     Habit h;
-    String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/TestGSon.txt";
+    String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/TestGSon";
 
     public void readFromFile() {
         //Create a new Gson object
         Gson gson = new Gson();
+        Habit.habits.clear();
+
 
 
         try {
         //Read the employee.json file
-        BufferedReader br = new BufferedReader(
-                new FileReader(filename));
+            BufferedReader br = new BufferedReader(
+                new FileReader(filename+"Date.txt"));
 
             //convert the json to  Java object (Employee)
 
-            Type collectionType = new TypeToken<ArrayList<Habit>>(){}.getType();
-            ArrayList<Habit> habitsF = gson.fromJson(br, collectionType);
-            Habit.habits.clear();
-            Habit.habits = habitsF;
-            } catch (IOException e)
+            Type collectionType = new TypeToken<ArrayList<DateHabit>>(){}.getType();
+            ArrayList<DateHabit> habitsF = gson.fromJson(br, collectionType);
+            for (int i = 0; i < habitsF.size(); i++ ) {
+
+                    Habit habit = (DateHabit) habitsF.get(i);
+                    Habit.habits.add(habit);
+                    DateHabit.dateHabits.add((DateHabit) habit);
+                }
+            }
+            catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        try {
+            //Read the employee.json file
+            BufferedReader br = new BufferedReader(
+                    new FileReader(filename+"Eco.txt"));
+
+            //convert the json to  Java object (Employee)
+
+            Type collectionType = new TypeToken<ArrayList<EconomicHabit>>(){}.getType();
+            ArrayList<EconomicHabit> habitsF = gson.fromJson(br, collectionType);
+            for (int i = 0; i < habitsF.size(); i++ ) {
+
+                Habit habit = (EconomicHabit) habitsF.get(i);
+                Habit.habits.add(habit);
+                EconomicHabit.ecohabits.add((EconomicHabit) habit);
+            }
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
 }
 
-    public void saveToFile(Habit habit) {
+    public void saveToFile(Habit habit, int typeHabit) {
         try {
             // Create a new Gson object
             Gson gson = new Gson();
             Habit.habits.add(habit);
+
             //convert the Java object to json
-            String jsonString = gson.toJson(Habit.habits);
             //Write JSON String to file
-            FileWriter fileWriter = new FileWriter(filename);
-            fileWriter.write(jsonString);
-            fileWriter.close();
+            if(typeHabit == 1) {
+
+                EconomicHabit.ecohabits.add((EconomicHabit) habit);
+                String jsonString = gson.toJson(EconomicHabit.ecohabits);
+
+                FileWriter fileWriter = new FileWriter(filename + "Eco.txt");
+                fileWriter.write(jsonString);
+                fileWriter.close();
+                EconomicHabit.ecohabits.clear();
+            } else if (typeHabit == 2) {
+
+                DateHabit.dateHabits.add((DateHabit) habit);
+                String jsonString = gson.toJson(DateHabit.dateHabits);
+
+                FileWriter fileWriter = new FileWriter(filename+"Date.txt");
+                fileWriter.write(jsonString);
+                fileWriter.close();
+                DateHabit.dateHabits.clear();
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
