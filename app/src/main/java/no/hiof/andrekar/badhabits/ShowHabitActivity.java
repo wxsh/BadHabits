@@ -37,7 +37,7 @@ public class ShowHabitActivity extends AppCompatActivity {
                         .setTitle("Delete habit?")
                         .setPositiveButton("Yes, I Confirm", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //TODO fix this, alternatively we might need a new function in saveData model? 
+                                //TODO fix this, alternatively we might need a new function in saveData model?
                                 Habit.habits.remove(currentNumber);
                                 Intent intent = new Intent(ShowHabitActivity.this, MainActivity.class);
                                 startActivity(intent);
