@@ -13,7 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import model.DateHabit;
+import model.EconomicHabit;
 import model.Habit;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
@@ -40,8 +43,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
         //TODO: reminder
-        //holder.habitGoal.setText(Habit.habits.get(position).getGoal());
+        if(Habit.habits.get(position).getClass() == EconomicHabit.class){
 
+            holder.habitGoal.setText(Float.toString(((EconomicHabit)Habit.habits.get(position)).getGoalValue()));
+        } else if (Habit.habits.get(position).getClass() == DateHabit.class){
+            holder.habitGoal.setText(((DateHabit)Habit.habits.get(position)).getDateGoal());
+        }
 
         if (Habit.habits.get(position).getIsFavourite()){
             holder.favoriteButton.setImageResource(R.drawable.star_on);
