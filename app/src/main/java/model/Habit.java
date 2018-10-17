@@ -1,6 +1,12 @@
 package model;
 //import no.hiof.andrekar.badhabits.R;
 
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -12,6 +18,7 @@ public class Habit {
     //TODO: make this list create itself from stored files
     public static ArrayList<Habit> habits = new ArrayList<Habit>();
 
+
     //We need a title and description for our main class.
     private String title;
     private String description;
@@ -22,7 +29,23 @@ public class Habit {
     private Date startDate;
 
 
-    //Constructor
+    //Constructors
+
+    public static void fromJson(JSONObject jsonObject) {
+        try {
+            String title = jsonObject.getString("title");
+            String description = jsonObject.getString("description");
+
+            //Temporary
+            Date startDate = new Date();
+            Habit h = new Habit(title, description, startDate);
+            habits.add(h);
+        } catch (Exception e) {
+            Log.d("fromJSON", e.getMessage());
+        }
+    }
+
+
     public Habit(String title, String description, Date startDate) {
         this.title = title;
         this.description = description;

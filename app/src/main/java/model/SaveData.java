@@ -9,8 +9,11 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +22,25 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import no.hiof.andrekar.badhabits.MainActivity;
+
 public class SaveData {
+
+    public static JSONObject readFromJson(File file) {
+        JSONObject json = null;
+        try {
+            InputStream is = new FileInputStream(file);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String myJson = new String(buffer, "UTF-8");
+            json = new JSONObject(myJson);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
 
     public void saveToFile(Habit habit, String fileName) {
 
@@ -42,7 +63,7 @@ public class SaveData {
             //fileWriter.close();
 
             //test habit
-            JSONObject jsonObject = toJSon(new Habit("asd","asd",new Date()));
+            JSONObject jsonObject = toJSon(new Habit(habit.getTitle(),habit.getDescription(),new Date()));
 
             Writer output;
             outFile = new File(targetDir, "testJ.json");
@@ -68,9 +89,8 @@ public class SaveData {
 
             jsonObject.put("title",habit.getTitle());
             jsonObject.put("description",habit.getDescription());
-            //jsonObject.put("favourite",habit.getIsFavourite());
-            //jsonObject.put("startDate",habit.getStartDate());
-
+            //jsonObject.put("favourite", habit.getIsFavourite());
+            //jsonObject.put("startDate", habit.getStartDate());
 
         }
         catch(JSONException ex) {
@@ -78,11 +98,18 @@ public class SaveData {
         }
         return jsonObject;
     }
-    public String readJSONFile(Context context){
-        String json = null;
+
+    public JSONObject readJSONFile(Context context){
+        JSONObject json = null;
         try {
-            InputStream is = context.getAssets().open("testers.txt");
-        } catch(IOException e) {
+            InputStream is = context.getAssets().open("testJ.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String myJson = new String(buffer, "UTF-8");
+            json = new JSONObject(myJson);
+        } catch(Exception e) {
             e.printStackTrace();
         }
         return json;
