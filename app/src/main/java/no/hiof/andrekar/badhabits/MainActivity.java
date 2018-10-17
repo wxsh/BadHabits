@@ -35,6 +35,8 @@ import model.DateHabit;
 import model.EconomicHabit;
 import model.Habit;
 
+import model.SaveData;
+
 public class MainActivity extends AppCompatActivity {
 
     static boolean firstRun = false;
@@ -47,11 +49,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        File targetDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        //TODO: Settings for where to save json files, save elsewhere, global attribute maybe?
-        File inFile = new File(targetDir, "testJ.json");
-        JSONObject jObj = SaveData.readFromJson(inFile);
-        Habit.fromJson(jObj);
+        Habit.habits.clear();
+        SaveData saveData = new SaveData();
+        saveData.readFromFile();
+
 
         if (!firstRun) {
             //temp: adding some habits - will be replaced with stored files

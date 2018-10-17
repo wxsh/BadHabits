@@ -6,79 +6,80 @@ import android.location.LocationManager;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 
 import no.hiof.andrekar.badhabits.MainActivity;
 
 public class SaveData {
+    Habit h;
+    String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/TestGSon.txt";
 
-    public static JSONObject readFromJson(File file) {
-        JSONObject json = null;
+    public void readFromFile() {
+        //Create a new Gson object
+        Gson gson = new Gson();
+
+
         try {
-            InputStream is = new FileInputStream(file);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            String myJson = new String(buffer, "UTF-8");
-            json = new JSONObject(myJson);
-        } catch(Exception e) {
+        //Read the employee.json file
+        BufferedReader br = new BufferedReader(
+                new FileReader(filename));
+
+            //convert the json to  Java object (Employee)
+
+            Type collectionType = new TypeToken<ArrayList<Habit>>(){}.getType();
+            ArrayList<Habit> habitsF = gson.fromJson(br, collectionType);
+            Habit.habits.clear();
+            Habit.habits = habitsF;
+            } catch (IOException e)
+        {
             e.printStackTrace();
         }
-        return json;
-    }
+}
 
-    public void saveToFile(Habit habit, String fileName) {
-
-        //TODO: Read existing data from file
-
+    public void saveToFile(Habit habit) {
         try {
-            File targetDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            if(!targetDir.exists())
-                targetDir.mkdirs();
+            // Create a new Gson object
+            Gson gson = new Gson();
+            Habit.habits.add(habit);
+            //convert the Java object to json
+            String jsonString = gson.toJson(Habit.habits);
+            //Write JSON String to file
+            FileWriter fileWriter = new FileWriter(filename);
+            fileWriter.write(jsonString);
+            fileWriter.close();
 
-            File outFile = new File(targetDir, fileName);
-            FileWriter fileWriter = new FileWriter(outFile, true);
-            BufferedWriter writer = new BufferedWriter(fileWriter);
-
-            //writer.write(habit.getTitle());
-            //writer.write(habit.getDescription() + "\n");
-            //writer.write(habit.getStartDate().toString()+ "\n\n");
-            //writer.flush();
-            //writer.close();
-            //fileWriter.close();
-
-            //test habit
-            JSONObject jsonObject = toJSon(new Habit(habit.getTitle(),habit.getDescription(),new Date()));
-
-            Writer output;
-            outFile = new File(targetDir, "testJ.json");
-            output = new BufferedWriter(new FileWriter(outFile));
-            output.write(jsonObject.toString());
-            output.close();
-        }
-        catch (Exception ex){
-            Log.e("saveData.saveToFile", ex.getMessage());
-        }
-
-        try {
-            Thread.sleep(2000);
-        }
-        catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -97,21 +98,5 @@ public class SaveData {
             ex.printStackTrace();
         }
         return jsonObject;
-    }
-
-    public JSONObject readJSONFile(Context context){
-        JSONObject json = null;
-        try {
-            InputStream is = context.getAssets().open("testJ.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            String myJson = new String(buffer, "UTF-8");
-            json = new JSONObject(myJson);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return json;
     }
 }

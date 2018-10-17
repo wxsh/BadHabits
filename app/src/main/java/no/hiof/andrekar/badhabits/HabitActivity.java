@@ -228,7 +228,7 @@ public class HabitActivity extends AppCompatActivity {
 
     private void saveHabit(Habit habit) {
         SaveData saveData = new SaveData();
-        saveData.saveToFile(habit, "testers.txt");
+        saveData.saveToFile(habit);
         //saveData.saveToFile(habit2,"testers.txt");
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);

@@ -52,7 +52,7 @@ public class Habit {
         this.startDate = startDate;
         this.isFavourite = false;
 
-        habits.add(this);
+       // habits.add(this);
     }
 
     //Getters
