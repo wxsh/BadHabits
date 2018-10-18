@@ -4,11 +4,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import model.DateHabit;
@@ -19,7 +21,8 @@ import model.SaveData;
 public class ShowHabitActivity extends AppCompatActivity {
 
     public static int currentNumber;
-    public Button deleteButton;
+    public ImageButton deleteButton;
+    public ImageButton editButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,18 @@ public class ShowHabitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_habit);
         EconomicHabit ecohabit;
         DateHabit dateHabit;
+
+
+        TextView goalView = findViewById(R.id.goalTextView);
+
+        if (Habit.habits.get(currentNumber).getClass() == DateHabit.class){
+            dateHabit = (DateHabit) Habit.habits.get(currentNumber);
+            goalView.setText(dateHabit.getDateGoal().toString());
+        }
+        else {
+            ecohabit = (EconomicHabit) Habit.habits.get(currentNumber);
+            //goalView.setText(ecohabit.getDateGoal().toString());
+        }
 
         TextView titleView = findViewById(R.id.habitTitleTextView);
         titleView.setText(Habit.habits.get(currentNumber).getTitle());
@@ -82,6 +97,15 @@ public class ShowHabitActivity extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
            }
+        });
+
+        editButton = findViewById(R.id.btn_habitEdit);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: editButton onclick
+                Snackbar.make(findViewById(android.R.id.content), "Not yet implemented", Snackbar.LENGTH_LONG).show();
+            }
         });
 
     }
