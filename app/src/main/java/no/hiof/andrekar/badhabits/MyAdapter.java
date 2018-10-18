@@ -2,6 +2,7 @@ package no.hiof.andrekar.badhabits;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+
+
+        if(position %2 == 1)
+        {
+            holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+        }
+        else
+        {
+            holder.itemView.setBackgroundColor(Color.parseColor("#e8e8e8"));
+            //  holder.imageView.setBackgroundColor(Color.parseColor("#FFFAF8FD"));
+        }
 
         holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
         holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());

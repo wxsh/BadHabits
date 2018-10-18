@@ -40,7 +40,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         }
         else {
             ecohabit = (EconomicHabit) Habit.habits.get(currentNumber);
-            //goalView.setText(ecohabit.getDateGoal().toString());
+            goalView.setText(String.valueOf(ecohabit.getGoalValue()));
         }
 
         TextView titleView = findViewById(R.id.habitTitleTextView);
