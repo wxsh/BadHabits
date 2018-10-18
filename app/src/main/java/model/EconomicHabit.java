@@ -59,7 +59,7 @@ public class EconomicHabit extends Habit {
         c.setTime(this.getStartDate());
         Date startDate = new Date(c.getTimeInMillis());
         float dateGoalL = ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
-        float saved = (((dateGoalL*this.getPrice())-(dateGoalL*this.getAlternativePrice()))-this.getGoalValue());
+        float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()));
         if (saved < 0) {
             return Float.toString(Math.abs(saved))+" gjenstår";
         }
