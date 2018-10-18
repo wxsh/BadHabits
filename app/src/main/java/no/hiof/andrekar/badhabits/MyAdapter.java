@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import model.DateHabit;
@@ -35,6 +37,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
+
         return holder;
     }
 
@@ -57,10 +60,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
         //TODO: reminder
         if(Habit.habits.get(position).getClass() == EconomicHabit.class){
-            //TODO: Matte
-            holder.habitGoal.setText(Float.toString(((EconomicHabit)Habit.habits.get(position)).getGoalValue()));
+            holder.habitGoal.setText(((EconomicHabit) Habit.habits.get(position)).getProgress());
         } else if (Habit.habits.get(position).getClass() == DateHabit.class){
-            //TODO: bedre å returne hvor mange dager som gjenstår her kanskje?
             holder.habitGoal.setText(((DateHabit)Habit.habits.get(position)).getDateGoal());
         }
 
@@ -101,6 +102,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                 } else if(Habit.habits.get(position).getClass() == EconomicHabit.class) {
                     saveData.updateData(1);
                 }
+
+                Collections.sort(Habit.habits, new Comparator<Habit>() {
+                    @Override
+                    public int compare(Habit o2, Habit o1) {
+                        boolean b1 = o1.getIsFavourite();
+                        boolean b2 = o2.getIsFavourite();
+                        return Boolean.compare(b1, b2);
+                    }
+                });
                 notifyDataSetChanged();
             }
         });
