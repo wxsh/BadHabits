@@ -45,9 +45,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
         //TODO: reminder
         if(Habit.habits.get(position).getClass() == EconomicHabit.class){
-
+            //TODO: Matte
             holder.habitGoal.setText(Float.toString(((EconomicHabit)Habit.habits.get(position)).getGoalValue()));
         } else if (Habit.habits.get(position).getClass() == DateHabit.class){
+            //TODO: bedre å returne hvor mange dager som gjenstår her kanskje?
             holder.habitGoal.setText(((DateHabit)Habit.habits.get(position)).getDateGoal());
         }
 
@@ -82,7 +83,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                     Habit.habits.get(position).setFavourite(true);
                     imgB.setImageResource(R.drawable.star_on);
                 }
-                //This currently just duplicates data.
                 SaveData saveData = new SaveData();
                 if (Habit.habits.get(position).getClass() == DateHabit.class) {
                     saveData.updateData(2);
@@ -90,7 +90,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                     saveData.updateData(1);
                 }
                 notifyDataSetChanged();
-                //saveData.saveToFile(habit2,"testers.txt");
             }
         });
 

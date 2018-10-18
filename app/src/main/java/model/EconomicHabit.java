@@ -51,4 +51,8 @@ public class EconomicHabit extends Habit {
     public void setGoalValue(float goalValue) {
         this.goalValue = goalValue;
     }
+
+    public String getProgress() {
+        return "Not yet implemented";
+    }
 }

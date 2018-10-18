@@ -44,7 +44,7 @@ public class ShowHabitActivity extends AppCompatActivity {
                         .setTitle("Delete habit?")
                         .setPositiveButton("Yes, I Confirm", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //TODO fix this, alternatively we might need a new function in saveData model?
+                                //TODO can this be done without looping through all habits?
                                 Habit habit = Habit.habits.get(currentNumber);
 
                                 if (habit instanceof EconomicHabit) {

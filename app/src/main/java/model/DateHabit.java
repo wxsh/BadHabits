@@ -3,6 +3,8 @@ package model;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,13 +31,18 @@ public class DateHabit extends Habit {
 
     public String getDateGoal(){
         String dateGoal;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyy");
+        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyy");
         Calendar c = Calendar.getInstance();
         c.setTime(this.getStartDate());
         c.add(Calendar.DATE,this.getDateGoalValue());
         Date endDate = new Date(c.getTimeInMillis());
-        dateGoal = simpleDateFormat.format(endDate);
-        return dateGoal;
+        //dateGoal = simpleDateFormat.format(endDate);
+        long dateGoalL = ChronoUnit.DAYS.between(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
+        dateGoal = Long.toString(dateGoalL);
+        if (Long.valueOf(dateGoalL) > 0) {
+            return dateGoal + " Remaining";
+        }
+        else return "Mål nådd";
     }
 
 }

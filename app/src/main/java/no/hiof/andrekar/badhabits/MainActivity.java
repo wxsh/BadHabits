@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         SaveData saveData = new SaveData();
         saveData.readFromFile();
 
-
+        /*
         if (!firstRun) {
             //temp: adding some habits - will be replaced with stored files
             //Habit.habits.clear();
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             scoop.setFavourite(true);
             firstRun = true;
         }
+        */
 
         //code to ask user for permission to store data.
         int REQUEST_CODE=1;
