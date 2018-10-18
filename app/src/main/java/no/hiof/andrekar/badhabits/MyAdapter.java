@@ -13,8 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import model.DateHabit;
+import model.EconomicHabit;
 import model.Habit;
+import model.SaveData;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
@@ -40,8 +44,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
         //TODO: reminder
-        //holder.habitGoal.setText(Habit.habits.get(position).getGoal());
-
+        if(Habit.habits.get(position).getClass() == EconomicHabit.class){
+            //TODO: Matte
+            holder.habitGoal.setText(Float.toString(((EconomicHabit)Habit.habits.get(position)).getGoalValue()));
+        } else if (Habit.habits.get(position).getClass() == DateHabit.class){
+            //TODO: bedre å returne hvor mange dager som gjenstår her kanskje?
+            holder.habitGoal.setText(((DateHabit)Habit.habits.get(position)).getDateGoal());
+        }
 
         if (Habit.habits.get(position).getIsFavourite()){
             holder.favoriteButton.setImageResource(R.drawable.star_on);
@@ -74,6 +83,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                     Habit.habits.get(position).setFavourite(true);
                     imgB.setImageResource(R.drawable.star_on);
                 }
+                SaveData saveData = new SaveData();
+                if (Habit.habits.get(position).getClass() == DateHabit.class) {
+                    saveData.updateData(2);
+                } else if(Habit.habits.get(position).getClass() == EconomicHabit.class) {
+                    saveData.updateData(1);
+                }
+                notifyDataSetChanged();
             }
         });
 

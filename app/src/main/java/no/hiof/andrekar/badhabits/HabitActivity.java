@@ -122,7 +122,7 @@ public class HabitActivity extends AppCompatActivity {
                         goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
                         price = Float.parseFloat(economicPriceEditText.getText().toString());
                         EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, alternativePrice, goalValue, price);
-                        saveHabit(habit);
+                        saveHabit(habit, typeHabit);
                     } else {
                         showTextNotification("Fields are empty");
                     }
@@ -131,7 +131,7 @@ public class HabitActivity extends AppCompatActivity {
                     if(fieldsOK == true) {
                         dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
                         DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue);
-                        saveHabit(habit);
+                        saveHabit(habit, typeHabit);
                     } else {
                         showTextNotification("Fields are empty");
                     }
@@ -226,9 +226,9 @@ public class HabitActivity extends AppCompatActivity {
         Toast.makeText(this, msgToDisplay, Toast.LENGTH_SHORT).show();
     }
 
-    private void saveHabit(Habit habit) {
+    private void saveHabit(Habit habit, int typeHabit) {
         SaveData saveData = new SaveData();
-        saveData.saveToFile(habit, "testers.txt");
+        saveData.saveToFile(habit, typeHabit);
         //saveData.saveToFile(habit2,"testers.txt");
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);

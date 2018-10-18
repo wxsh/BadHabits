@@ -6,11 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import model.DateHabit;
+import model.EconomicHabit;
 import model.Habit;
+import model.SaveData;
 
 public class ShowHabitActivity extends AppCompatActivity {
 
@@ -21,12 +25,15 @@ public class ShowHabitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_habit);
+        EconomicHabit ecohabit;
+        DateHabit dateHabit;
 
         TextView titleView = findViewById(R.id.habitTitleTextView);
         titleView.setText(Habit.habits.get(currentNumber).getTitle());
 
         TextView descriptionView = findViewById(R.id.descriptionTextView);
         descriptionView.setText(Habit.habits.get(currentNumber).getDescription());
+
 
         deleteButton = findViewById(R.id.btn_habitDelete);
         deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -37,7 +44,31 @@ public class ShowHabitActivity extends AppCompatActivity {
                         .setTitle("Delete habit?")
                         .setPositiveButton("Yes, I Confirm", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Habit.habits.remove(currentNumber);
+                                //TODO can this be done without looping through all habits?
+                                Habit habit = Habit.habits.get(currentNumber);
+
+                                if (habit instanceof EconomicHabit) {
+                                    Log.d("SHowHABIT", "Found Eco habit");
+                                    for (int i = 0; i < EconomicHabit.ecohabits.size(); i++) {
+                                        if (habit == EconomicHabit.ecohabits.get(i)) {
+                                            Log.d("SHowHABIT", "Found MATCHING eco habit");
+                                            EconomicHabit.ecohabits.remove(i);
+                                            SaveData saveData = new SaveData();
+                                            saveData.updateData(1);
+                                        }
+                                    }
+                                } else if (habit instanceof DateHabit) {
+                                    Log.d("SHowHABIT", "Found Date habit");
+                                    for (int i = 0; i < DateHabit.dateHabits.size(); i++) {
+                                        if (habit == DateHabit.dateHabits.get(i)) {
+                                            Log.d("SHowHABIT", "Found MATCHING date habit");
+                                            DateHabit.dateHabits.remove(i);
+                                            SaveData saveData = new SaveData();
+                                            saveData.updateData(2);
+                                        }
+                                    }
+                                }
+
                                 Intent intent = new Intent(ShowHabitActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }

@@ -3,6 +3,9 @@ package model;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,29 +33,13 @@ public class Habit {
 
 
     //Constructors
-
-    public static void fromJson(JSONObject jsonObject) {
-        try {
-            String title = jsonObject.getString("title");
-            String description = jsonObject.getString("description");
-
-            //Temporary
-            Date startDate = new Date();
-            Habit h = new Habit(title, description, startDate);
-            habits.add(h);
-        } catch (Exception e) {
-            Log.d("fromJSON", e.getMessage());
-        }
-    }
-
-
     public Habit(String title, String description, Date startDate) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.isFavourite = false;
-
-        habits.add(this);
+        //We add habits when we save them, so adding to list is currently not needed.
+        //habits.add(this);
     }
 
     //Getters
