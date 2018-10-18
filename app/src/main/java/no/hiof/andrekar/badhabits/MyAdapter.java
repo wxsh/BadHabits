@@ -105,12 +105,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
                 Collections.sort(Habit.habits, new Comparator<Habit>() {
                     @Override
-                    public int compare(Habit o2, Habit o1) {
-                        boolean b1 = o1.getIsFavourite();
-                        boolean b2 = o2.getIsFavourite();
-                        return Boolean.compare(b1, b2);
-                    }
-                });
+                    public int compare(Habit h2, Habit h1) {
+                        int result = Boolean.compare(h1.getIsFavourite(), h2.getIsFavourite());
+                        if (result == 0) {
+                            // boolean values the same
+                            result = h2.getTitle().compareTo(h1.getTitle());
+                        }
+                        return result;
+                    }});
                 notifyDataSetChanged();
             }
         });

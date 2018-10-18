@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import model.DateHabit;
@@ -82,6 +84,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //TODO: Implement this into habits model? 
+        Collections.sort(Habit.habits, new Comparator<Habit>() {
+            @Override
+            public int compare(Habit h2, Habit h1) {
+            int result = Boolean.compare(h1.getIsFavourite(), h2.getIsFavourite());
+                if (result == 0) {
+                    // boolean values the same
+                    result = h2.getTitle().compareTo(h1.getTitle());
+                }
+            return result;
+        }});
         initRecyclerView();
     }
 

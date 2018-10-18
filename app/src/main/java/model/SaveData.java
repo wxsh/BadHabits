@@ -99,14 +99,6 @@ public class SaveData {
             e.printStackTrace();
         }
 
-        Collections.sort(Habit.habits, new Comparator<Habit>() {
-            @Override
-            public int compare(Habit o2, Habit o1) {
-                boolean b1 = o1.getIsFavourite();
-                boolean b2 = o2.getIsFavourite();
-                return Boolean.compare(b1, b2);
-            }
-        });
 }
 
     public void saveToFile(Habit habit, int typeHabit) {
