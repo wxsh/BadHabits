@@ -48,10 +48,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
         //TODO: reminder
         if(Habit.habits.get(position).getClass() == EconomicHabit.class){
-            //TODO: Matte
-            holder.habitGoal.setText(Float.toString(((EconomicHabit)Habit.habits.get(position)).getGoalValue()));
+            holder.habitGoal.setText(((EconomicHabit) Habit.habits.get(position)).getProgress());
         } else if (Habit.habits.get(position).getClass() == DateHabit.class){
-            //TODO: bedre å returne hvor mange dager som gjenstår her kanskje?
             holder.habitGoal.setText(((DateHabit)Habit.habits.get(position)).getDateGoal());
         }
 

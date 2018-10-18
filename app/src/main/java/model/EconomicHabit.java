@@ -1,6 +1,9 @@
 package model;
 
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 //TODO: Implement maths in class? IE: getters for progress?
@@ -52,6 +55,17 @@ public class EconomicHabit extends Habit {
     }
 
     public String getProgress() {
-        return "Not yet implemented";
+        Calendar c = Calendar.getInstance();
+        c.setTime(this.getStartDate());
+        Date startDate = new Date(c.getTimeInMillis());
+        float dateGoalL = ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
+        float saved = (((dateGoalL*this.getPrice())-(dateGoalL*this.getAlternativePrice()))-this.getGoalValue());
+        if (saved < 0) {
+            return Float.toString(Math.abs(saved))+" gjenstår";
+        }
+        else {
+            return Float.toString(Math.abs(saved))+" spart!";
+        }
+
     }
 }
