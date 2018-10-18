@@ -46,28 +46,16 @@ public class ShowHabitActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int id) {
                                 //TODO can this be done without looping through all habits?
                                 Habit habit = Habit.habits.get(currentNumber);
+                                SaveData saveData = new SaveData();
 
                                 if (habit instanceof EconomicHabit) {
-                                    Log.d("SHowHABIT", "Found Eco habit");
-                                    for (int i = 0; i < EconomicHabit.ecohabits.size(); i++) {
-                                        if (habit == EconomicHabit.ecohabits.get(i)) {
-                                            Log.d("SHowHABIT", "Found MATCHING eco habit");
-                                            EconomicHabit.ecohabits.remove(i);
-                                            SaveData saveData = new SaveData();
-                                            saveData.updateData(1);
-                                        }
-                                    }
+                                    Habit.habits.remove(currentNumber);
+                                    saveData.updateData(1);
                                 } else if (habit instanceof DateHabit) {
-                                    Log.d("SHowHABIT", "Found Date habit");
-                                    for (int i = 0; i < DateHabit.dateHabits.size(); i++) {
-                                        if (habit == DateHabit.dateHabits.get(i)) {
-                                            Log.d("SHowHABIT", "Found MATCHING date habit");
-                                            DateHabit.dateHabits.remove(i);
-                                            SaveData saveData = new SaveData();
-                                            saveData.updateData(2);
-                                        }
-                                    }
+                                    Habit.habits.remove(currentNumber);
+                                    saveData.updateData(2);
                                 }
+
 
                                 Intent intent = new Intent(ShowHabitActivity.this, MainActivity.class);
                                 startActivity(intent);

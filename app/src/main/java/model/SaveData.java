@@ -36,6 +36,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -46,6 +48,10 @@ public class SaveData {
     String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/TestGSon";
     String ecofile = filename+"Eco.txt";
     String datefile = filename+"Date.txt";
+    ArrayList<EconomicHabit> ecohabits = new ArrayList<EconomicHabit>();
+    ArrayList<DateHabit> datehabits = new ArrayList<DateHabit>();
+
+
 
     public void readFromFile() {
         //Create a new Gson object
@@ -64,11 +70,9 @@ public class SaveData {
 
             Type collectionType = new TypeToken<ArrayList<DateHabit>>(){}.getType();
             ArrayList<DateHabit> habitsF = gson.fromJson(br, collectionType);
-            DateHabit.dateHabits.clear();
             for (int i = 0; i < habitsF.size(); i++ ) {
                     Habit habit = (DateHabit) habitsF.get(i);
                     Habit.habits.add(habit);
-                    DateHabit.dateHabits.add((DateHabit) habit);
                 }
             }
             catch (IOException e)
@@ -85,30 +89,45 @@ public class SaveData {
 
             Type collectionType = new TypeToken<ArrayList<EconomicHabit>>(){}.getType();
             ArrayList<EconomicHabit> habitsF = gson.fromJson(br, collectionType);
-            EconomicHabit.ecohabits.clear();
             for (int i = 0; i < habitsF.size(); i++ ) {
                 Habit habit = (EconomicHabit) habitsF.get(i);
                 Habit.habits.add(habit);
-                EconomicHabit.ecohabits.add((EconomicHabit) habit);
             }
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
+
+        Collections.sort(Habit.habits, new Comparator<Habit>() {
+            @Override
+            public int compare(Habit o2, Habit o1) {
+                boolean b1 = o1.getIsFavourite();
+                boolean b2 = o2.getIsFavourite();
+                return Boolean.compare(b1, b2);
+            }
+        });
 }
 
     public void saveToFile(Habit habit, int typeHabit) {
         try {
             // Create a new Gson object
             Gson gson = new Gson();
-            Habit.habits.add(habit);
 
             //convert the Java object to json
             if(typeHabit == 1) {
+                Log.d("InstanceOF", "Got Eco Habit");
 
-                EconomicHabit.ecohabits.add((EconomicHabit) habit);
-                String jsonString = gson.toJson(EconomicHabit.ecohabits);
+                Habit.habits.add(habit);
+                ecohabits.clear();
+                for ( Habit habitListed : Habit.habits ) {
+                    Log.d("InstanceOF", "Looping through habits");
+                    if (habitListed instanceof EconomicHabit) {
+                        Log.d("InstanceOF", "EcoHabit");
+                        ecohabits.add((EconomicHabit) habitListed);
+                    }
+                }
+                String jsonString = gson.toJson(ecohabits);
 
                 FileWriter fileWriter = new FileWriter(ecofile, false);
                 fileWriter.write(jsonString);
@@ -116,19 +135,28 @@ public class SaveData {
                 //EconomicHabit.ecohabits.clear();
             } else if (typeHabit == 2) {
 
-                DateHabit.dateHabits.add((DateHabit) habit);
-                String jsonString = gson.toJson(DateHabit.dateHabits);
+                Log.d("InstanceOF", "Got Date Habit");
 
+                Habit.habits.add(habit);
+                datehabits.clear();
+                for ( Habit habitListed : Habit.habits ) {
+                    Log.d("InstanceOF", "Looping through habits");
+                    if (habitListed instanceof DateHabit) {
+                        Log.d("InstanceOF", "EcoHabit");
+                        datehabits.add((DateHabit) habitListed);
+                    }
+                }
+                String jsonString = gson.toJson(datehabits);
                 FileWriter fileWriter = new FileWriter(datefile, false);
                 fileWriter.write(jsonString);
                 fileWriter.close();
-                //DateHabit.dateHabits.clear();
             }
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public void updateData(int typeHabit) {
@@ -136,13 +164,30 @@ public class SaveData {
 
         try {
             if (typeHabit == 1) {
-                String jsonString = gson.toJson(EconomicHabit.ecohabits);
-                FileWriter fileWriter = new FileWriter(ecofile);
+                ecohabits.clear();
+                for ( Habit habitListed : Habit.habits ) {
+                    Log.d("InstanceOF", "Looping through habits");
+                    if (habitListed instanceof EconomicHabit) {
+                        Log.d("InstanceOF", "EcoHabit");
+                        ecohabits.add((EconomicHabit) habitListed);
+                    }
+                }
+                String jsonString = gson.toJson(ecohabits);
+
+                FileWriter fileWriter = new FileWriter(ecofile, false);
                 fileWriter.write(jsonString);
                 fileWriter.close();
             } else if (typeHabit == 2) {
-                String jsonString = gson.toJson(DateHabit.dateHabits);
-                FileWriter fileWriter = new FileWriter(datefile);
+                datehabits.clear();
+                for ( Habit habitListed : Habit.habits ) {
+                    Log.d("InstanceOF", "Looping through habits");
+                    if (habitListed instanceof DateHabit) {
+                        Log.d("InstanceOF", "EcoHabit");
+                        datehabits.add((DateHabit) habitListed);
+                    }
+                }
+                String jsonString = gson.toJson(datehabits);
+                FileWriter fileWriter = new FileWriter(datefile, false);
                 fileWriter.write(jsonString);
                 fileWriter.close();
             }

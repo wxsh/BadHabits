@@ -14,8 +14,6 @@ import java.util.Date;
 public class DateHabit extends Habit {
     private Integer dateGoalValue;
 
-    public static ArrayList<DateHabit> dateHabits = new ArrayList<DateHabit>();
-
     public DateHabit(String title, String description, Date startDate, Integer dateGoalValue) {
         super(title, description, startDate);
         this.dateGoalValue = dateGoalValue;

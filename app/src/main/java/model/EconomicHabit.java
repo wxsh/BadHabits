@@ -13,7 +13,6 @@ public class EconomicHabit extends Habit {
     private float price;
     private float alternativePrice;
 
-    public static ArrayList<EconomicHabit> ecohabits = new ArrayList<EconomicHabit>();
 
     // Constructor
     public EconomicHabit(String title, String description, Date startDate, String currency, float alternativePrice, float goalValue, float price) {
