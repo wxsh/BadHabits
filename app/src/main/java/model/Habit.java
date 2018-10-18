@@ -79,4 +79,16 @@ public class Habit {
         //Might want to have this as a toggle instead.
         this.isFavourite = isFavourite;
     }
+
+    public static Comparator<Habit> HabitComparator = new Comparator<Habit>() {
+        @Override
+        public int compare(Habit h2, Habit h1) {
+            int result = Boolean.compare(h1.getIsFavourite(), h2.getIsFavourite());
+            if (result == 0) {
+                // boolean values the same
+                result = h2.getTitle().compareTo(h1.getTitle());
+            }
+            return result;
+        }
+    };
 }

@@ -84,17 +84,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //TODO: Implement this into habits model? 
-        Collections.sort(Habit.habits, new Comparator<Habit>() {
-            @Override
-            public int compare(Habit h2, Habit h1) {
-            int result = Boolean.compare(h1.getIsFavourite(), h2.getIsFavourite());
-                if (result == 0) {
-                    // boolean values the same
-                    result = h2.getTitle().compareTo(h1.getTitle());
-                }
-            return result;
-        }});
+        //TODO: Implement this into habits model?
+        Collections.sort(Habit.habits, Habit.HabitComparator);
         initRecyclerView();
     }
 
@@ -130,4 +121,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
+
 }
