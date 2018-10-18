@@ -50,6 +50,7 @@ public class SaveData {
     public void readFromFile() {
         //Create a new Gson object
         Gson gson = new Gson();
+
         Habit.habits.clear();
 
 
@@ -63,8 +64,8 @@ public class SaveData {
 
             Type collectionType = new TypeToken<ArrayList<DateHabit>>(){}.getType();
             ArrayList<DateHabit> habitsF = gson.fromJson(br, collectionType);
+            DateHabit.dateHabits.clear();
             for (int i = 0; i < habitsF.size(); i++ ) {
-
                     Habit habit = (DateHabit) habitsF.get(i);
                     Habit.habits.add(habit);
                     DateHabit.dateHabits.add((DateHabit) habit);
@@ -84,8 +85,8 @@ public class SaveData {
 
             Type collectionType = new TypeToken<ArrayList<EconomicHabit>>(){}.getType();
             ArrayList<EconomicHabit> habitsF = gson.fromJson(br, collectionType);
+            EconomicHabit.ecohabits.clear();
             for (int i = 0; i < habitsF.size(); i++ ) {
-
                 Habit habit = (EconomicHabit) habitsF.get(i);
                 Habit.habits.add(habit);
                 EconomicHabit.ecohabits.add((EconomicHabit) habit);
@@ -109,19 +110,19 @@ public class SaveData {
                 EconomicHabit.ecohabits.add((EconomicHabit) habit);
                 String jsonString = gson.toJson(EconomicHabit.ecohabits);
 
-                FileWriter fileWriter = new FileWriter(ecofile);
+                FileWriter fileWriter = new FileWriter(ecofile, false);
                 fileWriter.write(jsonString);
                 fileWriter.close();
-                EconomicHabit.ecohabits.clear();
+                //EconomicHabit.ecohabits.clear();
             } else if (typeHabit == 2) {
 
                 DateHabit.dateHabits.add((DateHabit) habit);
                 String jsonString = gson.toJson(DateHabit.dateHabits);
 
-                FileWriter fileWriter = new FileWriter(datefile);
+                FileWriter fileWriter = new FileWriter(datefile, false);
                 fileWriter.write(jsonString);
                 fileWriter.close();
-                DateHabit.dateHabits.clear();
+                //DateHabit.dateHabits.clear();
             }
 
 
