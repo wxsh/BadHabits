@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,8 +42,6 @@ import model.SaveData;
 
 public class MainActivity extends AppCompatActivity {
 
-    static boolean firstRun = false;
-
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,19 +54,9 @@ public class MainActivity extends AppCompatActivity {
         SaveData saveData = new SaveData();
         saveData.readFromFile();
 
-        /*
-        if (!firstRun) {
-            //temp: adding some habits - will be replaced with stored files
-            //Habit.habits.clear();
-            Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date(), "kr", 10, 100, 10);
-            Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date(), 10);
-            Habit poop = new EconomicHabit("Poop", "Stop with poop", new Date(), "kr", 10, 100, 10);
-            Habit scoop = new DateHabit("Scoop", "Stop drinking scoop", new Date(), 10);
-            gumHabit.setFavourite(true);
-            scoop.setFavourite(true);
-            firstRun = true;
-        }
-        */
+
+
+
 
         //code to ask user for permission to store data.
         int REQUEST_CODE=1;
@@ -110,6 +99,14 @@ public class MainActivity extends AppCompatActivity {
             Snackbar.make(findViewById(android.R.id.content), "Not yet implemented", Snackbar.LENGTH_LONG).show();
             return true;
         }
+        if (id == R.id.action_populate) {
+            populateData();
+            return true;
+        }
+        if (id == R.id.action_remove) {
+            removeData();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -122,5 +119,39 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    private void populateData() {
+        ArrayList<Habit> testHabits = new ArrayList<Habit>();
+        Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date(), "kr", 10, 100, 10);
+        Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date(), 10);
+        Habit poop = new EconomicHabit("Smokes", "Stop with smoking", new Date(), "kr", 10, 100, 10);
+        Habit scoop = new DateHabit("Having fun", "Stop having fun", new Date(), 10);
+        gumHabit.setFavourite(true);
+        scoop.setFavourite(true);
 
+        testHabits.add((EconomicHabit) gumHabit);
+        testHabits.add((DateHabit) sodaHabit);
+        testHabits.add((EconomicHabit) poop);
+        testHabits.add((DateHabit) scoop);
+        SaveData saveData = new SaveData();
+
+        for (Habit habit : testHabits) {
+            if (habit instanceof DateHabit) {
+                saveData.saveToFile(habit, 2);
+            } else if (habit instanceof EconomicHabit) {
+                saveData.saveToFile(habit, 1);
+            }
+        }
+        testHabits.clear();
+        initRecyclerView();
+        Collections.sort(Habit.habits, Habit.HabitComparator);
+        }
+
+        private void removeData() {
+            Habit.habits.clear();
+            SaveData saveData = new SaveData();
+            saveData.updateData(1);
+            saveData.updateData(2);
+            initRecyclerView();
+        }
 }
+
