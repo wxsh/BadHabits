@@ -12,9 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
@@ -53,7 +55,8 @@ public class HabitActivity extends AppCompatActivity {
     //Date habits
     private EditText dateGoalEditText;
     //Economic Habits
-    private EditText economicGoalEditText, economicCurrencyEditText, economicAlternativePriceEditText, economicPriceEditText;
+    private EditText economicGoalEditText, economicAlternativePriceEditText, economicPriceEditText;
+    private Spinner economicCurrencySpinner;
     private float alternativePrice, goalValue, price;
 
     private RadioGroup typeHabitRG;
@@ -78,10 +81,18 @@ public class HabitActivity extends AppCompatActivity {
 
         //Extra UI items
         dateGoalEditText = findViewById(R.id.newHabit_dateHabit_goal);
-        economicCurrencyEditText = findViewById(R.id.newHabit_economicHabit_currency);
+        economicCurrencySpinner = findViewById(R.id.newHabit_economicHabit_currency);
         economicGoalEditText = findViewById(R.id.newHabit_economicHabit_goal);
         economicAlternativePriceEditText = findViewById(R.id.newHabit_economicHabit_alternativePrice);
         economicPriceEditText = findViewById(R.id.newHabit_economicHabit_price);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.currency_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        economicCurrencySpinner.setAdapter(adapter);
 
         updateUI(typeHabit);
 
@@ -115,9 +126,9 @@ public class HabitActivity extends AppCompatActivity {
 
                 //DONE: Check variable from radiogroup
                 if (typeHabit == 1) {
-                    boolean fieldsOK = checkFields(new EditText[] { economicCurrencyEditText, economicAlternativePriceEditText, economicGoalEditText, economicPriceEditText, editTitle, editDesc, dateEditText });
+                    boolean fieldsOK = checkFields(new EditText[] { economicAlternativePriceEditText, economicGoalEditText, economicPriceEditText, editTitle, editDesc, dateEditText });
                     if (fieldsOK == true) {
-                        currency = economicCurrencyEditText.getText().toString();
+                        currency = economicCurrencySpinner.getSelectedItem().toString();
                         alternativePrice = Float.parseFloat(economicAlternativePriceEditText.getText().toString());
                         goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
                         price = Float.parseFloat(economicPriceEditText.getText().toString());
@@ -171,19 +182,19 @@ public class HabitActivity extends AppCompatActivity {
             economicPriceEditText.setVisibility(View.VISIBLE);
             economicGoalEditText.setVisibility(View.VISIBLE);
             economicAlternativePriceEditText.setVisibility(View.VISIBLE);
-            economicCurrencyEditText.setVisibility(View.VISIBLE);
+            economicCurrencySpinner.setVisibility(View.VISIBLE);
         } else if (typeHabit == 2) {
             dateGoalEditText.setVisibility(View.VISIBLE);
             economicPriceEditText.setVisibility(View.INVISIBLE);
             economicGoalEditText.setVisibility(View.INVISIBLE);
             economicAlternativePriceEditText.setVisibility(View.INVISIBLE);
-            economicCurrencyEditText.setVisibility(View.INVISIBLE);
+            economicCurrencySpinner.setVisibility(View.INVISIBLE);
         } else {
             dateGoalEditText.setVisibility(View.INVISIBLE);
             economicPriceEditText.setVisibility(View.INVISIBLE);
             economicGoalEditText.setVisibility(View.INVISIBLE);
             economicAlternativePriceEditText.setVisibility(View.INVISIBLE);
-            economicCurrencyEditText.setVisibility(View.INVISIBLE);
+            economicCurrencySpinner.setVisibility(View.INVISIBLE);
         }
 
     }

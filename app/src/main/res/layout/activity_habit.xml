@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HabitActivity"
-    android:fitsSystemWindows="true" >
+    tools:context=".HabitActivity">
 
 
     <EditText
@@ -126,54 +125,51 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Sparingsmål"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/newHabit_economicHabit_currency"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radiogroup_typeHabit" />
 
-    <EditText
+    <Spinner
         android:id="@+id/newHabit_economicHabit_currency"
-        android:layout_width="wrap_content"
+        android:layout_width="116dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Valuta"
-        android:inputType="textCapCharacters"
+        app:layout_constraintBottom_toBottomOf="@+id/newHabit_economicHabit_goal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_goal" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/newHabit_economicHabit_goal"
+        app:layout_constraintTop_toTopOf="@+id/newHabit_economicHabit_goal" />
 
     <EditText
         android:id="@+id/newHabit_economicHabit_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Pris per dag"
         android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_currency" />
+        app:layout_constraintEnd_toEndOf="@+id/newHabit_economicHabit_goal"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/newHabit_economicHabit_goal"
+        app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_goal" />
 
     <EditText
         android:id="@+id/newHabit_economicHabit_alternativePrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Alternativets Pris Per Dag"
         android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/newHabit_economicHabit_price"
+        app:layout_constraintStart_toStartOf="@+id/newHabit_economicHabit_price"
         app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_price" />
 
 </android.support.constraint.ConstraintLayout>

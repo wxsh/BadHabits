@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="currency_array">
+        <item>NOK</item>
+        <item>SEK</item>
+        <item>DKK</item>
+        <item>EUR</item>
+        <item>USD</item>
+    </string-array>
+</resources>
