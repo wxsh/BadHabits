@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         //TODO: Implement this into habits model?
         Collections.sort(Habit.habits, Habit.HabitComparator);
 
-
         initRecyclerView();
     }
 
@@ -116,6 +115,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView(){
+
+        RecyclerView favoriteRecyclerView = findViewById(R.id.favorite_recycler_view);
+        MyFavoriteAdapter favAdapter = new MyFavoriteAdapter(this);
+        favoriteRecyclerView.setAdapter(favAdapter);
+        favoriteRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         MyAdapter adapter = new MyAdapter(this);
