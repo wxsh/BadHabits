@@ -1,6 +1,8 @@
 package no.hiof.andrekar.badhabits;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
+import model.DateHabit;
+import model.EconomicHabit;
 import model.Habit;
+import model.SaveData;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
@@ -29,18 +37,33 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
+
+        if(position %2 == 1)
+        {
+            holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+        }
+        else
+        {
+            holder.itemView.setBackgroundColor(Color.parseColor("#e8e8e8"));
+            //  holder.imageView.setBackgroundColor(Color.parseColor("#FFFAF8FD"));
+        }
+
         holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
         holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
         //TODO: reminder
-        //holder.habitGoal.setText(Habit.habits.get(position).getGoal());
-
+        if(Habit.habits.get(position).getClass() == EconomicHabit.class){
+            holder.habitGoal.setText(((EconomicHabit) Habit.habits.get(position)).getProgress());
+        } else if (Habit.habits.get(position).getClass() == DateHabit.class){
+            holder.habitGoal.setText(((DateHabit)Habit.habits.get(position)).getDateGoal());
+        }
 
         if (Habit.habits.get(position).getIsFavourite()){
             holder.favoriteButton.setImageResource(R.drawable.star_on);
@@ -53,9 +76,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: finish onClikListner
                 Log.d(TAG, "onClick: clicked on: " + Habit.habits.get(position).getTitle());
-                Toast.makeText(mContext, Habit.habits.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                ShowHabitActivity.setCurrentNumber(position);
+                Intent intent = new Intent(mContext, ShowHabitActivity.class);
+                mContext.startActivity(intent);
             }
         });
 
@@ -72,6 +96,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                     Habit.habits.get(position).setFavourite(true);
                     imgB.setImageResource(R.drawable.star_on);
                 }
+                SaveData saveData = new SaveData();
+                if (Habit.habits.get(position).getClass() == DateHabit.class) {
+                    saveData.updateData(2);
+                } else if(Habit.habits.get(position).getClass() == EconomicHabit.class) {
+                    saveData.updateData(1);
+                }
+
+                Collections.sort(Habit.habits, Habit.HabitComparator);
+                notifyDataSetChanged();
             }
         });
 

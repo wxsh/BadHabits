@@ -1,14 +1,28 @@
 package model;
 //import no.hiof.andrekar.badhabits.R;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class Habit {
     //An ArrayList to contain all habits when they are created
 
+    //TODO: implement Math for habits. Return progress values.
+
     //TODO: make this list create itself from stored files
     public static ArrayList<Habit> habits = new ArrayList<Habit>();
+
 
     //We need a title and description for our main class.
     private String title;
@@ -20,14 +34,14 @@ public class Habit {
     private Date startDate;
 
 
-    //Constructor
+    //Constructors
     public Habit(String title, String description, Date startDate) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
         this.isFavourite = false;
-
-        habits.add(this);
+        //We add habits when we save them, so adding to list is currently not needed.
+        //habits.add(this);
     }
 
     //Getters
@@ -42,7 +56,6 @@ public class Habit {
     public Date getStartDate() {
         return startDate;
     }
-
 
     public boolean getIsFavourite() {
         return isFavourite;
@@ -66,4 +79,16 @@ public class Habit {
         //Might want to have this as a toggle instead.
         this.isFavourite = isFavourite;
     }
+
+    public static Comparator<Habit> HabitComparator = new Comparator<Habit>() {
+        @Override
+        public int compare(Habit h2, Habit h1) {
+            int result = Boolean.compare(h1.getIsFavourite(), h2.getIsFavourite());
+            if (result == 0) {
+                // boolean values the same
+                result = h2.getTitle().compareTo(h1.getTitle());
+            }
+            return result;
+        }
+    };
 }
