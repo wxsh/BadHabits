@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -118,13 +119,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initRecyclerView(){
-
+    private void  initRecyclerView(){
 
         RecyclerView favoriteRecyclerView = findViewById(R.id.favorite_recycler_view);
+
         favAdapter = new MyFavoriteAdapter(this);
         favoriteRecyclerView.setAdapter(favAdapter);
         favoriteRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         adapter = new MyAdapter(this);
@@ -171,5 +173,6 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             favAdapter.notifyDataSetChanged();
         }
+
 }
 

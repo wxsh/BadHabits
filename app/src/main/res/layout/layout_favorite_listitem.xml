@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fav_parent_layout"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
-    android:padding="5dp">
+    android:layout_height="145dp"
+    android:background="@color/faveHabitBG2">
 
     <TextView
 
@@ -40,10 +40,10 @@
         android:id="@+id/fav_habit_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="21dp"
-        android:layout_toEndOf="@+id/fav_habit_name"
+        android:layout_below="@+id/fav_habit_name"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
         android:text="Description"
         android:textAlignment="textStart"
         android:textColor="#000"
@@ -68,4 +68,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/empty_fav"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:gravity="center"
+        android:text="Here will your favorites be displayed"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+
 </RelativeLayout>
+
