@@ -45,6 +45,10 @@ import model.SaveData;
 public class MainActivity extends AppCompatActivity {
 
 
+    public static MyAdapter adapter;
+    public static MyFavoriteAdapter favAdapter;
+
+
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,13 +120,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecyclerView(){
 
+
         RecyclerView favoriteRecyclerView = findViewById(R.id.favorite_recycler_view);
-        MyFavoriteAdapter favAdapter = new MyFavoriteAdapter(this);
+        favAdapter = new MyFavoriteAdapter(this);
         favoriteRecyclerView.setAdapter(favAdapter);
         favoriteRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        MyAdapter adapter = new MyAdapter(this);
+        adapter = new MyAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -160,6 +165,11 @@ public class MainActivity extends AppCompatActivity {
             saveData.updateData(1);
             saveData.updateData(2);
             initRecyclerView();
+        }
+
+        public static void updateRecyclerView(){
+            adapter.notifyDataSetChanged();
+            favAdapter.notifyDataSetChanged();
         }
 }
 

@@ -104,7 +104,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                 }
 
                 Collections.sort(Habit.habits, Habit.HabitComparator);
-                notifyDataSetChanged();
+                MainActivity.updateRecyclerView();
+
             }
         });
 
@@ -116,7 +117,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView habitName;
         TextView habitGoal;
