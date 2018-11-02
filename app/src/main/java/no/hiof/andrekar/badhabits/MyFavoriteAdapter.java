@@ -28,6 +28,8 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
         private Context mContext;
 
+        private boolean mHaveFavorite;
+
     public MyFavoriteAdapter(Context context) {
             mContext = context;
         }
@@ -45,9 +47,12 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
         @Override
         public void onBindViewHolder(final MyFavoriteAdapter.ViewHolder holder, final int position) {
 
-        boolean mHaveFavorite = Habit.getHaveFavorite();
+        if (position == 0){
+            mHaveFavorite = Habit.getHaveFavorite();
+        }
 
             if (mHaveFavorite) {
+                holder.parentLayout.setClickable(true);
                 holder.emptyFav.setVisibility(View.GONE);
                 holder.favoriteButton.setVisibility(View.VISIBLE);
                 holder.habitDescription.setVisibility(View.VISIBLE);
@@ -122,18 +127,29 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     });
                 }
             }
-            else{
+            else if (position == 0) {
+                holder.parentLayout.setClickable(false);
                 holder.emptyFav.setVisibility(View.VISIBLE);
                 holder.favoriteButton.setVisibility(View.GONE);
                 holder.habitDescription.setVisibility(View.GONE);
                 holder.habitGoal.setVisibility(View.GONE);
                 holder.habitName.setVisibility(View.GONE);
             }
+            else {
+                holder.emptyFav.setVisibility(View.GONE);
+                holder.favoriteButton.setVisibility(View.GONE);
+                holder.habitDescription.setVisibility(View.GONE);
+                holder.habitGoal.setVisibility(View.GONE);
+                holder.habitName.setVisibility(View.GONE);
+                holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
+
+            }
         }
 
 
         @Override
         public int getItemCount() {
+
             return Habit.habits.size();
         }
 
