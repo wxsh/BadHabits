@@ -2,6 +2,8 @@ package model;
 
 import android.util.Log;
 
+import com.google.firebase.database.Exclude;
+
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -27,6 +29,7 @@ public class DateHabit extends Habit {
         this.dateGoalValue = dateGoalValue;
     }
 
+    @Exclude
     public String getDateGoal(){
         String dateGoal;
         //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyy");

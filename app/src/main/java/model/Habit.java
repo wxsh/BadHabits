@@ -3,6 +3,7 @@ package model;
 
 import android.util.Log;
 
+import com.google.firebase.database.Exclude;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.UUID;
 
 public class Habit {
     //An ArrayList to contain all habits when they are created
@@ -32,6 +34,7 @@ public class Habit {
 
     //Start date? - Maybe this is better as a String and cast it later?
     private Date startDate;
+    private String uid;
 
 
     //Constructors
@@ -40,6 +43,7 @@ public class Habit {
         this.description = description;
         this.startDate = startDate;
         this.isFavourite = false;
+        this.uid = UUID.randomUUID().toString();
         //We add habits when we save them, so adding to list is currently not needed.
         //habits.add(this);
     }
@@ -60,6 +64,9 @@ public class Habit {
     public boolean getIsFavourite() {
         return isFavourite;
     }
+
+    @Exclude
+    public String getUid() { return uid; }
 
 
     //Setters
@@ -91,4 +98,5 @@ public class Habit {
             return result;
         }
     };
+
 }

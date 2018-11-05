@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(getBaseContext(), FirebaseActivity.class);
+            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
             startActivity(intent);
 
 //            Snackbar.make(findViewById(android.R.id.content), "Not yet implemented", Snackbar.LENGTH_LONG).show();

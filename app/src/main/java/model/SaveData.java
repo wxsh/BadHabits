@@ -6,6 +6,9 @@ import android.location.LocationManager;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -50,11 +53,15 @@ public class SaveData {
     String datefile = filename+"Date.txt";
     ArrayList<EconomicHabit> ecohabits = new ArrayList<EconomicHabit>();
     ArrayList<DateHabit> datehabits = new ArrayList<DateHabit>();
+    private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    FirebaseAuth fbAuth = FirebaseAuth.getInstance();
+
 
 
 
     public void readFromFile() {
         //Create a new Gson object
+
         Gson gson = new Gson();
 
         Habit.habits.clear();
@@ -105,6 +112,8 @@ public class SaveData {
         try {
             // Create a new Gson object
             Gson gson = new Gson();
+            dbRef.child(fbAuth.getUid()).child("habits").child(habit.getUid()).setValue(habit);
+
 
             //convert the Java object to json
             if(typeHabit == 1) {

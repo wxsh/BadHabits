@@ -1,5 +1,7 @@
 package model;
 
+import com.google.firebase.database.Exclude;
+
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -54,6 +56,7 @@ public class EconomicHabit extends Habit {
         this.goalValue = goalValue;
     }
 
+    @Exclude
     public String getProgress() {
         Calendar c = Calendar.getInstance();
         c.setTime(this.getStartDate());
