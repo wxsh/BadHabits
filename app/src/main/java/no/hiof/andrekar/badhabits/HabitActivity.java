@@ -39,12 +39,13 @@ public class HabitActivity extends AppCompatActivity {
 
     //DONE 01: https://developer.android.com/guide/topics/ui/controls/pickers#java - Time/date picker for date field
     //DONE 02: Cast Date field, or change field to accept string / Integers?
-    //TODO 03: Save data
+    //DONE 03: Save data
     //DONE 04: Logic to dynamically change fields to reflect type of habit
     //DONE 05: Make sure fields are filled out
     //NOT_NEEDED 06: Make sure date picker is available for all date fields.
 
     //TODO: SavedInstanceState on rotate? - Not needed?
+    //TODO: Intent handling and send data to fireBase.
 
     private String title;
     private String description;
@@ -76,26 +77,11 @@ public class HabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit);
         final EditText dateEditText = findViewById(R.id.newHabit_startDate);
-
-        editTitle = findViewById(R.id.newHabit_name);
-        editDesc = findViewById(R.id.newHabit_description);
-        typeHabitRG = findViewById(R.id.radiogroup_typeHabit);
+        findviews();
 
         if(getIntent().hasExtra("TITLE")) {
             setTitle(getIntent().getStringExtra("TITLE"));
         }
-
-
-        //Extra UI items
-        dateGoalEditText = findViewById(R.id.newHabit_dateHabit_goal);
-        dateGoalIT = findViewById(R.id.newHabit_dateHabit_goalIT);
-        economicGoalIT = findViewById(R.id.newHabit_economicHabit_goalIT);
-        economicPriceIT = findViewById(R.id.newHabit_economicHabit_priceIT);
-        economicAlternativePriceIT = findViewById(R.id.newHabit_economicHabit_alternativepriceIT);
-        economicCurrencySpinner = findViewById(R.id.newHabit_economicHabit_currency);
-        economicGoalEditText = findViewById(R.id.newHabit_economicHabit_goal);
-        economicAlternativePriceEditText = findViewById(R.id.newHabit_economicHabit_alternativePrice);
-        economicPriceEditText = findViewById(R.id.newHabit_economicHabit_price);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -259,4 +245,22 @@ public class HabitActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void findviews() {
+        editTitle = findViewById(R.id.newHabit_name);
+        editDesc = findViewById(R.id.newHabit_description);
+        typeHabitRG = findViewById(R.id.radiogroup_typeHabit);
+
+        //Extra UI items
+        dateGoalEditText = findViewById(R.id.newHabit_dateHabit_goal);
+        dateGoalIT = findViewById(R.id.newHabit_dateHabit_goalIT);
+        economicGoalIT = findViewById(R.id.newHabit_economicHabit_goalIT);
+        economicPriceIT = findViewById(R.id.newHabit_economicHabit_priceIT);
+        economicAlternativePriceIT = findViewById(R.id.newHabit_economicHabit_alternativepriceIT);
+        economicCurrencySpinner = findViewById(R.id.newHabit_economicHabit_currency);
+        economicGoalEditText = findViewById(R.id.newHabit_economicHabit_goal);
+        economicAlternativePriceEditText = findViewById(R.id.newHabit_economicHabit_alternativePrice);
+        economicPriceEditText = findViewById(R.id.newHabit_economicHabit_price);
+    }
+
 }
+
