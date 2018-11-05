@@ -76,11 +76,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), HabitActivity.class);
+                intent.putExtra("TITLE", "Add new habit");
                 startActivity(intent);
             }
         });
 
-        //TODO: Implement this into habits model?
+        //DONE: Implement this into habits model?
         Collections.sort(Habit.habits, Habit.HabitComparator);
 
         initRecyclerView();

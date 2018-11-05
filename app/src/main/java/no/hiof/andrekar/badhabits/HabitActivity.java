@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,18 +39,20 @@ public class HabitActivity extends AppCompatActivity {
 
     //DONE 01: https://developer.android.com/guide/topics/ui/controls/pickers#java - Time/date picker for date field
     //DONE 02: Cast Date field, or change field to accept string / Integers?
-    //TODO 03: Save data
+    //DONE 03: Save data
     //DONE 04: Logic to dynamically change fields to reflect type of habit
     //DONE 05: Make sure fields are filled out
     //NOT_NEEDED 06: Make sure date picker is available for all date fields.
 
     //TODO: SavedInstanceState on rotate? - Not needed?
+    //TODO: Intent handling and send data to fireBase.
 
     private String title;
     private String description;
     private Date startDate;
     //Title and description
     private EditText editTitle, editDesc, dateEditText;
+    private TextInputLayout dateGoalIT, economicGoalIT, economicPriceIT, economicAlternativePriceIT;
     private String currency;
 
     //Date habits
@@ -74,17 +77,11 @@ public class HabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit);
         final EditText dateEditText = findViewById(R.id.newHabit_startDate);
+        findviews();
 
-        editTitle = findViewById(R.id.newHabit_name);
-        editDesc = findViewById(R.id.newHabit_description);
-        typeHabitRG = findViewById(R.id.radiogroup_typeHabit);
-
-        //Extra UI items
-        dateGoalEditText = findViewById(R.id.newHabit_dateHabit_goal);
-        economicCurrencySpinner = findViewById(R.id.newHabit_economicHabit_currency);
-        economicGoalEditText = findViewById(R.id.newHabit_economicHabit_goal);
-        economicAlternativePriceEditText = findViewById(R.id.newHabit_economicHabit_alternativePrice);
-        economicPriceEditText = findViewById(R.id.newHabit_economicHabit_price);
+        if(getIntent().hasExtra("TITLE")) {
+            setTitle(getIntent().getStringExtra("TITLE"));
+        }
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -94,6 +91,10 @@ public class HabitActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         economicCurrencySpinner.setAdapter(adapter);
 
+        if (getIntent().hasExtra("HABIT_NAME")) {
+            // TODO: Add logic to handle intent that sends habit.
+            // Needs to set a variable to handle saving, most likely.
+        }
         updateUI(typeHabit);
 
         typeHabitRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -178,25 +179,24 @@ public class HabitActivity extends AppCompatActivity {
 
     private void updateUI(int typeHabit) {
         if (typeHabit == 1) {
-            dateGoalEditText.setVisibility(View.INVISIBLE);
-            economicPriceEditText.setVisibility(View.VISIBLE);
-            economicGoalEditText.setVisibility(View.VISIBLE);
-            economicAlternativePriceEditText.setVisibility(View.VISIBLE);
+            dateGoalIT.setVisibility(View.INVISIBLE);
+            economicGoalIT.setVisibility(View.VISIBLE);
+            economicPriceIT.setVisibility(View.VISIBLE);
+            economicAlternativePriceIT.setVisibility(View.VISIBLE);
             economicCurrencySpinner.setVisibility(View.VISIBLE);
         } else if (typeHabit == 2) {
-            dateGoalEditText.setVisibility(View.VISIBLE);
-            economicPriceEditText.setVisibility(View.INVISIBLE);
-            economicGoalEditText.setVisibility(View.INVISIBLE);
-            economicAlternativePriceEditText.setVisibility(View.INVISIBLE);
+            dateGoalIT.setVisibility(View.VISIBLE);
+            economicPriceIT.setVisibility(View.INVISIBLE);
+            economicGoalIT.setVisibility(View.INVISIBLE);
+            economicAlternativePriceIT.setVisibility(View.INVISIBLE);
             economicCurrencySpinner.setVisibility(View.INVISIBLE);
         } else {
-            dateGoalEditText.setVisibility(View.INVISIBLE);
-            economicPriceEditText.setVisibility(View.INVISIBLE);
-            economicGoalEditText.setVisibility(View.INVISIBLE);
-            economicAlternativePriceEditText.setVisibility(View.INVISIBLE);
+            dateGoalIT.setVisibility(View.INVISIBLE);
+            economicPriceIT.setVisibility(View.INVISIBLE);
+            economicGoalIT.setVisibility(View.INVISIBLE);
+            economicAlternativePriceIT.setVisibility(View.INVISIBLE);
             economicCurrencySpinner.setVisibility(View.INVISIBLE);
         }
-
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -245,4 +245,22 @@ public class HabitActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void findviews() {
+        editTitle = findViewById(R.id.newHabit_name);
+        editDesc = findViewById(R.id.newHabit_description);
+        typeHabitRG = findViewById(R.id.radiogroup_typeHabit);
+
+        //Extra UI items
+        dateGoalEditText = findViewById(R.id.newHabit_dateHabit_goal);
+        dateGoalIT = findViewById(R.id.newHabit_dateHabit_goalIT);
+        economicGoalIT = findViewById(R.id.newHabit_economicHabit_goalIT);
+        economicPriceIT = findViewById(R.id.newHabit_economicHabit_priceIT);
+        economicAlternativePriceIT = findViewById(R.id.newHabit_economicHabit_alternativepriceIT);
+        economicCurrencySpinner = findViewById(R.id.newHabit_economicHabit_currency);
+        economicGoalEditText = findViewById(R.id.newHabit_economicHabit_goal);
+        economicAlternativePriceEditText = findViewById(R.id.newHabit_economicHabit_alternativePrice);
+        economicPriceEditText = findViewById(R.id.newHabit_economicHabit_price);
+    }
+
 }
+
