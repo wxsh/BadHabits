@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,6 +44,10 @@ import model.Habit;
 import model.SaveData;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    public static MyAdapter adapter;
+    public static MyFavoriteAdapter favAdapter;
 
 
         @Override
@@ -77,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO: Implement this into habits model?
         Collections.sort(Habit.habits, Habit.HabitComparator);
-
 
         initRecyclerView();
     }
@@ -115,10 +119,17 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initRecyclerView(){
+    private void  initRecyclerView(){
+
+        RecyclerView favoriteRecyclerView = findViewById(R.id.favorite_recycler_view);
+
+        favAdapter = new MyFavoriteAdapter(this);
+        favoriteRecyclerView.setAdapter(favAdapter);
+        favoriteRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        MyAdapter adapter = new MyAdapter(this);
+        adapter = new MyAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -157,5 +168,11 @@ public class MainActivity extends AppCompatActivity {
             saveData.updateData(2);
             initRecyclerView();
         }
+
+        public static void updateRecyclerView(){
+            adapter.notifyDataSetChanged();
+            favAdapter.notifyDataSetChanged();
+        }
+
 }
 

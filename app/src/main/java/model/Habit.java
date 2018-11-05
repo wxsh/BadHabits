@@ -61,6 +61,17 @@ public class Habit {
         return isFavourite;
     }
 
+    //staticGetters
+    public static boolean getHaveFavorite(){
+        if (habits != null){
+            for (Habit h : habits) {
+                if (h.getIsFavourite())
+                    return true;
+            }
+        }
+        return false;
+    }
+
 
     //Setters
 
