@@ -17,16 +17,20 @@ public class EconomicHabit extends Habit {
     private float goalValue;
     private float price;
     private float alternativePrice;
+    private static final String habitType = "Eco";
+
 
 
     // Constructor
-    public EconomicHabit(String title, String description, Date startDate, String currency, float alternativePrice, float goalValue, float price) {
-        super(title, description, startDate);
+    public EconomicHabit(String title, String description, long startDate, String currency, float alternativePrice, float goalValue, float price, Boolean isFavourite) {
+        super(title, description, startDate, isFavourite, habitType);
         this.currency = currency;
         this.alternativePrice = alternativePrice;
         this.goalValue = goalValue;
         this.price = price;
     }
+
+    public EconomicHabit() {}
 
     public String getCurrency() {
         return currency;
@@ -39,6 +43,8 @@ public class EconomicHabit extends Habit {
     public float getAlternativePrice() {
         return alternativePrice;
     }
+
+    public String getHabitType() {return habitType; }
 
     public void setCurrency(String currency) {
         this.currency = currency;
@@ -56,10 +62,12 @@ public class EconomicHabit extends Habit {
         this.goalValue = goalValue;
     }
 
+
+
     @Exclude
     public String getProgress() {
         Calendar c = Calendar.getInstance();
-        c.setTime(this.getStartDate());
+        c.setTime(new Date(this.getStartDate()));
         Date startDate = new Date(c.getTimeInMillis());
         float dateGoalL = ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
         float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()));

@@ -1,16 +1,11 @@
 package no.hiof.andrekar.badhabits;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -19,10 +14,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,7 +38,7 @@ public class HabitActivity extends AppCompatActivity {
 
     private String title;
     private String description;
-    private Date startDate;
+    private long startDate;
     //Title and description
     private EditText editTitle, editDesc, dateEditText;
     private String currency;
@@ -132,7 +123,7 @@ public class HabitActivity extends AppCompatActivity {
                         alternativePrice = Float.parseFloat(economicAlternativePriceEditText.getText().toString());
                         goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
                         price = Float.parseFloat(economicPriceEditText.getText().toString());
-                        EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, alternativePrice, goalValue, price);
+                        EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, alternativePrice, goalValue, price, false);
                         saveHabit(habit, typeHabit);
                     } else {
                         showTextNotification("Fields are empty");
@@ -141,7 +132,7 @@ public class HabitActivity extends AppCompatActivity {
                     boolean fieldsOK = checkFields(new EditText[] { dateGoalEditText, editTitle, editDesc, dateEditText });
                     if(fieldsOK == true) {
                         dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
-                        DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue);
+                        DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue, false);
                         saveHabit(habit, typeHabit);
                     } else {
                         showTextNotification("Fields are empty");
@@ -219,7 +210,7 @@ public class HabitActivity extends AppCompatActivity {
     }
 
 
-    private Date convertToDate(String dateToConvert) {
+    private long convertToDate(String dateToConvert) {
         Date convertedDate = new Date();
 
         try {
@@ -228,7 +219,7 @@ public class HabitActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        return convertedDate;
+        return convertedDate.getTime();
 
     }
 

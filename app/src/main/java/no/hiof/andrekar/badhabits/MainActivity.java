@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import model.SaveData;
 
 import java.util.ArrayList;
@@ -29,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+            setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -109,10 +112,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateData() {
         ArrayList<Habit> testHabits = new ArrayList<Habit>();
-        Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date(), "kr", 10, 100, 10);
-        Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date(), 10);
-        Habit poop = new EconomicHabit("Smokes", "Stop with smoking", new Date(), "kr", 10, 100, 10);
-        Habit scoop = new DateHabit("Having fun", "Stop having fun", new Date(), 10);
+        Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date().getTime(), "kr", 10, 100, 10, false);
+        Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date().getTime(), 10, true);
+        Habit poop = new EconomicHabit("Smokes", "Stop with smoking", new Date().getTime(), "kr", 10, 100, 10, false);
+        Habit scoop = new DateHabit("Having fun", "Stop having fun", new Date().getTime(), 10, false);
         gumHabit.setFavourite(true);
         scoop.setFavourite(true);
 

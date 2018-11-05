@@ -33,19 +33,23 @@ public class Habit {
     private boolean isFavourite;
 
     //Start date? - Maybe this is better as a String and cast it later?
-    private Date startDate;
+    private long startDate;
     private String uid;
+    private String habitType;
 
 
     //Constructors
-    public Habit(String title, String description, Date startDate) {
+    public Habit(String title, String description, long startDate, Boolean isFavourite, String habitType) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
-        this.isFavourite = false;
+        this.isFavourite = isFavourite;
         this.uid = UUID.randomUUID().toString();
         //We add habits when we save them, so adding to list is currently not needed.
         //habits.add(this);
+    }
+
+    public Habit() {
     }
 
     //Getters
@@ -57,7 +61,8 @@ public class Habit {
         return description;
     }
 
-    public Date getStartDate() {
+    @Exclude
+    public long getStartDate() {
         return startDate;
     }
 
@@ -65,15 +70,18 @@ public class Habit {
         return isFavourite;
     }
 
-    @Exclude
     public String getUid() { return uid; }
+
+    public String getHabitType() { return habitType; }
+
 
 
     //Setters
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(long startDate) {
         this.startDate = startDate;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }

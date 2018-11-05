@@ -10,20 +10,29 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 //DONE: Implement maths in class? IE: getters for progress?
 
 public class DateHabit extends Habit {
     private Integer dateGoalValue;
+    private static final String habitType = "Date";
 
-    public DateHabit(String title, String description, Date startDate, Integer dateGoalValue) {
-        super(title, description, startDate);
+    public DateHabit() {}
+
+    public DateHabit(String title, String description, long startDate, Integer dateGoalValue, boolean isFavourite) {
+        super(title, description, startDate, isFavourite, habitType);
         this.dateGoalValue = dateGoalValue;
     }
+
 
     public Integer getDateGoalValue() {
         return dateGoalValue;
     }
+
+    public String getHabitType() { return habitType; }
+
 
     public void setDateGoalValue(Integer dateGoalValue) {
         this.dateGoalValue = dateGoalValue;
@@ -34,7 +43,7 @@ public class DateHabit extends Habit {
         String dateGoal;
         //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyy");
         Calendar c = Calendar.getInstance();
-        c.setTime(this.getStartDate());
+        c.setTime(new Date(this.getStartDate()));
         c.add(Calendar.DATE,this.getDateGoalValue());
         Date endDate = new Date(c.getTimeInMillis());
         //dateGoal = simpleDateFormat.format(endDate);
@@ -45,5 +54,4 @@ public class DateHabit extends Habit {
         }
         else return "Mål nådd";
     }
-
 }
