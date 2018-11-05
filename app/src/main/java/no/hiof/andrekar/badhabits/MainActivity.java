@@ -71,11 +71,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), HabitActivity.class);
+                intent.putExtra("TITLE", "Add new habit");
                 startActivity(intent);
             }
         });
 
-        //TODO: Implement this into habits model?
+        //DONE: Implement this into habits model?
         Collections.sort(Habit.habits, Habit.HabitComparator);
 
 
@@ -116,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView(){
-
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         MyAdapter adapter = new MyAdapter(this);
         recyclerView.setAdapter(adapter);
