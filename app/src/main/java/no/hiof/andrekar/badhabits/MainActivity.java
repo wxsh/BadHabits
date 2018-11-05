@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+
     private void populateData() {
         ArrayList<Habit> testHabits = new ArrayList<Habit>();
         Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date(), "kr", 10, 100, 10);

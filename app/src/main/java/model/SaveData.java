@@ -150,6 +150,55 @@ public class SaveData {
         }
 
     }
+    public void saveToFile(Habit habit, int typeHabit, int habitIndex) {
+        try {
+            // Create a new Gson object
+            Gson gson = new Gson();
+
+            //convert the Java object to json
+            if(typeHabit == 1) {
+                Log.d("InstanceOF", "Got Eco Habit");
+
+                Habit.habits.set(habitIndex, habit);
+                ecohabits.clear();
+                for ( Habit habitListed : Habit.habits ) {
+                    Log.d("InstanceOF", "Looping through habits");
+                    if (habitListed instanceof EconomicHabit) {
+                        Log.d("InstanceOF", "EcoHabit");
+                        ecohabits.add((EconomicHabit) habitListed);
+                    }
+                }
+                String jsonString = gson.toJson(ecohabits);
+
+                FileWriter fileWriter = new FileWriter(ecofile, false);
+                fileWriter.write(jsonString);
+                fileWriter.close();
+                //EconomicHabit.ecohabits.clear();
+            } else if (typeHabit == 2) {
+
+                Log.d("InstanceOF", "Got Date Habit");
+
+                Habit.habits.set(habitIndex, habit);
+                datehabits.clear();
+                for ( Habit habitListed : Habit.habits ) {
+                    Log.d("InstanceOF", "Looping through habits");
+                    if (habitListed instanceof DateHabit) {
+                        Log.d("InstanceOF", "EcoHabit");
+                        datehabits.add((DateHabit) habitListed);
+                    }
+                }
+                String jsonString = gson.toJson(datehabits);
+                FileWriter fileWriter = new FileWriter(datefile, false);
+                fileWriter.write(jsonString);
+                fileWriter.close();
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void updateData(int typeHabit) {
         Gson gson = new Gson();

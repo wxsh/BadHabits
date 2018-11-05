@@ -73,7 +73,7 @@ public class HabitActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit);
         final EditText dateEditText = findViewById(R.id.newHabit_startDate);
@@ -133,17 +133,40 @@ public class HabitActivity extends AppCompatActivity {
                         alternativePrice = Float.parseFloat(economicAlternativePriceEditText.getText().toString());
                         goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
                         price = Float.parseFloat(economicPriceEditText.getText().toString());
+
                         EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, alternativePrice, goalValue, price);
-                        saveHabit(habit, typeHabit);
-                    } else {
+
+                        if (getIntent().getSerializableExtra("CURRENT_HABIT_INDEX") == null){
+                            saveHabit(habit, typeHabit);
+                            System.out.println("Hei");
+                        }
+                        else{
+                            int habitIndex = (int) getIntent().getSerializableExtra("CURRENT_HABIT_INDEX");
+                            System.out.println(habitIndex);
+                            saveHabit(habit, typeHabit, habitIndex);
+                        }
+                    }else {
                         showTextNotification("Fields are empty");
                     }
                 } else if (typeHabit == 2) {
                     boolean fieldsOK = checkFields(new EditText[] { dateGoalEditText, editTitle, editDesc, dateEditText });
                     if(fieldsOK == true) {
-                        dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
+
                         DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue);
-                        saveHabit(habit, typeHabit);
+
+                        if (getIntent().getSerializableExtra("CURRENT_HABIT_INDEX") == null){
+                            saveHabit(habit, typeHabit);
+                            System.out.println("Hei");
+                        }
+                        else{
+                            int habitIndex = (int) getIntent().getSerializableExtra("CURRENT_HABIT_INDEX");
+                            System.out.println(habitIndex);
+                            saveHabit(habit, typeHabit, habitIndex);
+                        }
+
+                        //dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
+                        //DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue);
+                        //saveHabit(habit, typeHabit);
                     } else {
                         showTextNotification("Fields are empty");
                     }
@@ -154,6 +177,8 @@ public class HabitActivity extends AppCompatActivity {
                 //Habit habit = new Habit(title, description, startDate);
                 //testhabit
                 //Habit habit2 = new Habit("a","test",new Date());
+
+
             }
         });
 
@@ -240,6 +265,14 @@ public class HabitActivity extends AppCompatActivity {
     private void saveHabit(Habit habit, int typeHabit) {
         SaveData saveData = new SaveData();
         saveData.saveToFile(habit, typeHabit);
+        //saveData.saveToFile(habit2,"testers.txt");
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void saveHabit(Habit habit, int typeHabit, int habitIndex) {
+        SaveData saveData = new SaveData();
+        saveData.saveToFile(habit, typeHabit, habitIndex);
         //saveData.saveToFile(habit2,"testers.txt");
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);
