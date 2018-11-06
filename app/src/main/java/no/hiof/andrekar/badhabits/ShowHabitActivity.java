@@ -1,17 +1,17 @@
 package no.hiof.andrekar.badhabits;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import model.DateHabit;
 import model.EconomicHabit;
@@ -32,21 +32,34 @@ public class ShowHabitActivity extends AppCompatActivity {
         DateHabit dateHabit;
 
 
-        TextView goalView = findViewById(R.id.goalTextView);
+        TextView goalView = findViewById(R.id.getGoalTextView);
+        TextView progressView = findViewById(R.id.getProgressTextView);
+        TextView startView = findViewById(R.id.getStartTextView);
 
         if (Habit.habits.get(currentNumber).getClass() == DateHabit.class){
             dateHabit = (DateHabit) Habit.habits.get(currentNumber);
-            goalView.setText(dateHabit.getDateGoal().toString());
+            goalView.setText(dateHabit.getDateGoal());
+            progressView.setText(dateHabit.getDaysSinceStart());
+            //temp code?
+            Date date=new Date(dateHabit.getStartDate());
+            SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
+            String dateText = df2.format(date);
+            startView.setText(dateText);
         }
         else {
             ecohabit = (EconomicHabit) Habit.habits.get(currentNumber);
             goalView.setText(String.valueOf(ecohabit.getGoalValue()));
+            progressView.setText(ecohabit.getProgress());
+            Date date=new Date(ecohabit.getStartDate());
+            SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
+            String dateText = df2.format(date);
+            startView.setText(dateText);
         }
 
         TextView titleView = findViewById(R.id.habitTitleTextView);
         titleView.setText(Habit.habits.get(currentNumber).getTitle());
 
-        TextView descriptionView = findViewById(R.id.descriptionTextView);
+        TextView descriptionView = findViewById(R.id.getDescriptionTextView);
         descriptionView.setText(Habit.habits.get(currentNumber).getDescription());
 
 

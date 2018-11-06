@@ -94,7 +94,12 @@
     <string name="used_providers">Providers used: %s</string>
     <string name="idp_token">IDP Token</string>
     <string name="idp_secret">IDP Secret</string>
-
+    <string name="habittitle">HabitTitle</string>
+    <string name="description">Description:</string>
+    <string name="description_show_habit">Description</string>
+    <string name="goal">Goal:</string>
+    <string name="days_without">Days without:</string>
+    <string name="start">Start date:</string>
 
 
 </resources>
