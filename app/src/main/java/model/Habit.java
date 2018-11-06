@@ -3,6 +3,7 @@ package model;
 
 import android.util.Log;
 
+import com.google.firebase.database.Exclude;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.UUID;
 
 public class Habit {
     //An ArrayList to contain all habits when they are created
@@ -31,17 +33,23 @@ public class Habit {
     private boolean isFavourite;
 
     //Start date? - Maybe this is better as a String and cast it later?
-    private Date startDate;
+    private long startDate;
+    private String uid;
+    private String habitType;
 
 
     //Constructors
-    public Habit(String title, String description, Date startDate) {
+    public Habit(String title, String description, long startDate, Boolean isFavourite, String habitType) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
-        this.isFavourite = false;
+        this.isFavourite = isFavourite;
+        this.uid = UUID.randomUUID().toString();
         //We add habits when we save them, so adding to list is currently not needed.
         //habits.add(this);
+    }
+
+    public Habit() {
     }
 
     //Getters
@@ -53,7 +61,7 @@ public class Habit {
         return description;
     }
 
-    public Date getStartDate() {
+    public long getStartDate() {
         return startDate;
     }
 
@@ -71,13 +79,18 @@ public class Habit {
         }
         return false;
     }
+    public String getUid() { return uid; }
+
+    public String getHabitType() { return habitType; }
+
 
 
     //Setters
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(long startDate) {
         this.startDate = startDate;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -102,4 +115,5 @@ public class Habit {
             return result;
         }
     };
+
 }

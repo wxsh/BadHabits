@@ -91,7 +91,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                     Intent intent = new Intent(mContext, ShowHabitActivity.class);
                     mContext.startActivity(intent);
                 }
-            });
+                else {
+                    Habit.habits.get(position).setFavourite(true);
+                    imgB.setImageResource(R.drawable.star_on);
+                }
+                SaveData saveData = new SaveData();
+                if (Habit.habits.get(position).getClass() == DateHabit.class) {
+                    saveData.updateData(Habit.habits.get(position), 2);
+                } else if(Habit.habits.get(position).getClass() == EconomicHabit.class) {
+                    saveData.updateData(Habit.habits.get(position), 1);
+                }
 
             holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
