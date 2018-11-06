@@ -66,10 +66,11 @@ public class SaveData {
     FirebaseAuth fbAuth = FirebaseAuth.getInstance();
     private boolean habitexists = false;
 
-    //TODO: Fix duplication problem.
+    //DONE: Fix duplication problem.
+    //TODO: Make Adapter refresh after sync
 
 
-    public void readFromFile(Context context) {
+    public void readFromFile(final Context context) {
         //Create a new Gson object
         //Habit.habits.clear();
         //Gson gson = new Gson();
@@ -92,8 +93,9 @@ public class SaveData {
                     Habit.habits.add(habit);
                     Log.d(TAG, "Adding" + habit.toString() + "From firebase");
                 }
-                //adapter.notifyDataSetChanged();
                 Log.d(TAG, "This should be after adapter has loaded list; Habits length"+Habit.habits.size());
+
+                //TODO: Callback to mainactivity to update list.
                 // A new Habit has been added, add it to the displayed list
                 //Habit habit = (DateHabit) dataSnapshot.getValue(DateHabit.class);
 
@@ -242,9 +244,23 @@ public class SaveData {
 
     };
 
-    public void updateData(int typeHabit) {
-        Gson gson = new Gson();
+    public void removeData(Habit habit, int typeHabit) {
+        if (typeHabit == 1) {
+            dbRef.child(fbAuth.getUid()).child("habits").child("EcoHabits").child(habit.getUid()).removeValue();
+        } else if (typeHabit == 2) {
+            dbRef.child(fbAuth.getUid()).child("habits").child("DateHabits").child(habit.getUid()).removeValue();
+        }
+    }
 
+    public void updateData(Habit habit, int typeHabit) {
+        // Gson gson = new Gson();
+
+        if (typeHabit == 1) {
+            dbRef.child(fbAuth.getUid()).child("habits").child("EcoHabits").child(habit.getUid()).setValue(habit);
+        } else if (typeHabit == 2) {
+            dbRef.child(fbAuth.getUid()).child("habits").child("DateHabits").child(habit.getUid()).setValue(habit);
+        }
+        /*
         try {
             if (typeHabit == 1) {
                 ecohabits.clear();
@@ -277,5 +293,6 @@ public class SaveData {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
     }
 }

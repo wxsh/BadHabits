@@ -100,11 +100,11 @@ public class MainActivity extends AppCompatActivity {
         Collections.sort(Habit.habits, Habit.HabitComparator);
 
 
-        initRecyclerView();
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-            SaveData saveData = new SaveData();
-            saveData.readFromFile(this);
+                SaveData saveData = new SaveData();
+                saveData.readFromFile(this);
             }
+            initRecyclerView();
         }
 
 
@@ -181,8 +181,8 @@ public class MainActivity extends AppCompatActivity {
         private void removeData() {
             Habit.habits.clear();
             SaveData saveData = new SaveData();
-            saveData.updateData(1);
-            saveData.updateData(2);
+            //saveData.updateData(1);
+            //saveData.updateData(2);
             initRecyclerView();
         }
 }

@@ -59,16 +59,16 @@ public class ShowHabitActivity extends AppCompatActivity {
                         .setTitle("Delete habit?")
                         .setPositiveButton("Yes, I Confirm", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //TODO can this be done without looping through all habits?
+                                //DONE can this be done without looping through all habits?
                                 Habit habit = Habit.habits.get(currentNumber);
                                 SaveData saveData = new SaveData();
-
+                                //DONE: Fix deletion after implementing firebase. We can null out habit to firebase.
                                 if (habit instanceof EconomicHabit) {
+                                    saveData.removeData(Habit.habits.get(currentNumber), 1);
                                     Habit.habits.remove(currentNumber);
-                                    saveData.updateData(1);
                                 } else if (habit instanceof DateHabit) {
+                                    saveData.removeData(Habit.habits.get(currentNumber), 2);
                                     Habit.habits.remove(currentNumber);
-                                    saveData.updateData(2);
                                 }
 
 
