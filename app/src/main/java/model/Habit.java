@@ -61,7 +61,6 @@ public class Habit {
         return description;
     }
 
-    @Exclude
     public long getStartDate() {
         return startDate;
     }

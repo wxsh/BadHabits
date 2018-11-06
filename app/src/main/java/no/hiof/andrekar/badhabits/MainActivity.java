@@ -68,9 +68,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Habit.habits.clear();
-        SaveData saveData = new SaveData();
-        //saveData.readFromFile();
+
 
 
 
@@ -96,7 +94,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         initRecyclerView();
-    }
+        SaveData saveData = new SaveData();
+        saveData.readFromFile(this);
+        }
 
 
 

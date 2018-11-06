@@ -53,6 +53,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import no.hiof.andrekar.badhabits.MainActivity;
+import no.hiof.andrekar.badhabits.MyAdapter;
 
 public class SaveData {
     //Todo: Change this into internal storage, no need to use Downloads
@@ -64,46 +65,26 @@ public class SaveData {
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     FirebaseAuth fbAuth = FirebaseAuth.getInstance();
 
+    //TODO: Fix duplication problem.
 
 
-
-    public void readFromFile() {
+    public void readFromFile(Context context) {
         //Create a new Gson object
         //Habit.habits.clear();
         //Gson gson = new Gson();
+        //Habit.habits.clear();
+
         ChildEventListener childEventListener = new ChildEventListener() {
             String TAG = "firebaseread";
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getValue(DateHabit.class).getHabitType());
+                Log.d(TAG, "onChildAdded:" + dataSnapshot.getValue(DateHabit.class).getTitle());
 
-                if(dataSnapshot.getValue(DateHabit.class).getHabitType() == "Date") {
-                    Log.d(TAG, "onChildAdded: if test passed");
-                    String title = dataSnapshot.getValue(DateHabit.class).getTitle();
-                    String description = dataSnapshot.getValue(DateHabit.class).getDescription();
-                    int dateGoalValue = dataSnapshot.getValue(DateHabit.class).getDateGoalValue();
-                    boolean isFavourite = dataSnapshot.getValue(DateHabit.class).getIsFavourite();
-
-                    DateHabit tempHabit = new DateHabit(title, description, new Date().getTime(),dateGoalValue,isFavourite);
-                    Habit habit = (DateHabit) tempHabit;
-                    Habit.habits.add(habit);
-
-                }
-
-                if(dataSnapshot.getValue(DateHabit.class).getHabitType() == "Eco") {
-                    Log.d(TAG, "onChildAdded: if test passed for Eco");
-                    String title = dataSnapshot.getValue(EconomicHabit.class).getTitle();
-                    String description = dataSnapshot.getValue(EconomicHabit.class).getDescription();
-                    boolean isFavourite = dataSnapshot.getValue(EconomicHabit.class).getIsFavourite();
-
-                    //DateHabit tempHabit = new EconomicHabit(title, description, new Date().getTime(),dateGoalValue,isFavourite);
-
-                }
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getValue(Habit.class).getTitle());
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getValue(Habit.class).getDescription());
-
-
+                Habit habit = (DateHabit) dataSnapshot.getValue(DateHabit.class);
+                Habit.habits.add(habit);
+                //adapter.notifyDataSetChanged();
+                Log.d(TAG, "This should be after adapter has loaded list; Habits length"+Habit.habits.size());
                 // A new Habit has been added, add it to the displayed list
                 //Habit habit = (DateHabit) dataSnapshot.getValue(DateHabit.class);
 
@@ -150,12 +131,8 @@ public class SaveData {
                 Log.w(TAG, "postHabits:onCancelled", databaseError.toException());
             }
         };
-        dbRef.child(fbAuth.getUid()).child("habits").addChildEventListener(childEventListener);
 
-        for (int i = 0; i < Habit.habits.size(); i++ ) {
-            Log.d("firebaseread", "post read, got habits in list: "+Habit.habits.get(i).getTitle());
-        }
-
+        dbRef.child(fbAuth.getUid()).child("habits").child("DateHabits").addChildEventListener(childEventListener);
 
         /*
         try {
@@ -203,7 +180,11 @@ public class SaveData {
         //try {
             // Create a new Gson object
             //Gson gson = new Gson();
-            dbRef.child(fbAuth.getUid()).child("habits").child(habit.getUid()).setValue(habit);
+        if (typeHabit == 1) {
+            dbRef.child(fbAuth.getUid()).child("habits").child("EcoHabits").child(habit.getUid()).setValue(habit);
+        } else if (typeHabit == 2) {
+            dbRef.child(fbAuth.getUid()).child("habits").child("DateHabits").child(habit.getUid()).setValue(habit);
+        }
 
             /*
             //convert the Java object to json
