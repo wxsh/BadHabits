@@ -23,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 import java.util.List;
 
+//TODO: Handle merging if account exits and data is present for anon user in database?
+
 public class SettingsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
@@ -47,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
         buttonRegUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), 200);
+                startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).build(), 200);
             }
         });
     }
