@@ -94,6 +94,7 @@ public class SaveData {
                     Log.d(TAG, "Adding" + habit.toString() + "From firebase");
                 }
                 Log.d(TAG, "This should be after adapter has loaded list; Habits length"+Habit.habits.size());
+                MainActivity.updateRecyclerView();
 
                 //TODO: Callback to mainactivity to update list.
                 // A new Habit has been added, add it to the displayed list
