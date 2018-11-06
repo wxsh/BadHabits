@@ -53,14 +53,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         else {
             holder.itemView.setVisibility(View.VISIBLE);
             holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+        }
 
-
-            if(position %2 == 1)
-            {
+            if (position % 2 == 1) {
                 holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
-            }
-            else
-            {
+            } else {
                 holder.itemView.setBackgroundColor(Color.parseColor("#e8e8e8"));
                 //  holder.imageView.setBackgroundColor(Color.parseColor("#FFFAF8FD"));
             }
@@ -69,38 +66,29 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
             //TODO: reminder
-            if(Habit.habits.get(position).getClass() == EconomicHabit.class){
+            if (Habit.habits.get(position).getClass() == EconomicHabit.class) {
                 holder.habitGoal.setText(((EconomicHabit) Habit.habits.get(position)).getProgress());
-            } else if (Habit.habits.get(position).getClass() == DateHabit.class){
-                holder.habitGoal.setText(((DateHabit)Habit.habits.get(position)).getDateGoal());
+            } else if (Habit.habits.get(position).getClass() == DateHabit.class) {
+                holder.habitGoal.setText(((DateHabit) Habit.habits.get(position)).getDateGoal());
             }
 
-            if (Habit.habits.get(position).getIsFavourite()){
+            if (Habit.habits.get(position).getIsFavourite()) {
                 holder.favoriteButton.setImageResource(R.drawable.star_on);
-            }
-            else {
+            } else {
                 holder.favoriteButton.setImageResource(R.drawable.star_off);
             }
 
 
             holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d(TAG, "onClick: clicked on: " + Habit.habits.get(position).getTitle());
-                    ShowHabitActivity.setCurrentNumber(position);
-                    Intent intent = new Intent(mContext, ShowHabitActivity.class);
-                    mContext.startActivity(intent);
-                }
-                else {
-                    Habit.habits.get(position).setFavourite(true);
-                    imgB.setImageResource(R.drawable.star_on);
-                }
-                SaveData saveData = new SaveData();
-                if (Habit.habits.get(position).getClass() == DateHabit.class) {
-                    saveData.updateData(Habit.habits.get(position), 2);
-                } else if(Habit.habits.get(position).getClass() == EconomicHabit.class) {
-                    saveData.updateData(Habit.habits.get(position), 1);
-                }
+                                                       @Override
+                                                       public void onClick(View view) {
+                                                           Log.d(TAG, "onClick: clicked on: " + Habit.habits.get(position).getTitle());
+                                                           ShowHabitActivity.setCurrentNumber(position);
+                                                           Intent intent = new Intent(mContext, ShowHabitActivity.class);
+                                                           mContext.startActivity(intent);
+                                                       }
+                                                   });
+
 
             holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,19 +96,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                     ImageButton imgB = view.findViewById(R.id.favoriteBtn);
 
 
-                    if (Habit.habits.get(position).getIsFavourite()){
+                    if (Habit.habits.get(position).getIsFavourite()) {
                         Habit.habits.get(position).setFavourite(false);
                         holder.favoriteButton.setImageResource(R.drawable.star_off);
-                    }
-                    else {
+                    } else {
                         Habit.habits.get(position).setFavourite(true);
                         holder.favoriteButton.setImageResource(R.drawable.star_on);
                     }
                     SaveData saveData = new SaveData();
                     if (Habit.habits.get(position).getClass() == DateHabit.class) {
-                        saveData.updateData(2);
-                    } else if(Habit.habits.get(position).getClass() == EconomicHabit.class) {
-                        saveData.updateData(1);
+                        saveData.updateData(Habit.habits.get(position), 2);
+                    } else if (Habit.habits.get(position).getClass() == EconomicHabit.class) {
+                        saveData.updateData(Habit.habits.get(position), 1);
                     }
 
                     Collections.sort(Habit.habits, Habit.HabitComparator);
@@ -130,7 +117,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                 }
             });
         }
-    }
+
 
     @Override
     public int getItemCount() {
