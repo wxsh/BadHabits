@@ -64,6 +64,7 @@ public class SaveData {
     ArrayList<DateHabit> datehabits = new ArrayList<DateHabit>();
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     FirebaseAuth fbAuth = FirebaseAuth.getInstance();
+    private boolean habitexists = false;
 
     //TODO: Fix duplication problem.
 
@@ -73,7 +74,6 @@ public class SaveData {
         //Habit.habits.clear();
         //Gson gson = new Gson();
         //Habit.habits.clear();
-
         ChildEventListener childEventListener = new ChildEventListener() {
             String TAG = "firebaseread";
             @Override
@@ -82,7 +82,16 @@ public class SaveData {
                 Log.d(TAG, "onChildAdded:" + dataSnapshot.getValue(DateHabit.class).getTitle());
 
                 Habit habit = (DateHabit) dataSnapshot.getValue(DateHabit.class);
-                Habit.habits.add(habit);
+                for (Habit habitL: habit.habits) {
+                    if (habitL.getUid() == dataSnapshot.getValue(DateHabit.class).getUid()) {
+                        habitexists = true;
+                        Log.d(TAG, "Habit already found");
+                    }
+                }
+                if(habitexists == false) {
+                    Habit.habits.add(habit);
+                    Log.d(TAG, "Adding" + habit.toString() + "From firebase");
+                }
                 //adapter.notifyDataSetChanged();
                 Log.d(TAG, "This should be after adapter has loaded list; Habits length"+Habit.habits.size());
                 // A new Habit has been added, add it to the displayed list

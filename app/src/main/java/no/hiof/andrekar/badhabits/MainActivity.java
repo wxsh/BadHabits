@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import model.SaveData;
@@ -36,10 +37,16 @@ import model.Habit;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(mDatabase == null) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            database.setPersistenceEnabled(true);
+            mDatabase = database.getReference();
+        }
         mAuth = FirebaseAuth.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
                 mAuth.signInAnonymously()
@@ -94,8 +101,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         initRecyclerView();
-        SaveData saveData = new SaveData();
-        saveData.readFromFile(this);
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            SaveData saveData = new SaveData();
+            saveData.readFromFile(this);
+            }
         }
 
 
