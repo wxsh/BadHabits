@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
                 SaveData saveData = new SaveData();
-                saveData.readFromFile(this);
+                saveData.readFromFile();
             }
             initRecyclerView();
         }

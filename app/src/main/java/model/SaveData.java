@@ -70,7 +70,7 @@ public class SaveData {
     //TODO: Make Adapter refresh after sync
 
 
-    public void readFromFile(final Context context) {
+    public void readFromFile() {
         //Create a new Gson object
         //Habit.habits.clear();
         //Gson gson = new Gson();
@@ -252,6 +252,7 @@ public class SaveData {
             dbRef.child(fbAuth.getUid()).child("habits").child("DateHabits").child(habit.getUid()).removeValue();
         }
     }
+
     public void saveToFile(Habit habit, int typeHabit, int habitIndex) {
         try {
             // Create a new Gson object

@@ -59,6 +59,9 @@ public class HabitActivity extends AppCompatActivity {
 
     private int dateGoalValue;
 
+    //Edit mode when habit is sent
+    private boolean editMode;
+
     // 1 = Eco, 2 = Date
     private int typeHabit = 0;
 
@@ -85,8 +88,9 @@ public class HabitActivity extends AppCompatActivity {
         economicCurrencySpinner.setAdapter(adapter);
 
         if (getIntent().hasExtra("HABIT_NAME")) {
-            // TODO: Add logic to handle intent that sends habit.
-            // Needs to set a variable to handle saving, most likely.
+            setTitle(getIntent().getStringExtra("HABIT_NAME"));
+            //TODO: Fill out fields and change save function to handle existing habit.
+            editMode = true;
         }
         updateUI(typeHabit);
 
@@ -116,39 +120,22 @@ public class HabitActivity extends AppCompatActivity {
                 title = editTitle.getText().toString();
                 description = editDesc.getText().toString();
                 startDate = convertToDate(dateEditText.getText().toString());
-
-
-                //DONE: Check variable from radiogroup
-                if (typeHabit == 1) {
-                    boolean fieldsOK = checkFields(new EditText[] { economicAlternativePriceEditText, economicGoalEditText, economicPriceEditText, editTitle, editDesc, dateEditText });
-                    if (fieldsOK == true) {
-                        currency = economicCurrencySpinner.getSelectedItem().toString();
-                        alternativePrice = Float.parseFloat(economicAlternativePriceEditText.getText().toString());
-                        goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
-                        price = Float.parseFloat(economicPriceEditText.getText().toString());
-                        EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, alternativePrice, goalValue, price, false);
-                        saveHabit(habit, typeHabit);
-                    } else {
-                        showTextNotification("Fields are empty");
-                    }
+                boolean fieldsOK = false;
+                if(typeHabit == 1) {
+                    fieldsOK = checkFields(new EditText[]{economicAlternativePriceEditText, economicGoalEditText, economicPriceEditText, editTitle, editDesc, dateEditText});
                 } else if (typeHabit == 2) {
-                    boolean fieldsOK = checkFields(new EditText[] { dateGoalEditText, editTitle, editDesc, dateEditText });
-                    if(fieldsOK == true) {
-                        dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
-                        DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue, false);
-                        saveHabit(habit, typeHabit);
+                    fieldsOK = checkFields(new EditText[]{dateGoalEditText, editTitle, editDesc, dateEditText});
+                }
+
+                if (typeHabit != 0) {
+                    if (fieldsOK == true) {
+                        saveHabit(typeHabit);
                     } else {
                         showTextNotification("Fields are empty");
                     }
-
                 } else {
                     showTextNotification("Please select a type of habit");
                 }
-                //Habit habit = new Habit(title, description, startDate);
-                //testhabit
-                //Habit habit2 = new Habit("a","test",new Date());
-
-
             }
         });
 
@@ -232,10 +219,29 @@ public class HabitActivity extends AppCompatActivity {
         Toast.makeText(this, msgToDisplay, Toast.LENGTH_SHORT).show();
     }
 
-    private void saveHabit(Habit habit, int typeHabit) {
+    private void saveHabit(int typeHabit) {
         SaveData saveData = new SaveData();
-        saveData.saveToFile(habit, typeHabit);
-        //saveData.saveToFile(habit2,"testers.txt");
+        if (typeHabit == 1) {
+            currency = economicCurrencySpinner.getSelectedItem().toString();
+            alternativePrice = Float.parseFloat(economicAlternativePriceEditText.getText().toString());
+            goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
+            price = Float.parseFloat(economicPriceEditText.getText().toString());
+            if (editMode == false) {
+                EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, alternativePrice, goalValue, price, false);
+                saveData.saveToFile(habit, typeHabit);
+            } else if (editMode == true) {
+                //TODO add economichabit edit handling.
+            }
+        } else if (typeHabit == 2) {
+            dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
+            if (editMode == false) {
+                DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue, false);
+                saveData.saveToFile(habit, typeHabit);
+            } else if (editMode == true) {
+                //TODO add datehabit edit handling
+            }
+        }
+
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);
     }
