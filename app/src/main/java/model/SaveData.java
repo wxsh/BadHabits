@@ -71,11 +71,7 @@ public class SaveData {
 
 
     public void readFromFile() {
-        //Create a new Gson object
-        //Habit.habits.clear();
-        //Gson gson = new Gson();
-        //Habit.habits.clear();
-        ChildEventListener childEventListener = new ChildEventListener() {
+        ChildEventListener dateEventListener = new ChildEventListener() {
             String TAG = "firebaseread";
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
@@ -97,10 +93,6 @@ public class SaveData {
                 MainActivity.updateRecyclerView();
 
                 //TODO: Callback to mainactivity to update list.
-                // A new Habit has been added, add it to the displayed list
-                //Habit habit = (DateHabit) dataSnapshot.getValue(DateHabit.class);
-
-                // ...
             }
 
             @Override
@@ -143,106 +135,84 @@ public class SaveData {
                 Log.w(TAG, "postHabits:onCancelled", databaseError.toException());
             }
         };
+        ChildEventListener ecoEventListener = new ChildEventListener() {
+            String TAG = "firebaseread, ECO";
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
+                Log.d(TAG, "onChildAdded:" + dataSnapshot.getValue(EconomicHabit.class).getTitle());
 
-        dbRef.child(fbAuth.getUid()).child("habits").child("DateHabits").addChildEventListener(childEventListener);
-
-        /*
-        try {
-        //Read the employee.json file
-            BufferedReader br = new BufferedReader(
-                new FileReader(datefile));
-
-            //convert the json to  Java object (Employee)
-
-            Type collectionType = new TypeToken<ArrayList<DateHabit>>(){}.getType();
-            ArrayList<DateHabit> habitsF = gson.fromJson(br, collectionType);
-            for (int i = 0; i < habitsF.size(); i++ ) {
-                    Habit habit = (DateHabit) habitsF.get(i);
-                    Habit.habits.add(habit);
+                Habit habit = (EconomicHabit) dataSnapshot.getValue(EconomicHabit.class);
+                for (Habit habitL: habit.habits) {
+                    if (habitL.getUid() == dataSnapshot.getValue(EconomicHabit.class).getUid()) {
+                        habitexists = true;
+                        Log.d(TAG, "Habit already found");
+                    }
                 }
+                if(habitexists == false) {
+                    Habit.habits.add(habit);
+                    Log.d(TAG, "Adding" + habit.toString() + "From firebase");
+                }
+                Log.d(TAG, "This should be after adapter has loaded list; Habits length"+Habit.habits.size());
+                MainActivity.updateRecyclerView();
+
+                //TODO: Callback to mainactivity to update list.
             }
-            catch (IOException e)
-        {
-            e.printStackTrace();
-        }
 
-        try {
-            //Read the employee.json file
-            BufferedReader br = new BufferedReader(
-                    new FileReader(ecofile));
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
 
-            //convert the json to  Java object
+                // A Habit has changed, use the key to determine if we are displaying this
+                // Habit and if so displayed the changed Habit.
+                EconomicHabit newHabit = dataSnapshot.getValue(EconomicHabit.class);
+                String HabitKey = dataSnapshot.getKey();
 
-            Type collectionType = new TypeToken<ArrayList<EconomicHabit>>(){}.getType();
-            ArrayList<EconomicHabit> habitsF = gson.fromJson(br, collectionType);
-            for (int i = 0; i < habitsF.size(); i++ ) {
-                Habit habit = (EconomicHabit) habitsF.get(i);
-                Habit.habits.add(habit);
+                // ...
             }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        */
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+
+                // A Habit has changed, use the key to determine if we are displaying this
+                // Habit and if so remove it.
+                String HabitKey = dataSnapshot.getKey();
+
+                // ...
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+
+                // A Habit has changed position, use the key to determine if we are
+                // displaying this Habit and if so move it.
+                EconomicHabit movedHabit = dataSnapshot.getValue(EconomicHabit.class);
+                String HabitKey = dataSnapshot.getKey();
+
+                // ...
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "postHabits:onCancelled", databaseError.toException());
+            }
+        };
+
+
+        dbRef.child(fbAuth.getUid()).child("habits").keepSynced(true);
+        dbRef.child(fbAuth.getUid()).child("habits").child("DateHabits").addChildEventListener(dateEventListener);
+        dbRef.child(fbAuth.getUid()).child("habits").child("EcoHabits").addChildEventListener(ecoEventListener);
 
 }
 
     public void saveToFile(Habit habit, int typeHabit) {
-        //try {
-            // Create a new Gson object
-            //Gson gson = new Gson();
         if (typeHabit == 1) {
             dbRef.child(fbAuth.getUid()).child("habits").child("EcoHabits").child(habit.getUid()).setValue(habit);
         } else if (typeHabit == 2) {
             dbRef.child(fbAuth.getUid()).child("habits").child("DateHabits").child(habit.getUid()).setValue(habit);
         }
-
-            /*
-            //convert the Java object to json
-            if(typeHabit == 1) {
-                Log.d("InstanceOF", "Got Eco Habit");
-
-                Habit.habits.add(habit);
-                ecohabits.clear();
-                for ( Habit habitListed : Habit.habits ) {
-                    Log.d("InstanceOF", "Looping through habits");
-                    if (habitListed instanceof EconomicHabit) {
-                        Log.d("InstanceOF", "EcoHabit");
-                        ecohabits.add((EconomicHabit) habitListed);
-                    }
-                }
-                String jsonString = gson.toJson(ecohabits);
-
-                FileWriter fileWriter = new FileWriter(ecofile, false);
-                fileWriter.write(jsonString);
-                fileWriter.close();
-                //EconomicHabit.ecohabits.clear();
-            } else if (typeHabit == 2) {
-
-                Log.d("InstanceOF", "Got Date Habit");
-
-                Habit.habits.add(habit);
-                datehabits.clear();
-                for ( Habit habitListed : Habit.habits ) {
-                    Log.d("InstanceOF", "Looping through habits");
-                    if (habitListed instanceof DateHabit) {
-                        Log.d("InstanceOF", "EcoHabit");
-                        datehabits.add((DateHabit) habitListed);
-                    }
-                }
-                String jsonString = gson.toJson(datehabits);
-                FileWriter fileWriter = new FileWriter(datefile, false);
-                fileWriter.write(jsonString);
-                fileWriter.close();
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-
     };
 
     public void removeData(Habit habit, int typeHabit) {
@@ -295,8 +265,6 @@ public class SaveData {
                 fileWriter.write(jsonString);
                 fileWriter.close();
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -304,46 +272,10 @@ public class SaveData {
     }
 
     public void updateData(Habit habit, int typeHabit) {
-        // Gson gson = new Gson();
-
         if (typeHabit == 1) {
             dbRef.child(fbAuth.getUid()).child("habits").child("EcoHabits").child(habit.getUid()).setValue(habit);
         } else if (typeHabit == 2) {
             dbRef.child(fbAuth.getUid()).child("habits").child("DateHabits").child(habit.getUid()).setValue(habit);
         }
-        /*
-        try {
-            if (typeHabit == 1) {
-                ecohabits.clear();
-                for ( Habit habitListed : Habit.habits ) {
-                    Log.d("InstanceOF", "Looping through habits");
-                    if (habitListed instanceof EconomicHabit) {
-                        Log.d("InstanceOF", "EcoHabit");
-                        ecohabits.add((EconomicHabit) habitListed);
-                    }
-                }
-                String jsonString = gson.toJson(ecohabits);
-
-                FileWriter fileWriter = new FileWriter(ecofile, false);
-                fileWriter.write(jsonString);
-                fileWriter.close();
-            } else if (typeHabit == 2) {
-                datehabits.clear();
-                for ( Habit habitListed : Habit.habits ) {
-                    Log.d("InstanceOF", "Looping through habits");
-                    if (habitListed instanceof DateHabit) {
-                        Log.d("InstanceOF", "EcoHabit");
-                        datehabits.add((DateHabit) habitListed);
-                    }
-                }
-                String jsonString = gson.toJson(datehabits);
-                FileWriter fileWriter = new FileWriter(datefile, false);
-                fileWriter.write(jsonString);
-                fileWriter.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
     }
 }
