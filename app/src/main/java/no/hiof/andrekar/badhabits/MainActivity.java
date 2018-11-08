@@ -196,8 +196,6 @@ public class MainActivity extends AppCompatActivity {
         Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date().getTime(), 10, true);
         Habit poop = new EconomicHabit("Smokes", "Stop with smoking", new Date().getTime(), "kr", 10, 100, 10, false);
         Habit scoop = new DateHabit("Having fun", "Stop having fun", new Date().getTime(), 10, false);
-        gumHabit.setFavourite(true);
-        scoop.setFavourite(true);
 
         testHabits.add((EconomicHabit) gumHabit);
         testHabits.add((DateHabit) sodaHabit);
@@ -208,20 +206,26 @@ public class MainActivity extends AppCompatActivity {
         for (Habit habit : testHabits) {
             if (habit instanceof DateHabit) {
                 saveData.saveData(habit, 2);
+                Habit.habits.add((DateHabit) habit);
             } else if (habit instanceof EconomicHabit) {
                 saveData.saveData(habit, 1);
+                Habit.habits.add((EconomicHabit) habit);
             }
         }
         testHabits.clear();
-        initRecyclerView();
-        Collections.sort(Habit.habits, Habit.HabitComparator);
+        MainActivity.updateRecyclerView();
         }
 
         private void removeData() {
-            Habit.habits.clear();
             SaveData saveData = new SaveData();
-            //saveData.updateData(1);
-            //saveData.updateData(2);
+            for (Habit habit: Habit.habits) {
+                if(habit instanceof EconomicHabit) {
+                    saveData.removeData(habit, 1);
+                } else if(habit instanceof DateHabit) {
+                    saveData.removeData(habit, 2);
+                }
+            }
+            Habit.habits.clear();
             initRecyclerView();
         }
 
