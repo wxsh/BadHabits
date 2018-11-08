@@ -43,6 +43,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
         }
 
         //TODO: fix some bugs, like clickable when empty
+    //TODO: Empty item view does not show if you remove the last favourite.
 
         @Override
         public void onBindViewHolder(final MyFavoriteAdapter.ViewHolder holder, final int position) {
@@ -65,9 +66,16 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                 } else {
                     holder.itemView.setVisibility(View.VISIBLE);
-                    holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(500, ViewGroup.LayoutParams.MATCH_PARENT));
+                    if (Habit.getNumFavourites() == 1) {
+                        holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    } else if (Habit.getNumFavourites() == 2) {
+                        holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(750, ViewGroup.LayoutParams.MATCH_PARENT));
+                    } else if (Habit.getNumFavourites() >= 3) {
+                        holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(500, ViewGroup.LayoutParams.MATCH_PARENT));
+                    }
 
-                    holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
+
+                        holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
                     holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
                     //>DONE: DONE
@@ -115,7 +123,6 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
                             Collections.sort(Habit.habits, Habit.HabitComparator);
                             MainActivity.updateRecyclerView();
-
                         }
                     });
                 }
@@ -143,7 +150,6 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
         @Override
         public int getItemCount() {
-
             return Habit.habits.size();
         }
 

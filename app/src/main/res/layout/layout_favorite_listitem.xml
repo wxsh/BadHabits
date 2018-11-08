@@ -42,7 +42,7 @@
         android:text="5 days"
         android:textAlignment="viewStart"
         android:textColor="#000"
-        android:textSize="24sp" />
+        android:textSize="18sp" />
 
     <TextView
 
@@ -67,8 +67,8 @@
         android:layout_height="52dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="-8dp"
+        android:layout_marginEnd="-8dp"
 
 
         android:background="#00ffffff"
