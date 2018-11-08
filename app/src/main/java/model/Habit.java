@@ -80,6 +80,16 @@ public class Habit {
         return false;
     }
 
+    public static int getNumFavourites() {
+        int num = 0;
+        for (Habit habit: habits) {
+            if (habit.getIsFavourite()) {
+                num++;
+            }
+        }
+        return num;
+    }
+
     public String getUid() { return uid; }
 
     public String getHabitType() { return habitType; }

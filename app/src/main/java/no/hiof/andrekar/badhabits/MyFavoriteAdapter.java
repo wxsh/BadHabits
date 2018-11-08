@@ -43,6 +43,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
         }
 
         //TODO: fix some bugs, like clickable when empty
+    //TODO: Empty item view does not show if you remove the last favourite.
 
         @Override
         public void onBindViewHolder(final MyFavoriteAdapter.ViewHolder holder, final int position) {
@@ -65,19 +66,19 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                 } else {
                     holder.itemView.setVisibility(View.VISIBLE);
-                    holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 400));
+                    if (Habit.getNumFavourites() == 1) {
+                        holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    } else if (Habit.getNumFavourites() == 2) {
+                        holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(750, ViewGroup.LayoutParams.MATCH_PARENT));
+                    } else if (Habit.getNumFavourites() >= 3) {
+                        holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(500, ViewGroup.LayoutParams.MATCH_PARENT));
+                    }
 
 
-                    if (position % 2 == 1)
-                        holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.faveHabitBG));
-                    else
-                        holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.faveHabitBG2));
-
-
-                    holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
+                        holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
                     holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
-                    //TODO: DONE
+                    //>DONE: DONE
                     if (Habit.habits.get(position).getClass() == EconomicHabit.class) {
                         holder.habitGoal.setText(((EconomicHabit) Habit.habits.get(position)).getProgress());
                     } else if (Habit.habits.get(position).getClass() == DateHabit.class) {
@@ -122,7 +123,6 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
                             Collections.sort(Habit.habits, Habit.HabitComparator);
                             MainActivity.updateRecyclerView();
-
                         }
                     });
                 }
@@ -130,6 +130,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             else if (position == 0) {
                 holder.parentLayout.setClickable(false);
                 holder.emptyFav.setVisibility(View.VISIBLE);
+                holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 holder.favoriteButton.setVisibility(View.GONE);
                 holder.habitDescription.setVisibility(View.GONE);
                 holder.habitGoal.setVisibility(View.GONE);
@@ -149,7 +150,6 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
         @Override
         public int getItemCount() {
-
             return Habit.habits.size();
         }
 
