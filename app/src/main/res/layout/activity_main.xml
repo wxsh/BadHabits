@@ -43,7 +43,6 @@
         android:id="@+id/favorite_recycler_view"
         android:layout_width="wrap_content"
         android:layout_height="134dp"
-        android:background="@color/faveHabitBG"
         android:orientation="horizontal"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
