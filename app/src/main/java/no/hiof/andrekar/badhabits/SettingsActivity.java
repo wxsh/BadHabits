@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 import java.util.List;
@@ -60,7 +61,13 @@ public class SettingsActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser != null) {
-            userIdTW.setText("User ID: " + currentUser.getUid());
+            if (currentUser.isAnonymous()) {
+                userIdTW.setText("Du er ikke logget inn, data er ikke lagret til en spesifikk konto");
+                buttonRegUser.setVisibility(View.VISIBLE);
+            } else {
+                userIdTW.setText("Du er logget inn som " + currentUser.getEmail());
+                buttonRegUser.setVisibility(View.INVISIBLE);
+            }
         } else {
             userIdTW.setText("Error: sign in failed.");
         }
@@ -78,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user != null) {
-                    userIdTW.setText("User ID: " + user.getUid());
+                    userIdTW.setText("Du er logget inn som " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
                 } else {
                     userIdTW.setText("Error: sign in failed.");
                 }
