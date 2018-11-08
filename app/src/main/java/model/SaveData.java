@@ -61,19 +61,13 @@ import no.hiof.andrekar.badhabits.MainActivity;
 import no.hiof.andrekar.badhabits.MyAdapter;
 
 public class SaveData {
-    //Todo: Change this into internal storage, no need to use Downloads
+    //NOT NEEDED: Change this into internal storage, no need to use Downloads
     String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/TestGSon";
-    String ecofile = filename+"Eco.txt";
-    String datefile = filename+"Date.txt";
-    ArrayList<EconomicHabit> ecohabits = new ArrayList<EconomicHabit>();
-    ArrayList<DateHabit> datehabits = new ArrayList<DateHabit>();
-    private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     FirebaseAuth fbAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private boolean habitexists = false;
 
     //DONE: Fix duplication problem.
-    //TODO: Make Adapter refresh after sync
+    //DONE: Make Adapter refresh after sync
 
 
     public void readFromFile() {

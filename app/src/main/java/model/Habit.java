@@ -27,7 +27,7 @@ public class Habit {
 
     //TODO: implement Math for habits. Return progress values.
 
-    //TODO: make this list create itself from stored files
+    //DONE: make this list create itself from stored files
     public static ArrayList<Habit> habits = new ArrayList<Habit>();
 
 

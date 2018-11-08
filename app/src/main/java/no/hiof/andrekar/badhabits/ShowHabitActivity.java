@@ -115,7 +115,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: editButton onclick
+                //DONE: editButton onclick
                 Intent intent = new Intent(getBaseContext(), HabitActivity.class);
                 intent.putExtra("TITLE", "Editing: "+Habit.habits.get(currentNumber).getTitle());
                 intent.putExtra("CURRENT_HABIT_INDEX", currentNumber);

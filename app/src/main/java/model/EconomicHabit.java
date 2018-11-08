@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 //TODO: Implement maths in class? IE: getters for progress?
-//TODO: Rename variables? ie. Price and InitialValue / GoalValue? - DO we need both or should ie. initialValue be renamed to price for alternative?
+//DONE: Rename variables? ie. Price and InitialValue / GoalValue? - DO we need both or should ie. initialValue be renamed to price for alternative?
 
 
 public class EconomicHabit extends Habit {
