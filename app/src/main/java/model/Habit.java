@@ -1,6 +1,8 @@
 package model;
 //import no.hiof.andrekar.badhabits.R;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.google.firebase.firestore.Exclude;
@@ -11,7 +13,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -88,6 +93,15 @@ public class Habit {
             }
         }
         return num;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Exclude
+    public float getDaysFromStart() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date(this.getStartDate()));
+        Date startDate = new Date(c.getTimeInMillis());
+        return ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
     }
 
     public String getUid() { return uid; }

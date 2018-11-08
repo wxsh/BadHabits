@@ -10,7 +10,14 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import model.DateHabit;
@@ -23,6 +30,7 @@ public class ShowHabitActivity extends AppCompatActivity {
     public static int currentNumber;
     public ImageButton deleteButton;
     public ImageButton editButton;
+    HorizontalBarChart chart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         TextView goalView = findViewById(R.id.getGoalTextView);
         TextView progressView = findViewById(R.id.getProgressTextView);
         TextView startView = findViewById(R.id.getStartTextView);
+        chart = findViewById(R.id.detailChart);
 
         if (Habit.habits.get(currentNumber).getClass() == DateHabit.class){
             dateHabit = (DateHabit) Habit.habits.get(currentNumber);
@@ -54,10 +63,12 @@ public class ShowHabitActivity extends AppCompatActivity {
             SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
             String dateText = df2.format(date);
             startView.setText(dateText);
+            setEcoData();
         }
 
         TextView titleView = findViewById(R.id.habitTitleTextView);
         titleView.setText(Habit.habits.get(currentNumber).getTitle());
+
 
         TextView descriptionView = findViewById(R.id.getDescriptionTextView);
         descriptionView.setText(Habit.habits.get(currentNumber).getDescription());
@@ -115,6 +126,50 @@ public class ShowHabitActivity extends AppCompatActivity {
 
     }
 
+    private void setEcoData() {
+
+        float barWidth = 9f;
+        float spaceForBar = 10f;
+        ArrayList<BarEntry> values = new ArrayList<>();
+        ArrayList<BarEntry> values2 = new ArrayList<>();
+
+        EconomicHabit habit = ((EconomicHabit) Habit.habits.get(currentNumber));
+
+        values.add(new BarEntry(0 *spaceForBar, habit.getAlternativePrice()*habit.getDaysFromStart(),
+                    getResources().getDrawable(R.drawable.star_on)));
+        values2.add(new BarEntry(1 * spaceForBar, habit.getPrice()*habit.getDaysFromStart(),
+                getResources().getDrawable(R.drawable.star_on)));
+
+
+
+        BarDataSet set1;
+        BarDataSet set2;
+
+        if (chart.getData() != null &&
+            chart.getData().getDataSetCount() > 0) {
+            set1 = (BarDataSet) chart.getData().getDataSetByIndex(0);
+            set2 = (BarDataSet) chart.getData().getDataSetByIndex(1);
+            set1.setValues(values);
+            set2.setValues(values);
+            chart.getData().notifyDataChanged();
+            chart.notifyDataSetChanged();
+        } else {
+            set1 = new BarDataSet(values, "The alternative have cost");
+            set2 = new BarDataSet(values2, "Would have used");
+
+            set1.setDrawIcons(false);
+
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
+            dataSets.add(set2);
+
+            BarData data = new BarData(dataSets);
+            data.setValueTextSize(10f);
+            //data.setValueTypeface();
+            data.setBarWidth(barWidth);
+            chart.setData(data);
+        }
+    }
 
     public static void setCurrentNumber(int number){
         currentNumber = number;
