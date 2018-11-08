@@ -65,7 +65,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                 } else {
                     holder.itemView.setVisibility(View.VISIBLE);
-                    holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 400));
+                    holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(500, 400));
 
 
                     if (position % 2 == 1)
@@ -77,7 +77,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
                     holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
-                    //TODO: DONE
+                    //>DONE: DONE
                     if (Habit.habits.get(position).getClass() == EconomicHabit.class) {
                         holder.habitGoal.setText(((EconomicHabit) Habit.habits.get(position)).getProgress());
                     } else if (Habit.habits.get(position).getClass() == DateHabit.class) {
@@ -130,6 +130,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             else if (position == 0) {
                 holder.parentLayout.setClickable(false);
                 holder.emptyFav.setVisibility(View.VISIBLE);
+                holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 400));
                 holder.favoriteButton.setVisibility(View.GONE);
                 holder.habitDescription.setVisibility(View.GONE);
                 holder.habitGoal.setVisibility(View.GONE);
