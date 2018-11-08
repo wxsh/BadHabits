@@ -54,13 +54,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             holder.itemView.setVisibility(View.VISIBLE);
             holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
         }
-
+            /*
             if (position % 2 == 1) {
                 holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
             } else {
                 holder.itemView.setBackgroundColor(Color.parseColor("#e8e8e8"));
                 //  holder.imageView.setBackgroundColor(Color.parseColor("#FFFAF8FD"));
             }
+            */
 
             holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
             holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());

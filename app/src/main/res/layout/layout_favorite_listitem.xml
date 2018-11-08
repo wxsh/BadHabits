@@ -63,12 +63,12 @@
     <ImageButton
 
         android:id="@+id/fav_favoriteBtn"
-        android:layout_width="59dp"
-        android:layout_height="52dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-8dp"
-        android:layout_marginEnd="-8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
 
 
         android:background="#00ffffff"
@@ -86,7 +86,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
         android:text="Here will your favorites be displayed"
         android:textSize="24sp"
