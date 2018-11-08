@@ -15,15 +15,15 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static MyAdapter adapter;
     public static MyFavoriteAdapter favAdapter;
+    private boolean habitexists;
+
 
 
     @Override
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             database.setPersistenceEnabled(true);
             mDatabase = database.getReference();
+            database.getReference(mAuth.getUid()).keepSynced(true);
         }
         mAuth = FirebaseAuth.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
@@ -109,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-                SaveData saveData = new SaveData();
-                saveData.readFromFile(this);
+            SaveData saveData = new SaveData();
+            saveData.readFromFile();
             }
             initRecyclerView();
         }
@@ -184,9 +187,9 @@ public class MainActivity extends AppCompatActivity {
 
         for (Habit habit : testHabits) {
             if (habit instanceof DateHabit) {
-                saveData.saveToFile(habit, 2);
+                saveData.saveData(habit, 2);
             } else if (habit instanceof EconomicHabit) {
-                saveData.saveToFile(habit, 1);
+                saveData.saveData(habit, 1);
             }
         }
         testHabits.clear();
