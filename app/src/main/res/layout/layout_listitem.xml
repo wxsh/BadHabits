@@ -18,6 +18,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="7dp"
         android:text="Habit"
+        android:ellipsize="end"
         android:textAlignment="textStart"
         android:textColor="#000"
         android:textSize="18sp" />
@@ -49,7 +50,9 @@
         android:text="Description"
         android:textAlignment="textStart"
         android:textColor="#96000000"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+        android:ellipsize="end"
+        />
 
     <ImageButton
         android:id="@+id/favoriteBtn"
