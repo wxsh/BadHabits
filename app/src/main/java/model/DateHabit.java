@@ -2,7 +2,7 @@ package model;
 
 import android.util.Log;
 
-import com.google.firebase.database.Exclude;
+import com.google.firebase.firestore.Exclude;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -32,7 +32,6 @@ public class DateHabit extends Habit {
     }
 
     public String getHabitType() { return habitType; }
-
 
     public void setDateGoalValue(Integer dateGoalValue) {
         this.dateGoalValue = dateGoalValue;

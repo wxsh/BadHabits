@@ -1,6 +1,6 @@
 package model;
 
-import com.google.firebase.database.Exclude;
+import com.google.firebase.firestore.Exclude;
 
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;

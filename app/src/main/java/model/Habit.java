@@ -3,7 +3,7 @@ package model;
 
 import android.util.Log;
 
-import com.google.firebase.database.Exclude;
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -79,6 +79,7 @@ public class Habit {
         }
         return false;
     }
+
     public String getUid() { return uid; }
 
     public String getHabitType() { return habitType; }
