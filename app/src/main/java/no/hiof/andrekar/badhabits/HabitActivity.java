@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +23,6 @@ import java.util.Locale;
 
 import model.DateHabit;
 import model.EconomicHabit;
-import model.Habit;
 import model.SaveData;
 
 public class HabitActivity extends AppCompatActivity {
@@ -228,7 +225,7 @@ public class HabitActivity extends AppCompatActivity {
             price = Float.parseFloat(economicPriceEditText.getText().toString());
             if (editMode == false) {
                 EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, alternativePrice, goalValue, price, false);
-                saveData.saveToFile(habit, typeHabit);
+                saveData.saveData(habit, typeHabit);
             } else if (editMode == true) {
                 //TODO add economichabit edit handling.
             }
@@ -236,20 +233,12 @@ public class HabitActivity extends AppCompatActivity {
             dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
             if (editMode == false) {
                 DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue, false);
-                saveData.saveToFile(habit, typeHabit);
+                saveData.saveData(habit, typeHabit);
             } else if (editMode == true) {
                 //TODO add datehabit edit handling
             }
         }
 
-        Intent intent = new Intent(getBaseContext(), MainActivity.class);
-        startActivity(intent);
-    }
-
-    private void saveHabit(Habit habit, int typeHabit, int habitIndex) {
-        SaveData saveData = new SaveData();
-        saveData.saveToFile(habit, typeHabit, habitIndex);
-        //saveData.saveToFile(habit2,"testers.txt");
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);
     }

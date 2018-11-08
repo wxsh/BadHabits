@@ -15,9 +15,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,134 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static MyFavoriteAdapter favAdapter;
     private boolean habitexists;
 
-    ChildEventListener dateEventListener = new ChildEventListener() {
-        String TAG = "firebaseread";
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-            Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-            Log.d(TAG, "onChildAdded:" + dataSnapshot.getValue(DateHabit.class).getTitle());
 
-            Habit habit = (DateHabit) dataSnapshot.getValue(DateHabit.class);
-            for (Habit habitL: habit.habits) {
-                if (habitL.getUid() == dataSnapshot.getValue(DateHabit.class).getUid()) {
-                    habitexists = true;
-                    Log.d(TAG, "Habit already found");
-                }
-            }
-            if(habitexists == false) {
-                Habit.habits.add(habit);
-                Log.d(TAG, "Adding" + habit.toString() + "From firebase");
-            }
-            Log.d(TAG, "This should be after adapter has loaded list; Habits length"+Habit.habits.size());
-            MainActivity.updateRecyclerView();
-
-            //TODO: Callback to mainactivity to update list.
-        }
-
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-            Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-            // A Habit has changed, use the key to determine if we are displaying this
-            // Habit and if so displayed the changed Habit.
-            DateHabit newHabit = dataSnapshot.getValue(DateHabit.class);
-            String HabitKey = dataSnapshot.getKey();
-
-            // ...
-        }
-
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-            Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-            // A Habit has changed, use the key to determine if we are displaying this
-            // Habit and if so remove it.
-            String HabitKey = dataSnapshot.getKey();
-
-            // ...
-        }
-
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-            Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
-            // A Habit has changed position, use the key to determine if we are
-            // displaying this Habit and if so move it.
-            DateHabit movedHabit = dataSnapshot.getValue(DateHabit.class);
-            String HabitKey = dataSnapshot.getKey();
-
-            // ...
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            Log.w(TAG, "postHabits:onCancelled", databaseError.toException());
-        }
-    };
-    ChildEventListener ecoEventListener = new ChildEventListener() {
-        String TAG = "firebaseread, ECO";
-        @Override
-        public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-            Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-            Log.d(TAG, "onChildAdded:" + dataSnapshot.getValue(EconomicHabit.class).getTitle());
-
-            Habit habit = (EconomicHabit) dataSnapshot.getValue(EconomicHabit.class);
-            for (Habit habitL: habit.habits) {
-                if (habitL.getUid() == dataSnapshot.getValue(EconomicHabit.class).getUid()) {
-                    habitexists = true;
-                    Log.d(TAG, "Habit already found");
-                }
-            }
-            if(habitexists == false) {
-                Habit.habits.add(habit);
-                Log.d(TAG, "Adding" + habit.toString() + "From firebase");
-            }
-            Log.d(TAG, "This should be after adapter has loaded list; Habits length"+Habit.habits.size());
-            MainActivity.updateRecyclerView();
-
-            //TODO: Callback to mainactivity to update list.
-        }
-
-        @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-            Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-            // A Habit has changed, use the key to determine if we are displaying this
-            // Habit and if so displayed the changed Habit.
-            EconomicHabit newHabit = dataSnapshot.getValue(EconomicHabit.class);
-            String HabitKey = dataSnapshot.getKey();
-
-            // ...
-        }
-
-        @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-            Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-            // A Habit has changed, use the key to determine if we are displaying this
-            // Habit and if so remove it.
-            String HabitKey = dataSnapshot.getKey();
-
-            // ...
-        }
-
-        @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-            Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
-            // A Habit has changed position, use the key to determine if we are
-            // displaying this Habit and if so move it.
-            EconomicHabit movedHabit = dataSnapshot.getValue(EconomicHabit.class);
-            String HabitKey = dataSnapshot.getKey();
-
-            // ...
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            Log.w(TAG, "postHabits:onCancelled", databaseError.toException());
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-            mDatabase.child(mAuth.getUid()).child("habits").child("DateHabits").addChildEventListener(dateEventListener);
-            mDatabase.child(mAuth.getUid()).child("habits").child("EcoHabits").addChildEventListener(ecoEventListener);
+            SaveData saveData = new SaveData();
+            saveData.readFromFile();
             }
             initRecyclerView();
         }
@@ -317,9 +187,9 @@ public class MainActivity extends AppCompatActivity {
 
         for (Habit habit : testHabits) {
             if (habit instanceof DateHabit) {
-                saveData.saveToFile(habit, 2);
+                saveData.saveData(habit, 2);
             } else if (habit instanceof EconomicHabit) {
-                saveData.saveToFile(habit, 1);
+                saveData.saveData(habit, 1);
             }
         }
         testHabits.clear();
