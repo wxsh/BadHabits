@@ -93,7 +93,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //TODO: editButton onclick
                 Intent intent = new Intent(getBaseContext(), HabitActivity.class);
-                intent.putExtra("TITLE", "Add new habit");
+                intent.putExtra("TITLE", "Editing: "+Habit.habits.get(currentNumber).getTitle());
                 intent.putExtra("CURRENT_HABIT_INDEX", currentNumber);
                 startActivity(intent);
                 Snackbar.make(findViewById(android.R.id.content), "Not yet implemented", Snackbar.LENGTH_LONG).show();
