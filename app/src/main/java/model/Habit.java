@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class Habit {
     //An ArrayList to contain all habits when they are created
@@ -151,4 +152,8 @@ public class Habit {
         }
     };
 
+    public static long getDateDiff(long date1, long date2, TimeUnit timeUnit) {
+        long diffInMillies = date2 - date1;
+        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
+    }
 }

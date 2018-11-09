@@ -100,7 +100,7 @@
     <string name="goal">Goal:</string>
     <string name="days_without">Days without:</string>
     <string name="start">Start date:</string>
-    <string name="failedDate">Last fail</string>
+    <string name="failedDate">Days since last fail:</string>
 
 
 </resources>

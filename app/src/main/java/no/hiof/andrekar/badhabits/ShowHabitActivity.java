@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import model.DateHabit;
 import model.EconomicHabit;
@@ -78,8 +80,8 @@ public class ShowHabitActivity extends AppCompatActivity {
             failedView.setVisibility(View.GONE);
             failText.setVisibility(View.GONE);
         } else{
-            //TODO: FOrmat this as "Days since last fail, maybe?"
-            failedView.setText(df2.format(habit.getFailDate()));
+            //DONE: Format this as "Days since last fail, maybe?"
+            failedView.setText(Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS)));
         }
 
         TextView titleView = findViewById(R.id.habitTitleTextView);
