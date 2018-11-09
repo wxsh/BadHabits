@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 //TODO: Handle merging if account exits and data is present for anon user in database?
+//TODO change this to preferenceactivity
 
 public class SettingsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;

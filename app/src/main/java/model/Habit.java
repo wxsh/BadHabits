@@ -41,6 +41,7 @@ public class Habit {
     private long startDate;
     private String uid;
     private String habitType;
+    private long failDate;
 
 
     //Constructors
@@ -50,6 +51,7 @@ public class Habit {
         this.startDate = startDate;
         this.isFavourite = isFavourite;
         this.uid = UUID.randomUUID().toString();
+        this.failDate = 0;
         //We add habits when we save them, so adding to list is currently not needed.
         //habits.add(this);
     }
@@ -72,6 +74,14 @@ public class Habit {
 
     public boolean getIsFavourite() {
         return isFavourite;
+    }
+
+    public long getFailDate() {
+        return failDate;
+    }
+
+    public void setFailDate(long failDate) {
+        this.failDate = failDate;
     }
 
     //staticGetters

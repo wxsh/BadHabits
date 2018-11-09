@@ -141,7 +141,7 @@ public class ShowHabitActivity extends AppCompatActivity {
                         Habit habit = Habit.habits.get(currentNumber);
                         SaveData saveData = new SaveData();
                         Date currentTime = Calendar.getInstance().getTime();
-                        habit.setStartDate(currentTime.getTime());
+                        habit.setFailDate(currentTime.getTime());
                         if (habit instanceof EconomicHabit) {
                             saveData.saveData(Habit.habits.get(currentNumber), 1);
                         } else if (habit instanceof DateHabit) {

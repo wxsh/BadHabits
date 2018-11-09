@@ -10,7 +10,7 @@ import java.util.Date;
 
 //TODO: Implement maths in class? IE: getters for progress?
 //DONE: Rename variables? ie. Price and InitialValue / GoalValue? - DO we need both or should ie. initialValue be renamed to price for alternative?
-
+//TODO: Clean up unused functions.
 
 public class EconomicHabit extends Habit {
     private String currency;
@@ -18,8 +18,6 @@ public class EconomicHabit extends Habit {
     private float price;
     private float alternativePrice;
     private static final String habitType = "Eco";
-
-
 
     // Constructor
     public EconomicHabit(String title, String description, long startDate, String currency, float alternativePrice, float goalValue, float price, Boolean isFavourite) {
