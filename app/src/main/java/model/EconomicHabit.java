@@ -18,6 +18,7 @@ public class EconomicHabit extends Habit {
     private float price;
     private float alternativePrice;
     private static final String habitType = "Eco";
+    private int failedTotal;
 
     // Constructor
     public EconomicHabit(String title, String description, long startDate, String currency, float alternativePrice, float goalValue, float price, Boolean isFavourite) {
@@ -77,5 +78,16 @@ public class EconomicHabit extends Habit {
             return Float.toString(saved)+" "+this.getCurrency();
         }
 
+    }
+
+    public int getFailedTotal() {
+        return failedTotal;
+    }
+
+    public void setFailedTotal(int failedTotal) {
+        this.failedTotal = failedTotal;
+    }
+    public void increaseFailedTotal(int failedAmout){
+        this.failedTotal += failedAmout;
     }
 }

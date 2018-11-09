@@ -100,6 +100,8 @@
     <string name="goal">Goal:</string>
     <string name="days_without">Days without:</string>
     <string name="start">Start date:</string>
+    <string name="enter_amount">Enter amount</string>
+    <string name="enter_amount_spent">Enter amount spent:</string>
 
 
 </resources>
