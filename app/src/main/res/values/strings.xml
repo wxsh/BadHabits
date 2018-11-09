@@ -102,6 +102,7 @@
     <string name="start">Start date:</string>
     <string name="enter_amount">Enter amount</string>
     <string name="enter_amount_spent">Enter amount spent:</string>
+    <string name="failedDate">Days since last fail:</string>
 
 
 </resources>

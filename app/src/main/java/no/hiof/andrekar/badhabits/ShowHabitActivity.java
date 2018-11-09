@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import model.DateHabit;
 import model.EconomicHabit;
@@ -51,28 +54,38 @@ public class ShowHabitActivity extends AppCompatActivity {
         TextView goalView = findViewById(R.id.getGoalTextView);
         TextView progressView = findViewById(R.id.getProgressTextView);
         TextView startView = findViewById(R.id.getStartTextView);
+        TextView failedView = findViewById(R.id.getFailTextView);
         chart = findViewById(R.id.detailChart);
 
-        if (Habit.habits.get(currentNumber).getClass() == DateHabit.class) {
-            dateHabit = (DateHabit) Habit.habits.get(currentNumber);
-            goalView.setText(dateHabit.getDateGoal());
-            progressView.setText(dateHabit.getDaysSinceStart());
+        SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
+        Habit habit = Habit.habits.get(currentNumber);
+
+        if (habit instanceof DateHabit) {
+            goalView.setText(((DateHabit)habit).getDateGoal());
+            progressView.setText(((DateHabit)habit).getDaysSinceStart());
             //temp code?
-            Date date = new Date(dateHabit.getStartDate());
-            SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
+            Date date=new Date(habit.getStartDate());
             String dateText = df2.format(date);
             startView.setText(dateText);
-        } else {
-            ecohabit = (EconomicHabit) Habit.habits.get(currentNumber);
+        }
+        else {
             TextView progressText = findViewById(R.id.progressTextView);
             progressText.setText("Progress:");
-            goalView.setText(String.valueOf(ecohabit.getGoalValue()));
-            progressView.setText(ecohabit.getProgress());
-            Date date = new Date(ecohabit.getStartDate());
-            SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
+            goalView.setText(String.valueOf(((EconomicHabit) habit).getGoalValue()));
+            progressView.setText(((EconomicHabit) habit).getProgress());
+            Date date=new Date(habit.getStartDate());
             String dateText = df2.format(date);
             startView.setText(dateText);
             setEcoData();
+        }
+
+        if (habit.getFailDate() == 0) {
+            TextView failText = findViewById(R.id.failTextView);
+            failedView.setVisibility(View.GONE);
+            failText.setVisibility(View.GONE);
+        } else{
+            //DONE: Format this as "Days since last fail, maybe?"
+            failedView.setText(Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS)));
         }
 
         TextView titleView = findViewById(R.id.habitTitleTextView);
