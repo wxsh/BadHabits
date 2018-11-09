@@ -36,7 +36,8 @@ public class HabitActivity extends AppCompatActivity {
     //NOT_NEEDED 06: Make sure date picker is available for all date fields.
 
     //TODO: SavedInstanceState on rotate? - Not needed?
-    //TODO: Intent handling and send data to fireBase.
+    //TODO: Intent handling
+    //DONE: and send data to fireBase.
 
     private String title;
     private String description;
@@ -87,7 +88,7 @@ public class HabitActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("CURRENT_HABIT_INDEX")) {
             setTitle(getIntent().getStringExtra("HABIT_NAME"));
-            //TODO: Fill out fields and change save function to handle existing habit.
+            //DONE: Fill out fields and change save function to handle existing habit.
             Habit editHabit = Habit.habits.get(getIntent().getIntExtra("CURRENT_HABIT_INDEX", 0));
             editIndex = getIntent().getIntExtra("CURRENT_HABIT_INDEX", 0);
             editTitle.setText(editHabit.getTitle());
@@ -96,7 +97,7 @@ public class HabitActivity extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
             dateEditText.setText(sdf.format(editHabit.getStartDate()));
 
-            //TODO: Get start date.
+            //DONE: Get start date.
             if(editHabit instanceof DateHabit) {
                 typeHabitRG.check(R.id.newHabit_radioDate);
                 typeHabit = 2;
@@ -269,7 +270,7 @@ public class HabitActivity extends AppCompatActivity {
                 DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue, false);
                 saveData.saveData(habit, typeHabit);
             } else if (editMode == true) {
-                //TODO add datehabit edit handling
+                //DONE add datehabit edit handling
                 DateHabit habit = (DateHabit) Habit.habits.get(editIndex);
                 habit.setTitle(title);
                 habit.setDescription(description);

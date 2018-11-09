@@ -9,8 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 //TODO: Implement maths in class? IE: getters for progress?
-//TODO: Rename variables? ie. Price and InitialValue / GoalValue? - DO we need both or should ie. initialValue be renamed to price for alternative?
-
+//DONE: Rename variables? ie. Price and InitialValue / GoalValue? - DO we need both or should ie. initialValue be renamed to price for alternative?
+//TODO: Clean up unused functions.
 
 public class EconomicHabit extends Habit {
     private String currency;
@@ -18,8 +18,7 @@ public class EconomicHabit extends Habit {
     private float price;
     private float alternativePrice;
     private static final String habitType = "Eco";
-
-
+    private int failedTotal;
 
     // Constructor
     public EconomicHabit(String title, String description, long startDate, String currency, float alternativePrice, float goalValue, float price, Boolean isFavourite) {
@@ -70,7 +69,7 @@ public class EconomicHabit extends Habit {
         c.setTime(new Date(this.getStartDate()));
         Date startDate = new Date(c.getTimeInMillis());
         float dateGoalL = ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
-        float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()));
+        float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()) - this.getFailedTotal());
         if (saved < 0) {
             //Should maybe build this string in activity instead if we want to color it
             return Float.toString(saved)+" "+this.getCurrency();
@@ -79,5 +78,16 @@ public class EconomicHabit extends Habit {
             return Float.toString(saved)+" "+this.getCurrency();
         }
 
+    }
+
+    public int getFailedTotal() {
+        return failedTotal;
+    }
+
+    public void setFailedTotal(int failedTotal) {
+        this.failedTotal = failedTotal;
+    }
+    public void increaseFailedTotal(int failedAmout){
+        this.failedTotal += failedAmout;
     }
 }

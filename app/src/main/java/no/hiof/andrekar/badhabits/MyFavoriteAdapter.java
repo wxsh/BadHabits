@@ -1,21 +1,27 @@
 package no.hiof.andrekar.badhabits;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 import model.DateHabit;
 import model.EconomicHabit;
@@ -26,7 +32,10 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
         private static final String TAG = "RecyclerViewAdapter";
 
-        private Context mContext;
+    private String failedAmount = "";
+
+
+    private Context mContext;
 
         private boolean mHaveFavorite;
 
@@ -43,7 +52,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
         }
 
         //TODO: fix some bugs, like clickable when empty
-    //TODO: Empty item view does not show if you remove the last favourite.
+    //DONE: Empty item view does not show if you remove the last favourite.
 
         @Override
         public void onBindViewHolder(final MyFavoriteAdapter.ViewHolder holder, final int position) {
@@ -125,6 +134,67 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                             MainActivity.updateRecyclerView();
                         }
                     });
+
+                    holder.failedButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            final Habit habit = Habit.habits.get(position);
+
+                            if (habit instanceof EconomicHabit) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                                builder.setTitle("Don't worry, even if you fail, you can still do this! How much did you spend?");
+                                final EditText input = new EditText(view.getContext());
+                                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
+                                builder.setView(input);
+
+                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        SaveData saveData = new SaveData();
+                                        failedAmount = input.getText().toString();
+                                        ((EconomicHabit) habit).increaseFailedTotal(Integer.parseInt(failedAmount));
+                                        habit.setFailDate(new Date().getTime());
+                                        saveData.saveData(Habit.habits.get(position), 1);
+                                        notifyDataSetChanged();
+                                    }
+                                });
+                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                AlertDialog ecoAlert = builder.create();
+                                ecoAlert.show();
+
+                            } else if (habit instanceof DateHabit) {
+
+
+                                //DONE: editButton onclick
+                                final AlertDialog.Builder failedBuilder = new AlertDialog.Builder(view.getContext());
+                                failedBuilder.setMessage("Don't worry, even if you fail, you can still do this! Do you want to reset the days since last fail?").setTitle("Failed habit?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                        Date currentTime = Calendar.getInstance().getTime();
+                                        habit.setFailDate(currentTime.getTime());
+                                        SaveData saveData = new SaveData();
+                                        saveData.saveData(Habit.habits.get(position), 2);
+
+                                    }
+                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // CANCEL AND DO NOTHING
+                                    }
+                                });
+                                // Create the AlertDialog object and return it
+                                AlertDialog dialog = failedBuilder.create();
+                                //ecoAlert.show();
+                                dialog.show();
+                                //dialog.show();
+                            }
+                        }
+                    });
                 }
             }
             else if (position == 0) {
@@ -160,6 +230,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             TextView habitGoal;
             TextView habitDescription;
             ImageButton favoriteButton;
+            ImageButton failedButton;
             RelativeLayout parentLayout;
 
             TextView emptyFav;
@@ -171,6 +242,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                 habitDescription = itemView.findViewById(R.id.fav_habit_description);
                 favoriteButton = itemView.findViewById(R.id.fav_favoriteBtn);
                 parentLayout = itemView.findViewById(R.id.fav_parent_layout);
+                failedButton = itemView.findViewById(R.id.fav_btn_habitFailed);
 
                 emptyFav = itemView.findViewById(R.id.empty_fav);
             }

@@ -1,6 +1,8 @@
 package model;
 //import no.hiof.andrekar.badhabits.R;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.google.firebase.firestore.Exclude;
@@ -11,18 +13,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class Habit {
     //An ArrayList to contain all habits when they are created
 
     //TODO: implement Math for habits. Return progress values.
 
-    //TODO: make this list create itself from stored files
+    //DONE: make this list create itself from stored files
     public static ArrayList<Habit> habits = new ArrayList<Habit>();
 
 
@@ -36,6 +42,7 @@ public class Habit {
     private long startDate;
     private String uid;
     private String habitType;
+    private long failDate;
 
 
     //Constructors
@@ -45,6 +52,7 @@ public class Habit {
         this.startDate = startDate;
         this.isFavourite = isFavourite;
         this.uid = UUID.randomUUID().toString();
+        this.failDate = 0;
         //We add habits when we save them, so adding to list is currently not needed.
         //habits.add(this);
     }
@@ -69,6 +77,14 @@ public class Habit {
         return isFavourite;
     }
 
+    public long getFailDate() {
+        return failDate;
+    }
+
+    public void setFailDate(long failDate) {
+        this.failDate = failDate;
+    }
+
     //staticGetters
     public static boolean getHaveFavorite(){
         if (habits != null){
@@ -88,6 +104,15 @@ public class Habit {
             }
         }
         return num;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Exclude
+    public float getDaysFromStart() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date(this.getStartDate()));
+        Date startDate = new Date(c.getTimeInMillis());
+        return ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
     }
 
     public String getUid() { return uid; }
@@ -127,4 +152,8 @@ public class Habit {
         }
     };
 
+    public static long getDateDiff(long date1, long date2, TimeUnit timeUnit) {
+        long diffInMillies = date2 - date1;
+        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
+    }
 }
