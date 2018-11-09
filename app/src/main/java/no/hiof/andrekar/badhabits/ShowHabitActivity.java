@@ -1,6 +1,7 @@
 package no.hiof.andrekar.badhabits;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
@@ -17,7 +18,9 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import model.DateHabit;
@@ -30,6 +33,7 @@ public class ShowHabitActivity extends AppCompatActivity {
     public static int currentNumber;
     public ImageButton deleteButton;
     public ImageButton editButton;
+    public ImageButton failedButton;
     HorizontalBarChart chart;
 
     @Override
@@ -57,6 +61,8 @@ public class ShowHabitActivity extends AppCompatActivity {
         }
         else {
             ecohabit = (EconomicHabit) Habit.habits.get(currentNumber);
+            TextView progressText = findViewById(R.id.progressTextView);
+            progressText.setText("Progress:");
             goalView.setText(String.valueOf(ecohabit.getGoalValue()));
             progressView.setText(ecohabit.getProgress());
             Date date=new Date(ecohabit.getStartDate());
@@ -120,10 +126,39 @@ public class ShowHabitActivity extends AppCompatActivity {
                 intent.putExtra("TITLE", "Editing: "+Habit.habits.get(currentNumber).getTitle());
                 intent.putExtra("CURRENT_HABIT_INDEX", currentNumber);
                 startActivity(intent);
-                Snackbar.make(findViewById(android.R.id.content), "Not yet implemented", Snackbar.LENGTH_LONG).show();
+                //Snackbar.make(findViewById(android.R.id.content), "Not yet implemented", Snackbar.LENGTH_LONG).show();
             }
         });
 
+        failedButton = findViewById(R.id.btn_habitFailed);
+        failedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //DONE: editButton onclick
+                AlertDialog.Builder failedBuilder = new AlertDialog.Builder(ShowHabitActivity.this);
+                failedBuilder.setMessage("Do you want to reset the habit?").setTitle("Failed habit?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Habit habit = Habit.habits.get(currentNumber);
+                        SaveData saveData = new SaveData();
+                        Date currentTime = Calendar.getInstance().getTime();
+                        habit.setStartDate(currentTime.getTime());
+                        if (habit instanceof EconomicHabit) {
+                            saveData.saveData(Habit.habits.get(currentNumber), 1);
+                        } else if (habit instanceof DateHabit) {
+                            saveData.saveData(Habit.habits.get(currentNumber), 2);
+                        }
+                        recreate();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // CANCEL AND DO NOTHING
+                    }
+                });
+                // Create the AlertDialog object and return it
+                AlertDialog dialog = failedBuilder.create();
+                dialog.show();
+            }
+        });
     }
 
     private void setEcoData() {
