@@ -16,13 +16,15 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 import java.util.List;
 
+import model.SaveData;
+
 //TODO: Handle merging if account exits and data is present for anon user in database?
 //TODO change this to preferenceactivity
 
 public class SettingsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
-    private Button buttonRegUser;
+    private Button buttonRegUser, buttonLoginUser;
     private TextView userIdTW;
 
     List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -36,6 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
          buttonRegUser = findViewById(R.id.buttonRegisterUser);
+         buttonLoginUser = findViewById(R.id.buttonLoginUser);
          userIdTW = findViewById(R.id.userIdTextView);
 
          // Button to register the user
@@ -43,6 +46,12 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).build(), 200);
+            }
+        });
+        buttonLoginUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), 200);
             }
         });
     }
@@ -78,6 +87,8 @@ public class SettingsActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user != null) {
                     userIdTW.setText("Du er logget inn som " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    SaveData saveData = new SaveData();
+                    saveData.readFromFile();
                 } else {
                     userIdTW.setText("Error: sign in failed.");
                 }
