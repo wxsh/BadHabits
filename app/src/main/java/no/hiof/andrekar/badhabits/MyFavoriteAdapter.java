@@ -1,7 +1,9 @@
 package no.hiof.andrekar.badhabits;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
@@ -15,7 +17,9 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 import model.DateHabit;
 import model.EconomicHabit;
@@ -125,6 +129,33 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                             MainActivity.updateRecyclerView();
                         }
                     });
+
+                    holder.failedButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            AlertDialog.Builder failedBuilder = new AlertDialog.Builder(view.getContext());
+                            failedBuilder.setMessage("Don't worry, even if you fail, you can still do this! Do you want to reset the days since last fail?").setTitle("Failed habit?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Habit habit = Habit.habits.get(position);
+                                    SaveData saveData = new SaveData();
+                                    Date currentTime = Calendar.getInstance().getTime();
+                                    habit.setFailDate(currentTime.getTime());
+                                    if (habit instanceof EconomicHabit) {
+                                        saveData.saveData(Habit.habits.get(position), 1);
+                                    } else if (habit instanceof DateHabit) {
+                                        saveData.saveData(Habit.habits.get(position), 2);
+                                    }
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // CANCEL AND DO NOTHING
+                                }
+                            });
+                            // Create the AlertDialog object and return it
+                            AlertDialog dialog = failedBuilder.create();
+                            dialog.show();
+                        }
+                    });
                 }
             }
             else if (position == 0) {
@@ -160,6 +191,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             TextView habitGoal;
             TextView habitDescription;
             ImageButton favoriteButton;
+            ImageButton failedButton;
             RelativeLayout parentLayout;
 
             TextView emptyFav;
@@ -171,6 +203,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                 habitDescription = itemView.findViewById(R.id.fav_habit_description);
                 favoriteButton = itemView.findViewById(R.id.fav_favoriteBtn);
                 parentLayout = itemView.findViewById(R.id.fav_parent_layout);
+                failedButton = itemView.findViewById(R.id.fav_btn_habitFailed);
 
                 emptyFav = itemView.findViewById(R.id.empty_fav);
             }
