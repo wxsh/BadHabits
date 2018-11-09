@@ -83,7 +83,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             TextView failText = findViewById(R.id.failTextView);
             failedView.setVisibility(View.GONE);
             failText.setVisibility(View.GONE);
-        } else{
+        } else {
             //DONE: Format this as "Days since last fail, maybe?"
             failedView.setText(Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS)));
         }
@@ -165,6 +165,7 @@ public class ShowHabitActivity extends AppCompatActivity {
                             SaveData saveData = new SaveData();
                             failedAmount = input.getText().toString();
                             ((EconomicHabit) habit).increaseFailedTotal(Integer.parseInt(failedAmount));
+                            habit.setFailDate(new Date().getTime());
                             saveData.saveData(Habit.habits.get(currentNumber), 1);
                             recreate();
                         }

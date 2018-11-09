@@ -69,7 +69,7 @@ public class EconomicHabit extends Habit {
         c.setTime(new Date(this.getStartDate()));
         Date startDate = new Date(c.getTimeInMillis());
         float dateGoalL = ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
-        float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()));
+        float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()) - this.getFailedTotal());
         if (saved < 0) {
             //Should maybe build this string in activity instead if we want to color it
             return Float.toString(saved)+" "+this.getCurrency();
