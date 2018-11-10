@@ -64,7 +64,7 @@ public class EconomicHabit extends Habit {
 
 
     @Exclude
-    public String getProgress() {
+    public float getProgress() {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(this.getStartDate()));
         Date startDate = new Date(c.getTimeInMillis());
@@ -72,10 +72,10 @@ public class EconomicHabit extends Habit {
         float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()) - this.getFailedTotal());
         if (saved < 0) {
             //Should maybe build this string in activity instead if we want to color it
-            return Float.toString(saved)+" "+this.getCurrency();
+            return saved;
         }
         else {
-            return Float.toString(saved)+" "+this.getCurrency();
+            return saved;
         }
 
     }

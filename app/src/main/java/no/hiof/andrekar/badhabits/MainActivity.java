@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     public static MyAdapter adapter;
     public static MyFavoriteAdapter favAdapter;
     private boolean habitexists;
-
+    private float totalSaved;
 
 
     @Override
@@ -87,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-
+        bottomSheet();
 
 
 
@@ -119,6 +123,71 @@ public class MainActivity extends AppCompatActivity {
             }
             initRecyclerView();
         }
+
+    public void bottomSheet() {
+        // get the bottom sheet view
+        LinearLayout llBottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet);
+        ImageButton btnBottomSheet = (ImageButton) findViewById(R.id.btn_bottomSheetToggle);
+
+        // init the bottom sheet behavior
+        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
+
+        btnBottomSheet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                } else {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+
+        });
+
+        // change the state of the bottom sheet
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        // set hideable or not
+        bottomSheetBehavior.setHideable(false);
+
+        // set callback for changes
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;  
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+                        totalSaved = 0;
+                        for (Habit habit: Habit.habits) {
+                            if(habit instanceof EconomicHabit) {
+                                totalSaved = totalSaved + ((EconomicHabit) habit).getProgress();
+                            }
+                        }
+                        TextView textView = findViewById(R.id.bottom_sheet_top);
+                        textView.setText("Du har spart: "+ totalSaved);
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                        //DO stuff when collapsed
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -169,6 +238,9 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_remove) {
             removeData();
             return true;
+        }
+        if (id == R.id.action_refresh) {
+            updateRecyclerView();
         }
 
         return super.onOptionsItemSelected(item);

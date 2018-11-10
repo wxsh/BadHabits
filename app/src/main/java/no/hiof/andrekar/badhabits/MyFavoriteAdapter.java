@@ -90,7 +90,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
                     //>DONE: DONE
                     if (Habit.habits.get(position).getClass() == EconomicHabit.class) {
-                        holder.habitGoal.setText(((EconomicHabit) Habit.habits.get(position)).getProgress());
+                        holder.habitGoal.setText(Float.toString(((EconomicHabit) Habit.habits.get(position)).getProgress()));
                     } else if (Habit.habits.get(position).getClass() == DateHabit.class) {
                         holder.habitGoal.setText(((DateHabit) Habit.habits.get(position)).getDateGoal());
                     }
