@@ -26,9 +26,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -51,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     public static MyFavoriteAdapter favAdapter;
     private boolean habitexists;
     private float totalSaved;
+
 
 
     @Override
@@ -89,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
 
         bottomSheet();
@@ -158,14 +157,7 @@ public class MainActivity extends AppCompatActivity {
                     case BottomSheetBehavior.STATE_HIDDEN:
                         break;  
                     case BottomSheetBehavior.STATE_EXPANDED: {
-                        totalSaved = 0;
-                        for (Habit habit: Habit.habits) {
-                            if(habit instanceof EconomicHabit) {
-                                totalSaved = totalSaved + ((EconomicHabit) habit).getProgress();
-                            }
-                        }
-                        TextView textView = findViewById(R.id.bottom_sheet_top);
-                        textView.setText("Du har spart: "+ totalSaved);
+                        //DO stuff when expanded
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
@@ -177,8 +169,6 @@ public class MainActivity extends AppCompatActivity {
                     case BottomSheetBehavior.STATE_SETTLING:
                         break;
                 }
-
-
             }
 
             @Override
@@ -305,6 +295,8 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             favAdapter.notifyDataSetChanged();
         }
+
+
 
 }
 
