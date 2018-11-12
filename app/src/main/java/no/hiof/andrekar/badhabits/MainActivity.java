@@ -39,6 +39,7 @@ import model.SaveData;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import model.DateHabit;
 import model.EconomicHabit;
@@ -52,9 +53,10 @@ public class MainActivity extends AppCompatActivity {
     public static MyAdapter adapter;
     public static MyFavoriteAdapter favAdapter;
     private boolean habitexists;
-    private static float totalSaved, totalDays;
-    private static TextView ecoBottomText, dateBottomText;
+    private static float totalSaved, totalDays, longestStreak;
+    private static TextView ecoBottomText, dateBottomText, longestStreakText;
     private static SwipeRefreshLayout swipeContainer;
+    private static String longestStreakName;
 
 
 
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         ecoBottomText = findViewById(R.id.bottom_sheet_top_eco);
         dateBottomText = findViewById(R.id.bottom_sheet_top_date);
+        longestStreakText = findViewById(R.id.longestStreakText);
 
         bottomSheet();
         updateBottomSheet();
@@ -334,6 +337,7 @@ public class MainActivity extends AppCompatActivity {
         public static void updateBottomSheet() {
             totalSaved = 0;
             totalDays = 0;
+            longestStreak = -1;
             for (Habit habit: Habit.habits) {
                 if (habit instanceof EconomicHabit) {
                     totalSaved += ((EconomicHabit) habit).getProgress();
@@ -341,6 +345,19 @@ public class MainActivity extends AppCompatActivity {
                 } if (habit instanceof DateHabit) {
                     totalDays += habit.getDaysFromStart();
                     dateBottomText.setText("Days without: " + totalDays + " days");
+                    if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreak && habit.getFailDate() != 0) {
+                        longestStreak = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS);
+                        Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
+                        longestStreakName = habit.getTitle();
+                    } else {
+                        longestStreak = -1;
+                    }
+
+                }
+                if (longestStreak == -1) {
+                    longestStreakText.setText("NO FAILS! Hooray!");
+                }else {
+                    longestStreakText.setText("Days since last fail: " + longestStreak + " (" + longestStreakName + ")");
                 }
             }
 
