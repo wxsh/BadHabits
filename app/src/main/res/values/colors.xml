@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#fafafa</color>
-    <color name="colorPrimaryDark">#f3f3f3</color>
+    <color name="colorPrimary">#fff</color>
+    <color name="colorPrimaryDark">#333</color>
     <color name="colorAccent">#353535</color>
     <color name="faveHabitBG">#5c6bc0</color>
     <color name="faveHabitBG2">#737fc2</color>
-
 </resources>
