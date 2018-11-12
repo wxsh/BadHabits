@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BadHabits</string>
+    <string name="app_name">Bad Habits</string>
     <string name="action_settings">Settings</string>
 
     <string name="habittitle">HabitTitle</string>
