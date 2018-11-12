@@ -72,7 +72,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             TextView progressText = findViewById(R.id.progressTextView);
             progressText.setText("Progress:");
             goalView.setText(String.valueOf(((EconomicHabit) habit).getGoalValue()));
-            progressView.setText(((EconomicHabit) habit).getProgress());
+            progressView.setText(Float.toString(((EconomicHabit) habit).getProgress()));
             Date date=new Date(habit.getStartDate());
             String dateText = df2.format(date);
             startView.setText(dateText);
