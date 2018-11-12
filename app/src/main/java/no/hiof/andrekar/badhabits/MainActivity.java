@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
     public static MyAdapter adapter;
     public static MyFavoriteAdapter favAdapter;
     private boolean habitexists;
-    private float totalSaved;
+    private static float totalSaved, totalDays;
+    private static TextView ecoBottomText, dateBottomText;
 
 
 
@@ -88,9 +89,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        ecoBottomText = findViewById(R.id.bottom_sheet_top_eco);
+        dateBottomText = findViewById(R.id.bottom_sheet_top_date);
 
         bottomSheet();
+        updateBottomSheet();
 
 
 
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     public void bottomSheet() {
         // get the bottom sheet view
         LinearLayout llBottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet);
-        ImageButton btnBottomSheet = (ImageButton) findViewById(R.id.btn_bottomSheetToggle);
+        final ImageButton btnBottomSheet = (ImageButton) findViewById(R.id.btn_bottomSheetToggle);
 
         // init the bottom sheet behavior
         final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
@@ -135,8 +138,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    btnBottomSheet.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_more));
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } else {
+                    btnBottomSheet.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_less));
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
             }
@@ -294,9 +299,23 @@ public class MainActivity extends AppCompatActivity {
         public static void updateRecyclerView(){
             adapter.notifyDataSetChanged();
             favAdapter.notifyDataSetChanged();
+            updateBottomSheet();
         }
 
+        public static void updateBottomSheet() {
+            totalSaved = 0;
+            totalDays = 0;
+            for (Habit habit: Habit.habits) {
+                if (habit instanceof EconomicHabit) {
+                    totalSaved += ((EconomicHabit) habit).getProgress();
+                    ecoBottomText.setText("Left for goals: " + totalSaved + "NOK");
+                } if (habit instanceof DateHabit) {
+                    totalDays += habit.getDaysFromStart();
+                    dateBottomText.setText("Days without: " + totalDays + " days");
+                }
+            }
 
+        }
 
 }
 
