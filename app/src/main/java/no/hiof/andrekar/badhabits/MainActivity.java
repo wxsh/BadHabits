@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean habitexists;
     private static float totalSaved, totalDays;
     private static TextView ecoBottomText, dateBottomText;
+    private static SwipeRefreshLayout swipeContainer;
 
 
 
@@ -100,10 +102,29 @@ public class MainActivity extends AppCompatActivity {
         bottomSheet();
         updateBottomSheet();
 
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.recyclerSwipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                SaveData saveData = new SaveData();
+                saveData.readFromFile();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
 
 
-        //code to ask user for permission to store data.
+
+
+    //code to ask user for permission to store data.
         int REQUEST_CODE=1;
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -307,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             favAdapter.notifyDataSetChanged();
             updateBottomSheet();
+            swipeContainer.setRefreshing(false);
         }
 
         public static void updateBottomSheet() {
