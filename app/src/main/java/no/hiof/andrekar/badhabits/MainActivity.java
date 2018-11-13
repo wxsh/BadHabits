@@ -23,11 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private static TextView ecoBottomText, dateBottomText, longestStreakText;
     private static SwipeRefreshLayout swipeContainer;
     private static String longestStreakName;
-    private static PieChart bottomSheetPie;
+    private static PieChart bottomSheetPieEco, bottomSheetPieDate;
 
 
 
@@ -106,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
         ecoBottomText = findViewById(R.id.bottom_sheet_top_eco);
         dateBottomText = findViewById(R.id.bottom_sheet_top_date);
         longestStreakText = findViewById(R.id.longestStreakText);
-        bottomSheetPie = findViewById(R.id.chart_bottomSheetPie);
+        bottomSheetPieEco = findViewById(R.id.chart_bottomSheetPieEco);
+        bottomSheetPieDate = findViewById(R.id.chart_bottomSheetPieDate);
 
         bottomSheet();
         updateBottomSheet();
@@ -342,17 +341,18 @@ public class MainActivity extends AppCompatActivity {
             totalSaved = 0;
             totalDays = 0;
             longestStreak = -1;
-            ArrayList<PieEntry> entries = new ArrayList<>();
-            ArrayList<String> labels = new ArrayList<>();
+            ArrayList<PieEntry> entriesEco = new ArrayList<>();
+            ArrayList<PieEntry> entriesDate = new ArrayList<>();
+
             for (Habit habit: Habit.habits) {
                 if (habit instanceof EconomicHabit) {
                     totalSaved += ((EconomicHabit) habit).getProgress();
                     ecoBottomText.setText("Left for goals: " + totalSaved + "NOK");
-                    entries.add(new PieEntry(abs(((EconomicHabit) habit).getProgress()), habit.getTitle()));
-                    labels.add(habit.getTitle());
+                    entriesEco.add(new PieEntry(abs(((EconomicHabit) habit).getProgress()), habit.getTitle()));
                 } if (habit instanceof DateHabit) {
                     totalDays += habit.getDaysFromStart();
                     dateBottomText.setText("Days without: " + totalDays + " days");
+                    entriesDate.add(new PieEntry(Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), TimeUnit.DAYS), habit.getTitle()));
                 }
 
                 if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreak && habit.getFailDate() != 0) {
@@ -369,20 +369,30 @@ public class MainActivity extends AppCompatActivity {
                     longestStreakText.setText("Days since last fail: " + longestStreak + " (" + longestStreakName + ")");
                 }
             }
-            PieDataSet dataSet = new PieDataSet(entries, "saved");
-            PieData data = new PieData(dataSet);
+            PieDataSet dataSetEco = new PieDataSet(entriesEco, "saved");
+            PieData dataEco = new PieData(dataSetEco);
+            PieDataSet dataSetDate = new PieDataSet(entriesDate, "days");
+            PieData dataDate = new PieData(dataSetDate);
             ArrayList<Integer> colors = new ArrayList<>();
 
             for (int c : ColorTemplate.JOYFUL_COLORS)
                 colors.add(c);
 
-            dataSet.setColors(colors);
-            dataSet.setDrawIcons(false);
+            dataSetEco.setColors(colors);
+            dataSetEco.setDrawIcons(false);
 
-            bottomSheetPie.getDescription().setEnabled(false);
-            bottomSheetPie.setData(data);
-            bottomSheetPie.highlightValue(null);
-            bottomSheetPie.invalidate();
+            dataSetDate.setColors(colors);
+            dataSetDate.setDrawIcons(false);
+
+            bottomSheetPieEco.getDescription().setEnabled(false);
+            bottomSheetPieEco.setData(dataEco);
+            bottomSheetPieEco.highlightValue(null);
+            bottomSheetPieEco.invalidate();
+
+            bottomSheetPieDate.getDescription().setEnabled(false);
+            bottomSheetPieDate.setData(dataDate);
+            bottomSheetPieDate.highlightValue(null);
+            bottomSheetPieDate.invalidate();
 
         }
 }
