@@ -3,6 +3,7 @@ package no.hiof.andrekar.badhabits;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -121,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
             saveData.readFromFile();
             }
             initRecyclerView();
+
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
         }
 
     public void bottomSheet() {
@@ -215,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
             startActivity(intent);
 

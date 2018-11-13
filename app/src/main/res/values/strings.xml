@@ -12,5 +12,8 @@
     <string name="enter_amount_spent">Enter amount spent:</string>
     <string name="failedDate">Days since last fail:</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>
