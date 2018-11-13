@@ -37,7 +37,8 @@
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateUnchanged|adjustResize"
             android:noHistory="true" />
-        <activity android:name=".ShowHabitActivity" />
+        <activity android:name=".ShowHabitActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

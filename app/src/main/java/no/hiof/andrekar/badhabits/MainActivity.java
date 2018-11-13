@@ -26,6 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -45,6 +52,8 @@ import model.DateHabit;
 import model.EconomicHabit;
 import model.Habit;
 
+import static java.lang.Math.abs;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -57,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private static TextView ecoBottomText, dateBottomText, longestStreakText;
     private static SwipeRefreshLayout swipeContainer;
     private static String longestStreakName;
+    private static PieChart bottomSheetPie;
 
 
 
@@ -101,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         ecoBottomText = findViewById(R.id.bottom_sheet_top_eco);
         dateBottomText = findViewById(R.id.bottom_sheet_top_date);
         longestStreakText = findViewById(R.id.longestStreakText);
+        bottomSheetPie = findViewById(R.id.chart_bottomSheetPie);
 
         bottomSheet();
         updateBottomSheet();
@@ -338,30 +349,48 @@ public class MainActivity extends AppCompatActivity {
             totalSaved = 0;
             totalDays = 0;
             longestStreak = -1;
+            ArrayList<PieEntry> entries = new ArrayList<>();
+            ArrayList<String> labels = new ArrayList<>();
             for (Habit habit: Habit.habits) {
                 if (habit instanceof EconomicHabit) {
                     totalSaved += ((EconomicHabit) habit).getProgress();
                     ecoBottomText.setText("Left for goals: " + totalSaved + "NOK");
+                    entries.add(new PieEntry(abs(((EconomicHabit) habit).getProgress()), habit.getTitle()));
+                    labels.add(habit.getTitle());
                 } if (habit instanceof DateHabit) {
                     totalDays += habit.getDaysFromStart();
                     dateBottomText.setText("Days without: " + totalDays + " days");
-                    if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreak && habit.getFailDate() != 0) {
-                        longestStreak = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS);
-                        Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
-                        longestStreakName = habit.getTitle();
-                    } else {
-                        longestStreak = -1;
-                    }
-
                 }
+
+                if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreak && habit.getFailDate() != 0) {
+                    longestStreak = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS);
+                    Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
+                    longestStreakName = habit.getTitle();
+                } else {
+                    longestStreak = -1;
+                }
+
                 if (longestStreak == -1) {
                     longestStreakText.setText("NO FAILS! Hooray!");
                 }else {
                     longestStreakText.setText("Days since last fail: " + longestStreak + " (" + longestStreakName + ")");
                 }
             }
+            PieDataSet dataSet = new PieDataSet(entries, "saved");
+            PieData data = new PieData(dataSet);
+            ArrayList<Integer> colors = new ArrayList<>();
+
+            for (int c : ColorTemplate.JOYFUL_COLORS)
+                colors.add(c);
+
+            dataSet.setColors(colors);
+            dataSet.setDrawIcons(false);
+
+            bottomSheetPie.getDescription().setEnabled(false);
+            bottomSheetPie.setData(data);
+            bottomSheetPie.highlightValue(null);
+            bottomSheetPie.invalidate();
 
         }
-
 }
 
