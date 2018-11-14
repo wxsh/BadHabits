@@ -7,10 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.transition.TransitionInflater;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -118,7 +114,7 @@ public class HabitActivity extends AppCompatActivity {
                 economicAlternativePriceEditText.setText(Float.toString(((EconomicHabit) editHabit).getAlternativePrice()));
                 economicGoalEditText.setText(Float.toString(((EconomicHabit) editHabit).getGoalValue()));
                 economicPriceEditText.setText(Float.toString(((EconomicHabit) editHabit).getPrice()));
-                economicCurrencySpinner.setSelection(adapter.getPosition(((EconomicHabit) editHabit).getCurrency()));
+                // economicCurrencySpinner.setSelection(adapter.getPosition(((EconomicHabit) editHabit).getCurrency()));
             }
 
             editMode = true;
@@ -265,14 +261,13 @@ public class HabitActivity extends AppCompatActivity {
             goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
             price = Float.parseFloat(economicPriceEditText.getText().toString());
             if (editMode == false) {
-                EconomicHabit habit = new EconomicHabit(title, description, startDate, currency, alternativePrice, goalValue, price, false);
+                EconomicHabit habit = new EconomicHabit(title, description, startDate, alternativePrice, goalValue, price, false);
                 saveData.saveData(habit, typeHabit);
             } else if (editMode == true) {
                 EconomicHabit habit = (EconomicHabit) Habit.habits.get(editIndex);
                 habit.setTitle(title);
                 habit.setDescription(description);
                 habit.setStartDate(startDate);
-                habit.setCurrency(currency);
                 habit.setAlternativePrice(alternativePrice);
                 habit.setGoalValue(goalValue);
                 habit.setPrice(price);

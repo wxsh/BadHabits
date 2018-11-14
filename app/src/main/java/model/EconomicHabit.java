@@ -20,9 +20,8 @@ public class EconomicHabit extends Habit {
     private Map<String, Integer> failedMap = new HashMap<>();
 
     // Constructor
-    public EconomicHabit(String title, String description, long startDate, String currency, float alternativePrice, float goalValue, float price, Boolean isFavourite) {
+    public EconomicHabit(String title, String description, long startDate, float alternativePrice, float goalValue, float price, Boolean isFavourite) {
         super(title, description, startDate, isFavourite);
-        this.currency = currency;
         this.alternativePrice = alternativePrice;
         this.goalValue = goalValue;
         this.price = price;
@@ -30,20 +29,12 @@ public class EconomicHabit extends Habit {
 
     public EconomicHabit() {}
 
-    public String getCurrency() {
-        return currency;
-    }
-
     public float getPrice() { return price; }
 
     public float getGoalValue() { return goalValue; }
 
     public float getAlternativePrice() {
         return alternativePrice;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 
     public void setAlternativePrice(float alternativePrice) {

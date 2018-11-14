@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,6 +53,12 @@ public class ShowHabitActivity extends AppCompatActivity {
         EconomicHabit ecohabit;
         DateHabit dateHabit;
 
+        SharedPreferences sharedPref =
+                PreferenceManager.getDefaultSharedPreferences(this);
+
+        String currency = sharedPref.getString
+                (SettingsActivity.KEY_PREF_CURRENCY, "");
+
 
         TextView goalView = findViewById(R.id.getGoalTextView);
         TextView progressView = findViewById(R.id.getProgressTextView);
@@ -73,7 +81,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             TextView progressText = findViewById(R.id.progressTextView);
             progressText.setText("Progress:");
             goalView.setText(String.valueOf(((EconomicHabit) habit).getGoalValue()));
-            progressView.setText(Float.toString(((EconomicHabit) habit).getProgress()));
+            progressView.setText(Float.toString(((EconomicHabit) habit).getProgress()) + " " +currency);
             Date date=new Date(habit.getStartDate());
             String dateText = df2.format(date);
             startView.setText(dateText);

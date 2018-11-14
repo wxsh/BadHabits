@@ -1,7 +1,6 @@
 package no.hiof.andrekar.badhabits;
 
 import android.Manifest;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,10 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
-import android.transition.Slide;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -307,9 +302,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateData() {
         ArrayList<Habit> testHabits = new ArrayList<Habit>();
-        Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date().getTime(), "kr", 10, 100, 10, false);
+        Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date().getTime(), 10, 100, 10, false);
         Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date().getTime(), 10, true);
-        Habit poop = new EconomicHabit("Smokes", "Stop with smoking", new Date().getTime(), "kr", 10, 100, 10, false);
+        Habit poop = new EconomicHabit("Smokes", "Stop with smoking", new Date().getTime(), 10, 100, 10, false);
         Habit scoop = new DateHabit("Having fun", "Stop having fun", new Date().getTime(), 10, false);
 
         testHabits.add((EconomicHabit) gumHabit);
