@@ -2,9 +2,6 @@ package model;
 
 import com.google.firebase.firestore.Exclude;
 
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,13 +16,12 @@ public class EconomicHabit extends Habit {
     private float goalValue;
     private float price;
     private float alternativePrice;
-    private static final String habitType = "Eco";
     private int failedTotal;
     private Map<String, Integer> failedMap = new HashMap<>();
 
     // Constructor
     public EconomicHabit(String title, String description, long startDate, String currency, float alternativePrice, float goalValue, float price, Boolean isFavourite) {
-        super(title, description, startDate, isFavourite, habitType);
+        super(title, description, startDate, isFavourite);
         this.currency = currency;
         this.alternativePrice = alternativePrice;
         this.goalValue = goalValue;
@@ -45,8 +41,6 @@ public class EconomicHabit extends Habit {
     public float getAlternativePrice() {
         return alternativePrice;
     }
-
-    public String getHabitType() {return habitType; }
 
     public void setCurrency(String currency) {
         this.currency = currency;
