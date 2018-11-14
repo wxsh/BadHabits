@@ -7,6 +7,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.TransitionInflater;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -70,7 +74,11 @@ public class HabitActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
         setContentView(R.layout.activity_habit);
+        //Slide slide = TransitionInflater.from(this).inflateTransition(R.transition.slide_and_changebounds);
+        //getWindow().setExitTransition(slide);
+
         dateEditText = findViewById(R.id.newHabit_startDate);
         findviews();
 
@@ -172,6 +180,12 @@ public class HabitActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+    }
+
 
     private boolean checkFields(EditText[] fields) {
         for(int i = 0; i < fields.length; i++){
@@ -283,6 +297,7 @@ public class HabitActivity extends AppCompatActivity {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
     }
 
     private void findviews() {

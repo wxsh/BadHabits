@@ -1,6 +1,7 @@
 package no.hiof.andrekar.badhabits;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if(mDatabase == null) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             database.setPersistenceEnabled(true);
@@ -83,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
             FirebaseUser currentUser = mAuth.getCurrentUser();
         }
-
-            setContentView(R.layout.activity_main);
+        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -109,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("TITLE", "Add new habit");
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivityForResult(intent, 500);
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         });
 
@@ -195,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
         updateRecyclerView();
     }
 
@@ -295,7 +302,6 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             favAdapter.notifyDataSetChanged();
         }
-
 
 
 }
