@@ -5,8 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
@@ -60,6 +62,13 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
         @Override
         public void onBindViewHolder(final MyFavoriteAdapter.ViewHolder holder, final int position) {
 
+
+        SharedPreferences sharedPref =
+                PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
+
+        String currency = sharedPref.getString
+                (SettingsActivity.KEY_PREF_CURRENCY, "");
+
         if (position == 0){
             mHaveFavorite = Habit.getHaveFavorite();
         }
@@ -103,7 +112,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
                     //>DONE: DONE
                     if (Habit.habits.get(position).getClass() == EconomicHabit.class) {
-                        holder.habitGoal.setText(Float.toString(((EconomicHabit) Habit.habits.get(position)).getProgress()));
+                        holder.habitGoal.setText(Float.toString(((EconomicHabit) Habit.habits.get(position)).getProgress()) + " " + currency);
                     } else if (Habit.habits.get(position).getClass() == DateHabit.class) {
                         holder.habitGoal.setText(((DateHabit) Habit.habits.get(position)).getDateGoal());
                     }

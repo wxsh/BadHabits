@@ -2,7 +2,9 @@ package no.hiof.andrekar.badhabits;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,12 +65,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             }
             */
 
+
+            //Currency from sharedPrefs
+            SharedPreferences sharedPref =
+                PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
+
+            String currency = sharedPref.getString
+                (SettingsActivity.KEY_PREF_CURRENCY, "");
+
+
             holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
             holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
             //TODO: reminder
             if (Habit.habits.get(position).getClass() == EconomicHabit.class) {
-                holder.habitGoal.setText(Float.toString(((EconomicHabit) Habit.habits.get(position)).getProgress()));
+                holder.habitGoal.setText(Float.toString(((EconomicHabit) Habit.habits.get(position)).getProgress()) +" "+currency);
             } else if (Habit.habits.get(position).getClass() == DateHabit.class) {
                 holder.habitGoal.setText(((DateHabit) Habit.habits.get(position)).getDateGoal());
             }
