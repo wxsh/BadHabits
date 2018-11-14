@@ -31,6 +31,7 @@
         </activity>
         <activity
             android:name=".SettingsActivity"
+            android:label="Settings"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".HabitActivity"
@@ -38,6 +39,7 @@
             android:windowSoftInputMode="stateUnchanged|adjustResize"
             android:noHistory="true" />
         <activity android:name=".ShowHabitActivity"
+            android:label="Habit details"
             android:parentActivityName=".MainActivity"/>
     </application>
 
