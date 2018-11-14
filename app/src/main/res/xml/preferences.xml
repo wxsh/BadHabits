@@ -9,7 +9,8 @@
             android:key="key_currency"
             android:summary="Choose currency"
             android:entries="@array/currency_array"
-            android:entryValues="@array/currency_array">
+            android:entryValues="@array/currency_array"
+            android:defaultValue="NOK">
         </ListPreference>
 
         <ListPreference
