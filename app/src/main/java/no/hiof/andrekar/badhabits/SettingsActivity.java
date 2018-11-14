@@ -39,16 +39,19 @@ import android.widget.Toast;
 
 
 public class SettingsActivity extends AppCompatActivity {
-    public static final String KEY_PREF_EXAMPLE_SWITCH = "example_switch";
+    public static final String KEY_PREF_CURRENCY = "key_currency";
+    public static final String KEY_PREF_GOOGLE = "key_google";
+    public static final String KEY_PREF_EMAIL = "key_email";
 
     private FirebaseAuth mAuth;
 
     private Button buttonRegUser, buttonLoginUser;
     private TextView userIdTW;
 
-    List<AuthUI.IdpConfig> providers = Arrays.asList(
+    static List<AuthUI.IdpConfig> providers = Arrays.asList(
             new AuthUI.IdpConfig.EmailBuilder().build(),
             new AuthUI.IdpConfig.GoogleBuilder().build());
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +63,20 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences sharedPref =
                 PreferenceManager.getDefaultSharedPreferences(this);
 
-        Boolean switchPref = sharedPref.getBoolean
-                (SettingsActivity.KEY_PREF_EXAMPLE_SWITCH,false);
+        String currency = sharedPref.getString
+                (SettingsActivity.KEY_PREF_CURRENCY, "");
 
-        Toast.makeText(this, switchPref.toString(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, currency, Toast.LENGTH_SHORT).show();
+
+
     }
+
+
+
     /*
+    buttonRegUser = findViewById(R.id.buttonRegisterUser);
+    buttonLoginUser = findViewById(R.id.buttonLoginUser);
+    userIdTW = findViewById(R.id.userIdTextView);
 
         setContentView(R.layout.activity_settings);
 
@@ -88,20 +99,19 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
     }
-*/
     //public static class MainSettingsFragment extends MaterialPreferenceFragment
 
-    /*
+
     @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser != null) {
             if (currentUser.isAnonymous()) {
-                userIdTW.setText("Du er ikke logget inn, data er ikke lagret til en spesifikk konto");
+                //userIdTW.setText("Du er ikke logget inn, data er ikke lagret til en spesifikk konto");
                 buttonRegUser.setVisibility(View.VISIBLE);
             } else {
-                userIdTW.setText("Du er logget inn som " + currentUser.getEmail());
+                //userIdTW.setText("Du er logget inn som " + currentUser.getEmail());
                 buttonRegUser.setVisibility(View.INVISIBLE);
             }
         } else {

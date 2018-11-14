@@ -13,7 +13,7 @@ import java.util.Date;
 //TODO: Clean up unused functions.
 
 public class EconomicHabit extends Habit {
-    private String currency;
+    static private String currency;
     private float goalValue;
     private float price;
     private float alternativePrice;

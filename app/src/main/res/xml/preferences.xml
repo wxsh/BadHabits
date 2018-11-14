@@ -1,22 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="HEY">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-
-    <SwitchPreferenceCompat
-        android:defaultValue="true"
-        android:key="user_category"
+    <PreferenceCategory
         android:title="USER">
-    </SwitchPreferenceCompat>
 
-    <SwitchPreferenceCompat
-        android:key="notifications"
-        android:title="Enable message notifications"/>
+        <ListPreference
+            android:title="Currency"
+            android:key="key_currency"
+            android:summary="Choose currency"
+            android:entries="@array/currency_array"
+            android:entryValues="@array/currency_array">
+        </ListPreference>
 
-    <Preference
-        android:key="feedback"
-        android:title="Send feedback"
-        android:summary="Report technical issues or suggest new features"/>
+        <Preference
+            android:dialogTitle="Google"
+            android:dialogMessage="Enter your name"
+            android:inputType="textCapWords"
+            android:key="key_google"
+            android:title="Google"
+            android:summary="Sign in with google"
+            />
 
+        <EditTextPreference
+            android:dialogTitle="Your email"
+            android:dialogMessage="Enter your email"
+            android:inputType="textEmailAddress"
+            android:key="key_email"
+            android:title="Email"
+            android:summary="Dennis.Skants@gmail.com"
+            />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="user_category"
+            android:title="USER">
+        </SwitchPreference>
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="PLAYER">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="enable_timer"
+            android:title="Enable sleep timer"
+            android:summary="Enable or disable sleep timer">
+        </CheckBoxPreference>
+
+        <ListPreference
+            android:dependency="enable_timer"
+            android:key="key_sleep_timer"
+            android:summary="Stop playing music after time"
+            android:entries="@array/timerList"
+            android:entryValues="@array/timerListValues">
+        </ListPreference>
+
+
+    </PreferenceCategory>
 </PreferenceScreen>
