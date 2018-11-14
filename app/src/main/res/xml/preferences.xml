@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="USER">
+
+        <ListPreference
+            android:title="Currency"
+            android:key="key_currency"
+            android:summary="Choose currency"
+            android:entries="@array/currency_array"
+            android:entryValues="@array/currency_array">
+        </ListPreference>
+
+        <ListPreference
+            android:dialogTitle="Google"
+            android:defaultValue="Anonym"
+            android:key="key_google"
+            android:title="Google"
+            android:summary="Sign in with google"
+            android:entries="@array/google_array"
+            android:entryValues="@array/google_array">
+        </ListPreference>
+
+
+
+    </PreferenceCategory>
+
+    <!--
+    Bare test greier under
+    -->
+
+    <PreferenceCategory
+        android:title="Color scheme">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="enable_timer"
+            android:title="Enable sleep timer"
+            android:summary="Enable or disable sleep timer">
+        </CheckBoxPreference>
+
+        <ListPreference
+            android:dependency="enable_timer"
+            android:key="key_sleep_timer"
+            android:summary="Stop playing music after time"
+            android:entries="@array/timerList"
+            android:entryValues="@array/timerListValues">
+        </ListPreference>
+
+
+    </PreferenceCategory>
+</PreferenceScreen>

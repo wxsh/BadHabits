@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="currency_array">
+        <item>NOK</item>
+        <item>SEK</item>
+        <item>DKK</item>
+        <item>EUR</item>
+        <item>USD</item>
+    </string-array>
+
+    <string-array name="google_array">
+        <item>Login</item>
+        <item>Registrier</item>
+        <item>Anonym</item>
+    </string-array>
+
+
+    <string-array name="timerList">
+        <item>After 5 seconds</item>
+        <item>After 10 seconds</item>
+        <item>After 15 seconds</item>
+        <item>After 20 seconds</item>
+
+    </string-array>
+
+    <string-array name="timerListValues">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
+
+
+</resources>
