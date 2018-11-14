@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -15,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,13 +47,13 @@ public class HabitActivity extends AppCompatActivity {
     //Title and description
     private EditText editTitle, editDesc, dateEditText;
     private TextInputLayout dateGoalIT, economicGoalIT, economicPriceIT, economicAlternativePriceIT;
-    private String currency;
+    private String pricePeriod, alternativePricePeriod;
 
     //Date habits
     private EditText dateGoalEditText;
     //Economic Habits
     private EditText economicGoalEditText, economicAlternativePriceEditText, economicPriceEditText;
-    private Spinner economicCurrencySpinner;
+    private Spinner economicPeriodSpinner, economicAlterntivePeriodSpinner;
     private float alternativePrice, goalValue, price;
 
     private RadioGroup typeHabitRG;
@@ -84,11 +86,12 @@ public class HabitActivity extends AppCompatActivity {
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.currency_array, android.R.layout.simple_spinner_item);
+                R.array.period_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        economicCurrencySpinner.setAdapter(adapter);
+        economicPeriodSpinner.setAdapter(adapter);
+        economicAlterntivePeriodSpinner.setAdapter(adapter);
 
         if (getIntent().hasExtra("CURRENT_HABIT_INDEX")) {
             setTitle(getIntent().getStringExtra("HABIT_NAME"));
@@ -114,7 +117,8 @@ public class HabitActivity extends AppCompatActivity {
                 economicAlternativePriceEditText.setText(Float.toString(((EconomicHabit) editHabit).getAlternativePrice()));
                 economicGoalEditText.setText(Float.toString(((EconomicHabit) editHabit).getGoalValue()));
                 economicPriceEditText.setText(Float.toString(((EconomicHabit) editHabit).getPrice()));
-                // economicCurrencySpinner.setSelection(adapter.getPosition(((EconomicHabit) editHabit).getCurrency()));
+                economicPeriodSpinner.setSelection(adapter.getPosition("Daily"));
+                economicAlterntivePeriodSpinner.setSelection(adapter.getPosition("Daily"));
             }
 
             editMode = true;
@@ -199,19 +203,22 @@ public class HabitActivity extends AppCompatActivity {
             economicGoalIT.setVisibility(View.VISIBLE);
             economicPriceIT.setVisibility(View.VISIBLE);
             economicAlternativePriceIT.setVisibility(View.VISIBLE);
-            economicCurrencySpinner.setVisibility(View.VISIBLE);
+            economicPeriodSpinner.setVisibility(View.VISIBLE);
+            economicAlterntivePeriodSpinner.setVisibility(View.VISIBLE);
         } else if (typeHabit == 2) {
             dateGoalIT.setVisibility(View.VISIBLE);
             economicPriceIT.setVisibility(View.INVISIBLE);
             economicGoalIT.setVisibility(View.INVISIBLE);
             economicAlternativePriceIT.setVisibility(View.INVISIBLE);
-            economicCurrencySpinner.setVisibility(View.INVISIBLE);
+            economicPeriodSpinner.setVisibility(View.INVISIBLE);
+            economicAlterntivePeriodSpinner.setVisibility(View.INVISIBLE);
         } else {
             dateGoalIT.setVisibility(View.INVISIBLE);
             economicPriceIT.setVisibility(View.INVISIBLE);
             economicGoalIT.setVisibility(View.INVISIBLE);
             economicAlternativePriceIT.setVisibility(View.INVISIBLE);
-            economicCurrencySpinner.setVisibility(View.INVISIBLE);
+            economicPeriodSpinner.setVisibility(View.INVISIBLE);
+            economicAlterntivePeriodSpinner.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -256,10 +263,14 @@ public class HabitActivity extends AppCompatActivity {
     private void saveHabit(int typeHabit) {
         SaveData saveData = new SaveData();
         if (typeHabit == 1) {
-            currency = economicCurrencySpinner.getSelectedItem().toString();
-            alternativePrice = Float.parseFloat(economicAlternativePriceEditText.getText().toString());
+            pricePeriod = economicPeriodSpinner.getSelectedItem().toString();
+            alternativePricePeriod = economicAlterntivePeriodSpinner.getSelectedItem().toString();
+            price = convertPrice(Float.parseFloat(economicPriceEditText.getText().toString()), economicPeriodSpinner);
+            alternativePrice = convertPrice(Float.parseFloat(economicAlternativePriceEditText.getText().toString()), economicAlterntivePeriodSpinner);
+            Log.d("Pricespinner", economicAlterntivePeriodSpinner.getSelectedItem().toString());
+
             goalValue = Float.parseFloat(economicGoalEditText.getText().toString());
-            price = Float.parseFloat(economicPriceEditText.getText().toString());
+
             if (editMode == false) {
                 EconomicHabit habit = new EconomicHabit(title, description, startDate, alternativePrice, goalValue, price, false);
                 saveData.saveData(habit, typeHabit);
@@ -306,10 +317,24 @@ public class HabitActivity extends AppCompatActivity {
         economicGoalIT = findViewById(R.id.newHabit_economicHabit_goalIT);
         economicPriceIT = findViewById(R.id.newHabit_economicHabit_priceIT);
         economicAlternativePriceIT = findViewById(R.id.newHabit_economicHabit_alternativepriceIT);
-        economicCurrencySpinner = findViewById(R.id.newHabit_economicHabit_currency);
+        economicPeriodSpinner = findViewById(R.id.newHabit_economicHabit_periodPrice);
         economicGoalEditText = findViewById(R.id.newHabit_economicHabit_goal);
         economicAlternativePriceEditText = findViewById(R.id.newHabit_economicHabit_alternativePrice);
         economicPriceEditText = findViewById(R.id.newHabit_economicHabit_price);
+        economicAlterntivePeriodSpinner = findViewById(R.id.newHabit_economicHabit_periodAlternativePrice);
+    }
+
+    private float convertPrice(float price, Spinner spinner) {
+        DecimalFormat df = new DecimalFormat("###.##");
+        if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[0])) {
+            return Float.parseFloat(df.format(price));
+        } else if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[1])) {
+            return Float.parseFloat(df.format(price/7));
+        } else if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[2])) {
+            return Float.parseFloat(df.format(price/30));
+        } else if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[3])) {
+            return Float.parseFloat(df.format(price/365));
+        } else return 0;
     }
 
 }

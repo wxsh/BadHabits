@@ -2,6 +2,7 @@ package model;
 
 import com.google.firebase.firestore.Exclude;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,13 +56,14 @@ public class EconomicHabit extends Habit {
 
     @Exclude
     public float getProgress() {
+        DecimalFormat df = new DecimalFormat("###.##");
         float dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
         float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()) - this.getFailedTotal());
         if (saved < 0) {
-            return saved;
+            return Float.parseFloat(df.format(saved));
         }
         else {
-            return saved;
+            return Float.parseFloat(df.format(saved));
         }
 
     }

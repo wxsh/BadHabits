@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HabitActivity"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    tools:context=".HabitActivity">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/newHabit_startDateIT"
@@ -111,16 +111,14 @@
         android:id="@+id/newHabit_economicHabit_goalIT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/newHabit_economicHabit_currency"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintHorizontal_weight="0.6"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radiogroup_typeHabit">
 
         <EditText
             android:id="@+id/newHabit_economicHabit_goal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:ems="10"
@@ -130,11 +128,14 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/newHabit_economicHabit_priceIT"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/newHabit_economicHabit_goalIT"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/newHabit_economicHabit_goalIT"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/newHabit_economicHabit_periodPrice"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_weight="0.6"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_goalIT">
 
         <EditText
@@ -152,13 +153,13 @@
         android:id="@+id/newHabit_dateHabit_goalIT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/newHabit_economicHabit_currency"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radiogroup_typeHabit">
 
         <EditText
             android:id="@+id/newHabit_dateHabit_goal"
-            android:layout_width="match_parent"
+            android:layout_width="366dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
@@ -168,26 +169,45 @@
     </android.support.design.widget.TextInputLayout>
 
     <Spinner
-        android:id="@+id/newHabit_economicHabit_currency"
+        android:id="@+id/newHabit_economicHabit_periodPrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Valuta"
-        app:layout_constraintBottom_toBottomOf="@+id/newHabit_economicHabit_goalIT"
+        app:layout_constraintBottom_toTopOf="@+id/newHabit_economicHabit_alternativepriceIT"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintHorizontal_weight="0.4"
-        app:layout_constraintStart_toEndOf="@+id/newHabit_economicHabit_goalIT"
-        app:layout_constraintTop_toTopOf="@+id/newHabit_economicHabit_goalIT" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/newHabit_economicHabit_priceIT"
+        app:layout_constraintTop_toTopOf="@+id/newHabit_economicHabit_priceIT" />
+
+    <Spinner
+        android:id="@+id/newHabit_economicHabit_periodAlternativePrice"
+        android:layout_width="0dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="0dp"
+        android:ems="10"
+        android:hint="Valuta"
+        app:layout_constraintBottom_toBottomOf="@+id/newHabit_economicHabit_alternativepriceIT"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/newHabit_economicHabit_alternativepriceIT"
+        app:layout_constraintTop_toTopOf="@+id/newHabit_economicHabit_alternativepriceIT" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/newHabit_economicHabit_alternativepriceIT"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/newHabit_economicHabit_priceIT"
-        app:layout_constraintStart_toStartOf="@+id/newHabit_economicHabit_priceIT"
+        android:layout_marginEnd="0dp"
+        app:layout_constraintEnd_toStartOf="@+id/newHabit_economicHabit_periodAlternativePrice"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_weight="0.6"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_priceIT">
 
         <EditText
@@ -197,7 +217,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="Alternativets Pris Per Dag"
+            android:hint="Alternativets Pris"
             android:inputType="numberDecimal" />
 
     </android.support.design.widget.TextInputLayout>
