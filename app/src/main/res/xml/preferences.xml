@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="USER">
 
         <ListPreference
             android:title="Currency"
@@ -10,7 +8,8 @@
             android:summary="Choose currency"
             android:entries="@array/currency_array"
             android:entryValues="@array/currency_array"
-            android:defaultValue="NOK">
+            android:defaultValue="NOK"
+            android:icon="@drawable/ic_currency" >
         </ListPreference>
 
         <ListPreference
@@ -20,16 +19,13 @@
             android:title="Google"
             android:summary="Sign in with google"
             android:entries="@array/google_array"
-            android:entryValues="@array/google_array">
+            android:entryValues="@array/google_array"
+            android:icon="@drawable/googleg_standard_color_18">
         </ListPreference>
 
-
-
-    </PreferenceCategory>
-
     <!--
+
     Bare test greier under
-    -->
 
     <PreferenceCategory
         android:title="Color scheme">
@@ -50,4 +46,5 @@
 
 
     </PreferenceCategory>
+    -->
 </PreferenceScreen>
