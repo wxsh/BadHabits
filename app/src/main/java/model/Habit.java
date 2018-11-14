@@ -46,7 +46,7 @@ public class Habit {
 
 
     //Constructors
-    public Habit(String title, String description, long startDate, Boolean isFavourite, String habitType) {
+    public Habit(String title, String description, long startDate, Boolean isFavourite) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
@@ -116,10 +116,6 @@ public class Habit {
     }
 
     public String getUid() { return uid; }
-
-    public String getHabitType() { return habitType; }
-
-
 
     //Setters
 
