@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -369,9 +370,9 @@ public class MainActivity extends AppCompatActivity {
                     longestStreakText.setText("Days since last fail: " + longestStreak + " (" + longestStreakName + ")");
                 }
             }
-            PieDataSet dataSetEco = new PieDataSet(entriesEco, "saved");
+            PieDataSet dataSetEco = new PieDataSet(entriesEco, "");
             PieData dataEco = new PieData(dataSetEco);
-            PieDataSet dataSetDate = new PieDataSet(entriesDate, "days");
+            PieDataSet dataSetDate = new PieDataSet(entriesDate, "");
             PieData dataDate = new PieData(dataSetDate);
             ArrayList<Integer> colors = new ArrayList<>();
 
@@ -385,11 +386,14 @@ public class MainActivity extends AppCompatActivity {
             dataSetDate.setDrawIcons(false);
 
             bottomSheetPieEco.getDescription().setEnabled(false);
+//            bottomSheetPieEco.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+            bottomSheetPieEco.setDrawEntryLabels(false);
             bottomSheetPieEco.setData(dataEco);
             bottomSheetPieEco.highlightValue(null);
             bottomSheetPieEco.invalidate();
 
             bottomSheetPieDate.getDescription().setEnabled(false);
+            bottomSheetPieDate.setDrawEntryLabels(false);
             bottomSheetPieDate.setData(dataDate);
             bottomSheetPieDate.highlightValue(null);
             bottomSheetPieDate.invalidate();
