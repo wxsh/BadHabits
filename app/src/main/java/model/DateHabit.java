@@ -1,11 +1,14 @@
 package model;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.Exclude;
 
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 //DONE: Implement maths in class? IE: getters for progress?
 
@@ -30,13 +33,10 @@ public class DateHabit extends Habit {
     @Exclude
     public String getDateGoal(){
         String dateGoal;
-        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyy");
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(this.getStartDate()));
         c.add(Calendar.DATE,this.getDateGoalValue());
-        Date endDate = new Date(c.getTimeInMillis());
-        //dateGoal = simpleDateFormat.format(endDate);
-        long dateGoalL = ChronoUnit.DAYS.between(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
+        long dateGoalL = Habit.getDateDiff(new Date().getTime(), c.getTimeInMillis(), TimeUnit.DAYS);
         dateGoal = Long.toString(dateGoalL);
         if (Long.valueOf(dateGoalL) > 0) {
             return dateGoal + " Remaining";
@@ -47,13 +47,7 @@ public class DateHabit extends Habit {
     @Exclude
     public String getDaysSinceStart(){
         String dateGoal;
-        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyy");
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date(this.getStartDate()));
-        //c.add(Calendar.DATE,this.getDateGoalValue());
-        Date endDate = new Date(c.getTimeInMillis());
-        //dateGoal = simpleDateFormat.format(endDate);
-        long dateGoalL = ChronoUnit.DAYS.between(endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(),new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
+        long dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
         dateGoal = Long.toString(dateGoalL);
         if(Long.valueOf(dateGoalL) > 0){
             return dateGoal + " Days since start";

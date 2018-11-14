@@ -106,13 +106,9 @@ public class Habit {
         return num;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Exclude
     public float getDaysFromStart() {
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date(this.getStartDate()));
-        Date startDate = new Date(c.getTimeInMillis());
-        return ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
+        return Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
     }
 
     public String getUid() { return uid; }
@@ -149,7 +145,7 @@ public class Habit {
     };
 
     public static long getDateDiff(long date1, long date2, TimeUnit timeUnit) {
-        long diffInMillies = date2 - date1;
-        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        long diffInMillis = date2 - date1;
+        return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
     }
 }
