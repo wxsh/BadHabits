@@ -9,6 +9,12 @@
         <item>USD</item>
     </string-array>
 
+    <string-array name="google_array">
+        <item>Login</item>
+        <item>Registrier</item>
+        <item>Anonym</item>
+    </string-array>
+
 
     <string-array name="timerList">
         <item>After 5 seconds</item>
@@ -25,31 +31,5 @@
         <item>20</item>
     </string-array>
 
-
-    <string-array name="musicQuality">
-        <item>128kbps</item>
-        <item>320kpbs</item>
-        <item>lossLess</item>
-    </string-array>
-
-
-    <string-array name="musicQualityValues">
-        <item>128</item>
-        <item>320</item>
-        <item>lossLess</item>
-    </string-array>
-
-    <string-array name="typesOfMusic">
-        <item>Pop</item>
-        <item>Rock</item>
-        <item>Classical</item>
-        <item>Hiphop</item>
-    </string-array>
-    <string-array name="typesOfMusicValues">
-        <item>Pop</item>
-        <item>Rock</item>
-        <item>Classical</item>
-        <item>Hiphop</item>
-    </string-array>
 
 </resources>

@@ -12,35 +12,26 @@
             android:entryValues="@array/currency_array">
         </ListPreference>
 
-        <Preference
+        <ListPreference
             android:dialogTitle="Google"
-            android:dialogMessage="Enter your name"
-            android:inputType="textCapWords"
+            android:defaultValue="Anonym"
             android:key="key_google"
             android:title="Google"
             android:summary="Sign in with google"
-            />
+            android:entries="@array/google_array"
+            android:entryValues="@array/google_array">
+        </ListPreference>
 
-        <EditTextPreference
-            android:dialogTitle="Your email"
-            android:dialogMessage="Enter your email"
-            android:inputType="textEmailAddress"
-            android:key="key_email"
-            android:title="Email"
-            android:summary="Dennis.Skants@gmail.com"
-            />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="user_category"
-            android:title="USER">
-        </SwitchPreference>
 
 
     </PreferenceCategory>
 
+    <!--
+    Bare test greier under
+    -->
+
     <PreferenceCategory
-        android:title="PLAYER">
+        android:title="Color scheme">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="enable_timer"

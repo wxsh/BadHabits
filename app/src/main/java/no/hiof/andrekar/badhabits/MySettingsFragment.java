@@ -41,19 +41,18 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         Preference currency = findPreference(SettingsActivity.KEY_PREF_CURRENCY);
         currency.setSummary(sharedPreferences.getString(SettingsActivity.KEY_PREF_CURRENCY,""));
 
-        Preference email = findPreference(SettingsActivity.KEY_PREF_EMAIL);
-        email.setSummary(sharedPreferences.getString(SettingsActivity.KEY_PREF_EMAIL,""));
+//        Preference email = findPreference(SettingsActivity.KEY_PREF_EMAIL);
+//        email.setSummary(sharedPreferences.getString(SettingsActivity.KEY_PREF_EMAIL,""));
 
         Preference googlePref = (Preference) findPreference(SettingsActivity.KEY_PREF_GOOGLE);
         googlePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
 
-
                 //Denne kjøres hvis brukeren skal registreres.
-                startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).build(), 200);
+                //startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).build(), 200);
 
                 //Denne skal kjøres hvis brukeren har en eksisterende konto.
-                startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), 200);
+                //startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), 200);
 
 
                 return true;
@@ -84,7 +83,22 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
         Preference preference = findPreference(key);
         try {
+            if( key.equals(SettingsActivity.KEY_PREF_GOOGLE)){
+
+                if(sharedPreferences.getString(key,"").equals("Registrier")){
+                System.out.println(key);
+                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).build(), 200);
+                }
+                else if(sharedPreferences.getString(key,"").equals("Login")){
+                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), 200);
+                }
+                else {
+                    preference.setSummary("Login with google");
+                }
+
+            }else
             preference.setSummary(sharedPreferences.getString(key,""));
+
         }catch (Exception e){
             e.printStackTrace();
         }
