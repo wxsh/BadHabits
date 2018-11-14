@@ -4,9 +4,11 @@ import com.google.firebase.firestore.Exclude;
 
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 //TODO: Implement maths in class? IE: getters for progress?
 //DONE: Rename variables? ie. Price and InitialValue / GoalValue? - DO we need both or should ie. initialValue be renamed to price for alternative?
@@ -19,6 +21,7 @@ public class EconomicHabit extends Habit {
     private float alternativePrice;
     private static final String habitType = "Eco";
     private int failedTotal;
+    private Map<String, Integer> failedMap = new HashMap<>();
 
     // Constructor
     public EconomicHabit(String title, String description, long startDate, String currency, float alternativePrice, float goalValue, float price, Boolean isFavourite) {
@@ -61,17 +64,15 @@ public class EconomicHabit extends Habit {
         this.goalValue = goalValue;
     }
 
-
+    public Map<String, Integer> getMappedFail() {
+        return failedMap;
+    }
 
     @Exclude
     public float getProgress() {
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date(this.getStartDate()));
-        Date startDate = new Date(c.getTimeInMillis());
-        float dateGoalL = ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
+        float dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
         float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()) - this.getFailedTotal());
         if (saved < 0) {
-            //Should maybe build this string in activity instead if we want to color it
             return saved;
         }
         else {
@@ -87,7 +88,9 @@ public class EconomicHabit extends Habit {
     public void setFailedTotal(int failedTotal) {
         this.failedTotal = failedTotal;
     }
+    
     public void increaseFailedTotal(int failedAmout){
+        failedMap.put(Long.toString(new Date().getTime()), failedAmout);
         this.failedTotal += failedAmout;
     }
 }
