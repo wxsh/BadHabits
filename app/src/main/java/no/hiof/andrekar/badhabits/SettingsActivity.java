@@ -48,9 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button buttonRegUser, buttonLoginUser;
     private TextView userIdTW;
 
-    static List<AuthUI.IdpConfig> providers = Arrays.asList(
-            new AuthUI.IdpConfig.EmailBuilder().build(),
-            new AuthUI.IdpConfig.GoogleBuilder().build());
+
 
 
     @Override
