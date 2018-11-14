@@ -6,14 +6,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -70,22 +73,32 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                 holder.habitName.setVisibility(View.VISIBLE);
                 holder.failedButton.setVisibility(View.VISIBLE);
 
+                WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+                Display display = wm.getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
 
                 if (!Habit.habits.get(position).getIsFavourite()) {
+
+
                     holder.itemView.setVisibility(View.GONE);
                     holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                 } else {
                     holder.itemView.setVisibility(View.VISIBLE);
                     if (Habit.getNumFavourites() == 1) {
                         holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        holder.habitName.setWidth((int)(size.x/1.3) );
                     } else if (Habit.getNumFavourites() == 2) {
-                        holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(750, ViewGroup.LayoutParams.MATCH_PARENT));
+                        holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams((int)(size.x /1.5), ViewGroup.LayoutParams.MATCH_PARENT));
+                        holder.habitName.setWidth((int)(holder.itemView.getLayoutParams().width/1.5) );
                     } else if (Habit.getNumFavourites() >= 3) {
-                        holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(500, ViewGroup.LayoutParams.MATCH_PARENT));
+                        holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams((int)(size.x /2.2), ViewGroup.LayoutParams.MATCH_PARENT));
+                        holder.habitName.setWidth((int)(holder.itemView.getLayoutParams().width/1.7) );
                     }
+                    holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
 
 
-                        holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
+
                     holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
                     //>DONE: DONE

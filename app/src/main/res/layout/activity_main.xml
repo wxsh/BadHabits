@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/colorPrimary">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -22,11 +23,15 @@
     </android.support.design.widget.AppBarLayout>
 
     <!-- TODO: Do we need to have external content handling? Cleaner? -->
-
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/recyclerSwipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp">
     <include
         android:id="@+id/include"
-        layout="@layout/content_main"
-        app:layout_constraintTop_toTopOf="parent" />
+        layout="@layout/content_main" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <include layout="@layout/bottom_sheet" />
 

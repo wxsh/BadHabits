@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -38,10 +45,13 @@ import model.SaveData;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import model.DateHabit;
 import model.EconomicHabit;
 import model.Habit;
+
+import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +61,11 @@ public class MainActivity extends AppCompatActivity {
     public static MyAdapter adapter;
     public static MyFavoriteAdapter favAdapter;
     private boolean habitexists;
-    private float totalSaved;
+    private static float totalSaved, totalDays, longestStreak;
+    private static TextView ecoBottomText, dateBottomText, longestStreakText;
+    private static SwipeRefreshLayout swipeContainer;
+    private static String longestStreakName;
+    private static PieChart bottomSheetPieEco, bottomSheetPieDate;
 
 
 
@@ -93,14 +107,38 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        ecoBottomText = findViewById(R.id.bottom_sheet_top_eco);
+        dateBottomText = findViewById(R.id.bottom_sheet_top_date);
+        longestStreakText = findViewById(R.id.longestStreakText);
+        bottomSheetPieEco = findViewById(R.id.chart_bottomSheetPieEco);
+        bottomSheetPieDate = findViewById(R.id.chart_bottomSheetPieDate);
 
         bottomSheet();
+        updateBottomSheet();
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.recyclerSwipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                SaveData saveData = new SaveData();
+                saveData.readFromFile();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
 
 
 
-        //code to ask user for permission to store data.
+
+    //code to ask user for permission to store data.
         int REQUEST_CODE=1;
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -132,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     public void bottomSheet() {
         // get the bottom sheet view
         LinearLayout llBottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet);
-        ImageButton btnBottomSheet = (ImageButton) findViewById(R.id.btn_bottomSheetToggle);
+        final ImageButton btnBottomSheet = (ImageButton) findViewById(R.id.btn_bottomSheetToggle);
 
         // init the bottom sheet behavior
         final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
@@ -141,8 +179,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    btnBottomSheet.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_more));
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } else {
+                    btnBottomSheet.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_less));
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
             }
@@ -301,8 +341,70 @@ public class MainActivity extends AppCompatActivity {
         public static void updateRecyclerView(){
             adapter.notifyDataSetChanged();
             favAdapter.notifyDataSetChanged();
+            updateBottomSheet();
+            swipeContainer.setRefreshing(false);
         }
 
+        public static void updateBottomSheet() {
+            totalSaved = 0;
+            totalDays = 0;
+            longestStreak = -1;
+            ArrayList<PieEntry> entriesEco = new ArrayList<>();
+            ArrayList<PieEntry> entriesDate = new ArrayList<>();
 
+            for (Habit habit: Habit.habits) {
+                if (habit instanceof EconomicHabit) {
+                    totalSaved += ((EconomicHabit) habit).getProgress();
+                    ecoBottomText.setText("Left for goals: " + totalSaved + "NOK");
+                    entriesEco.add(new PieEntry(abs(((EconomicHabit) habit).getProgress()), habit.getTitle()));
+                } if (habit instanceof DateHabit) {
+                    totalDays += habit.getDaysFromStart();
+                    dateBottomText.setText("Days without: " + totalDays + " days");
+                    entriesDate.add(new PieEntry(Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), TimeUnit.DAYS), habit.getTitle()));
+                }
+
+                if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreak && habit.getFailDate() != 0) {
+                    longestStreak = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS);
+                    Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
+                    longestStreakName = habit.getTitle();
+                } else {
+                    longestStreak = -1;
+                }
+
+                if (longestStreak == -1) {
+                    longestStreakText.setText("NO FAILS! Hooray!");
+                }else {
+                    longestStreakText.setText("Days since last fail: " + longestStreak + " (" + longestStreakName + ")");
+                }
+            }
+            PieDataSet dataSetEco = new PieDataSet(entriesEco, "");
+            PieData dataEco = new PieData(dataSetEco);
+            PieDataSet dataSetDate = new PieDataSet(entriesDate, "");
+            PieData dataDate = new PieData(dataSetDate);
+            ArrayList<Integer> colors = new ArrayList<>();
+
+            for (int c : ColorTemplate.JOYFUL_COLORS)
+                colors.add(c);
+
+            dataSetEco.setColors(colors);
+            dataSetEco.setDrawIcons(false);
+
+            dataSetDate.setColors(colors);
+            dataSetDate.setDrawIcons(false);
+
+            bottomSheetPieEco.getDescription().setEnabled(false);
+//            bottomSheetPieEco.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+            bottomSheetPieEco.setDrawEntryLabels(false);
+            bottomSheetPieEco.setData(dataEco);
+            bottomSheetPieEco.highlightValue(null);
+            bottomSheetPieEco.invalidate();
+
+            bottomSheetPieDate.getDescription().setEnabled(false);
+            bottomSheetPieDate.setDrawEntryLabels(false);
+            bottomSheetPieDate.setData(dataDate);
+            bottomSheetPieDate.highlightValue(null);
+            bottomSheetPieDate.invalidate();
+
+        }
 }
 
