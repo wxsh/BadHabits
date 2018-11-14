@@ -78,14 +78,19 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     holder.itemView.setVisibility(View.VISIBLE);
                     if (Habit.getNumFavourites() == 1) {
                         holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        //holder.habitName.setWidth(holder.itemView.getLayoutParams().width - 220);
                     } else if (Habit.getNumFavourites() == 2) {
                         holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(750, ViewGroup.LayoutParams.MATCH_PARENT));
+                        holder.habitName.setWidth(holder.itemView.getLayoutParams().width - 220);
                     } else if (Habit.getNumFavourites() >= 3) {
                         holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(500, ViewGroup.LayoutParams.MATCH_PARENT));
+                        holder.habitName.setWidth(holder.itemView.getLayoutParams().width - 220);
+                        //holder.habitName.setWidth(300);
                     }
+                    holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
 
 
-                        holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
+
                     holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
                     //>DONE: DONE

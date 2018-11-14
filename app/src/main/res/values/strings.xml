@@ -11,6 +11,8 @@
     <string name="enter_amount">Enter amount</string>
     <string name="enter_amount_spent">Enter amount spent:</string>
     <string name="failedDate">Days since last fail:</string>
+    <string name="habit">Habit</string>
+    <string name="habit_days">5 days</string>
 
 
 </resources>
