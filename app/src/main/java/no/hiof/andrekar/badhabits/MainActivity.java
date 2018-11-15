@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
 //            return true;
         }
         if (id == R.id.action_populate) {
-            populateData();
+            populateData(true);
             return true;
         }
         if (id == R.id.action_remove) {
@@ -330,13 +330,13 @@ public class MainActivity extends AppCompatActivity {
         boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
         Log.d("Sharedpref", Boolean.toString(onboarding));
         if (onboarding == false) {
-            populateData();
+            populateData(false);
             onBoard(findViewById(R.id.fab_addHabit));
         }
     }
 
 
-    private void populateData() {
+    private void populateData(boolean save) {
         ArrayList<Habit> testHabits = new ArrayList<Habit>();
         Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date().getTime(), 10, 100, 10, false);
         Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date().getTime(), 10, true);
@@ -352,9 +352,14 @@ public class MainActivity extends AppCompatActivity {
         for (Habit habit : testHabits) {
             if (habit instanceof DateHabit) {
                 Habit.habits.add((DateHabit) habit);
-                //saveData.saveData(habit, 2);
+                if(save) {
+                    saveData.saveData(habit, 2);
+                }
             } else if (habit instanceof EconomicHabit) {
                 Habit.habits.add((EconomicHabit) habit);
+                if(save) {
+                    saveData.saveData(habit, 1);
+                }
             }
         }
         updateRecyclerView();
