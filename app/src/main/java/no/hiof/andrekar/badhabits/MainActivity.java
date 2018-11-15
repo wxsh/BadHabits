@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private static SwipeRefreshLayout swipeContainer;
     private static String longestStreakName;
     private static PieChart bottomSheetPieEco, bottomSheetPieDate;
+    private static View targetThreeHolder;
 
 
 
@@ -429,11 +430,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onBoard(final View view) {
-
-
             view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
+                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                     // make an
                     SimpleTarget firstTarget = new SimpleTarget.Builder(MainActivity.this)
@@ -455,8 +455,12 @@ public class MainActivity extends AppCompatActivity {
                             .setDescription("Favourites will be displayed on the top of the screen")
                             .build();
 
-                    float threeX = 1005;
-                    float threeY = 635;
+                    View three = findViewById(R.id.recycler_view);
+                    int[] threeLocation = new int[2];
+                    three.getLocationInWindow(threeLocation);
+                    float threeX = threeLocation[0] + 1005;
+                    float threeY = threeLocation[1] + 70;
+
 
                     SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(threeX, threeY)
                             .setShape(new Circle(50f))
@@ -473,7 +477,6 @@ public class MainActivity extends AppCompatActivity {
                             .setDescription("To access settings, touch the menu. We'll remove the habits we added, so you are ready to start your journey")
                             .build();
 
-                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     Spotlight.with(MainActivity.this)
                             .setOverlayColor(R.color.background)
                             .setDuration(100L)

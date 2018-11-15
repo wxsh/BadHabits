@@ -93,7 +93,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                 holder.favoriteButton.setImageResource(R.drawable.star_off);
             }
 
-
             holder.parentLayout.setOnClickListener(new View.OnClickListener() {
                                                        @Override
                                                        public void onClick(View view) {

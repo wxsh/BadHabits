@@ -28,7 +28,7 @@
             android:title="Reset Onboarding"
             android:summary="Play tutorial again"
             android:defaultValue="false"
-            android:icon="@drawable/googleg_standard_color_18">
+            android:icon="@drawable/ic_flag_triangle">
         </Preference>
 
     <!--

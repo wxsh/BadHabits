@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -70,18 +71,16 @@ public class ShowHabitActivity extends AppCompatActivity {
         Habit habit = Habit.habits.get(currentNumber);
 
         if (habit instanceof DateHabit) {
-            goalView.setText(((DateHabit)habit).getDateGoal());
-            progressView.setText(((DateHabit)habit).getDaysSinceStart());
+            goalView.setText(((DateHabit)habit).getDaysSinceStart());
+            progressView.setText(((DateHabit)habit).getDateGoal());
             //temp code?
             Date date=new Date(habit.getStartDate());
             String dateText = df2.format(date);
             startView.setText(dateText);
         }
         else {
-            TextView progressText = findViewById(R.id.progressTextView);
-            progressText.setText("Progress:");
-            goalView.setText(String.valueOf(((EconomicHabit) habit).getGoalValue()));
-            progressView.setText(Float.toString(((EconomicHabit) habit).getProgress()) + " " +currency);
+            goalView.setText(String.valueOf(((EconomicHabit) habit).getProgress()) + " " + currency);
+            progressView.setText(Float.toString(((EconomicHabit) habit).getGoalValue()) + " " +currency);
             Date date=new Date(habit.getStartDate());
             String dateText = df2.format(date);
             startView.setText(dateText);
@@ -89,7 +88,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         }
 
         if (habit.getFailDate() == 0) {
-            TextView failText = findViewById(R.id.failTextView);
+            ImageView failText = findViewById(R.id.failTextView);
             failedView.setVisibility(View.GONE);
             failText.setVisibility(View.GONE);
         } else {
@@ -97,8 +96,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             failedView.setText(Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS)));
         }
 
-        TextView titleView = findViewById(R.id.habitTitleTextView);
-        titleView.setText(Habit.habits.get(currentNumber).getTitle());
+        setTitle(Habit.habits.get(currentNumber).getTitle());
 
 
         TextView descriptionView = findViewById(R.id.getDescriptionTextView);
