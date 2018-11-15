@@ -334,9 +334,8 @@ public class ShowHabitActivity extends AppCompatActivity {
                 SimpleTarget firstTarget = new SimpleTarget.Builder(ShowHabitActivity.this)
                         .setPoint(findViewById(R.id.btn_habitDelete))
                         .setShape(new Circle(50f))
-                        .setTitle("Delete habit.")
-                        .setDescription("Touch this button to delete a habit." +
-                                "You'll get a popup to confirm this action, don't worry")
+                        .setTitle(getString(R.string.tutorial_habit_title_delete))
+                        .setDescription(getString(R.string.tutorial_habit_desc_delete))
                         .build();
 
                 //View two = findViewById(R.id.favorite_recycler_view);
@@ -345,14 +344,14 @@ public class ShowHabitActivity extends AppCompatActivity {
                 SimpleTarget secondTarget = new SimpleTarget.Builder(ShowHabitActivity.this)
                         .setPoint(findViewById(R.id.btn_habitEdit))
                         .setShape(new Circle(50f))
-                        .setTitle("Edit habit")
-                        .setDescription("This button takes you to the screen to edit habits.")
+                        .setTitle(getString(R.string.tutorial_habit_title_edit))
+                        .setDescription(getString(R.string.tutorial_habit_desc_edit))
                         .build();
 
                 SimpleTarget thirdTarget = new SimpleTarget.Builder(ShowHabitActivity.this).setPoint(findViewById(R.id.btn_habitFailed))
                         .setShape(new Circle(50f))
-                        .setTitle("Failed habit")
-                        .setDescription("Hit a snag? Don't worry. This button will take a note if you spent some money")
+                        .setTitle(getString(R.string.tutorial_habit_title_failed))
+                        .setDescription(getString(R.string.tutorial_habit_desc_failed))
                         .build();
 
 

@@ -42,7 +42,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.takusemba.spotlight.OnSpotlightStateChangedListener;
 import com.takusemba.spotlight.Spotlight;
 import com.takusemba.spotlight.shape.Circle;
-import com.takusemba.spotlight.shape.Shape;
 import com.takusemba.spotlight.target.SimpleTarget;
 
 import model.SaveData;
@@ -516,8 +515,8 @@ public class MainActivity extends AppCompatActivity {
                     SimpleTarget firstTarget = new SimpleTarget.Builder(MainActivity.this)
                             .setPoint(findViewById(R.id.fab_addHabit))
                             .setShape(new Circle(200f))
-                            .setTitle("Welcome to Bad Habits!")
-                            .setDescription("To add a Habit, click on the floating action button. We have added some habits to show you around.")
+                            .setTitle(getString(R.string.tutorial_main_title_welcome))
+                            .setDescription(getString(R.string.tutorial_main_desc_newhabit))
                             .build();
 
                     //View two = findViewById(R.id.favorite_recycler_view);
@@ -531,8 +530,8 @@ public class MainActivity extends AppCompatActivity {
                     SimpleTarget secondTarget = new SimpleTarget.Builder(MainActivity.this)
                             .setPoint(two)
                             .setShape(new Circle(250f))
-                            .setTitle("Favourites")
-                            .setDescription("Favourites will be displayed on the top of the screen")
+                            .setTitle(getString(R.string.tutorial_main_title_favourite))
+                            .setDescription(getString(R.string.tutorial_main_desc_favdisplay))
                             .build();
 
 
@@ -542,8 +541,8 @@ public class MainActivity extends AppCompatActivity {
 
                     SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(three)
                             .setShape(new Circle(50f))
-                            .setTitle("Favourites")
-                            .setDescription("To add a favourite, touch the heart button")
+                            .setTitle(getString(R.string.tutorial_main_title_favourite))
+                            .setDescription(getString(R.string.tutorial_main_desc_favadd))
                             .build();
 
                     float fourX = 1025;
@@ -551,15 +550,15 @@ public class MainActivity extends AppCompatActivity {
 
                     SimpleTarget fourthTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(fourX, fourY)
                             .setShape(new Circle(50f))
-                            .setTitle("Settings")
-                            .setDescription("To access settings, touch the menu. We'll remove the habits we added, so you are ready to start your journey")
+                            .setTitle(getString(R.string.tutorial_main_title_settings))
+                            .setDescription(getString(R.string.tutorial_main_desc_settings))
                             .build();
 
                     Spotlight.with(MainActivity.this)
                             .setOverlayColor(R.color.background)
                             .setDuration(100L)
                             .setAnimation(new DecelerateInterpolator(2f))
-                            .setTargets(firstTarget, secondTarget, thirdTarget, fourthTarget)
+                            .setTargets(firstTarget, thirdTarget, secondTarget, fourthTarget)
                             .setClosedOnTouchedOutside(true)
                             .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
                                 @Override
