@@ -211,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
 
         // change the state of the bottom sheet
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetPieEco.setVisibility(View.INVISIBLE);
+        bottomSheetPieDate.setVisibility(View.INVISIBLE);
 
         // set hideable or not
         bottomSheetBehavior.setHideable(false);
@@ -219,18 +221,28 @@ public class MainActivity extends AppCompatActivity {
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
                 switch (newState) {
                     case BottomSheetBehavior.STATE_HIDDEN:
                         break;  
                     case BottomSheetBehavior.STATE_EXPANDED: {
                         //DO stuff when expanded
+                        bottomSheetPieEco.setVisibility(View.VISIBLE);
+                        bottomSheetPieDate.setVisibility(View.VISIBLE);
+                        bottomSheetPieEco.animateXY(1500, 1500);
+                        bottomSheetPieDate.animateXY(1500, 1500);
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
                         //DO stuff when collapsed
+                        bottomSheetPieEco.setVisibility(View.INVISIBLE);
+                        bottomSheetPieDate.setVisibility(View.INVISIBLE);
                     }
                     break;
-                    case BottomSheetBehavior.STATE_DRAGGING:
+                    case BottomSheetBehavior.STATE_DRAGGING: {
+
+                    }
+
                         break;
                     case BottomSheetBehavior.STATE_SETTLING:
                         break;
