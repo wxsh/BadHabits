@@ -39,6 +39,8 @@
         android:text="@string/failedDate"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/getDescriptionTextView" />
     <TextView
         android:id="@+id/getFailTextView"
@@ -58,8 +60,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/habittitle"
-        android:textSize="24sp"
+        android:textSize="28sp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,6 +73,8 @@
         android:layout_marginStart="16dp"
         android:text="@string/description"
         android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
@@ -92,6 +97,9 @@
         android:layout_marginTop="12dp"
         android:text="@string/goal"
         android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/getStartTextView" />
 
@@ -102,6 +110,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="@string/goal"
+
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goalTextView" />
@@ -119,7 +128,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@android:color/black"
+        android:background="#FF000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -172,6 +181,8 @@
         android:layout_marginTop="12dp"
         android:text="@string/days_without"
         android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/getGoalTextView" />
 
@@ -183,6 +194,8 @@
         android:layout_marginTop="12dp"
         android:text="@string/start"
         android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/getDescriptionTextView" />
 
