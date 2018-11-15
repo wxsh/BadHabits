@@ -9,7 +9,7 @@
             android:entries="@array/currency_array"
             android:entryValues="@array/currency_array"
             android:defaultValue="NOK"
-            android:icon="@drawable/ic_currency" >
+            android:icon="@drawable/ic_currency_usd" >
         </ListPreference>
 
         <ListPreference
