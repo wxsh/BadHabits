@@ -23,6 +23,14 @@
             android:icon="@drawable/googleg_standard_color_18">
         </ListPreference>
 
+        <Preference
+            android:key="key_onboard"
+            android:title="Reset Onboarding"
+            android:summary="Play tutorial again"
+            android:defaultValue="false"
+            android:icon="@drawable/googleg_standard_color_18">
+        </Preference>
+
     <!--
 
     Bare test greier under

@@ -42,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String KEY_PREF_CURRENCY = "key_currency";
     public static final String KEY_PREF_GOOGLE = "key_google";
     public static final String KEY_PREF_EMAIL = "key_email";
+    public static final String KEY_PREF_ONBOARD = "key_onboard";
 
     private FirebaseAuth mAuth;
 
