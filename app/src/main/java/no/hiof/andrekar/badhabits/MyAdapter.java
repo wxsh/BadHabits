@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,8 +81,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             //TODO: reminder
             if (Habit.habits.get(position).getClass() == EconomicHabit.class) {
                 holder.habitGoal.setText(Float.toString(((EconomicHabit) Habit.habits.get(position)).getProgress()) +" "+currency);
+                holder.habitIcon.setImageResource(R.drawable.ic_coin);
             } else if (Habit.habits.get(position).getClass() == DateHabit.class) {
                 holder.habitGoal.setText(((DateHabit) Habit.habits.get(position)).getDateGoal());
+                holder.habitIcon.setImageResource(R.drawable.ic_calendar_today);
             }
 
             if (Habit.habits.get(position).getIsFavourite()) {
@@ -144,6 +147,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         TextView habitDescription;
         ImageButton favoriteButton;
         RelativeLayout parentLayout;
+        ImageView habitIcon;
 
 
 
@@ -154,6 +158,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             habitDescription = itemView.findViewById(R.id.habit_description);
             favoriteButton = itemView.findViewById(R.id.favoriteBtn);
             parentLayout = itemView.findViewById(R.id.parent_layout);
+            habitIcon = itemView.findViewById(R.id.img_habitIcon);
 
         }
     }

@@ -39,6 +39,8 @@
         android:text="@string/failedDate"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/getDescriptionTextView" />
     <TextView
         android:id="@+id/getFailTextView"
@@ -59,8 +61,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/habittitle"
-        android:textSize="24sp"
+        android:textSize="28sp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/btn_habitFailed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -70,10 +73,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/description"
         android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toBottomOf="@+id/habitTitleTextView" />
 
     <TextView
         android:id="@+id/getDescriptionTextView"
@@ -94,6 +100,9 @@
         android:layout_marginTop="12dp"
         android:text="@string/goal"
         android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/getStartTextView" />
 
@@ -104,13 +113,13 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="@string/goal"
+
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goalTextView" />
 
 
-
-
+    <!--
     <View
 
         android:id="@+id/view"
@@ -121,11 +130,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/habitTitleTextView" />
+       -->
 
     <ImageButton
         android:id="@+id/btn_habitDelete"
@@ -136,11 +145,12 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:onClick="deleteHabit"
         android:src="@drawable/ic_delete"
-        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintBottom_toTopOf="@+id/habitTitleTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        android:contentDescription="TODO" />
+        android:contentDescription="TODO"
+        android:tint="@color/buttonTint"/>
     
     <ImageButton
         android:id="@+id/btn_habitEdit"
@@ -148,11 +158,11 @@
         android:layout_height="39dp"
         android:layout_marginTop="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/edit"
-        app:layout_constraintBottom_toTopOf="@+id/view"
+        android:src="@drawable/ic_edit_pencil"
         app:layout_constraintEnd_toStartOf="@+id/btn_habitDelete"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:tint="@color/buttonTint"/>
 
     <ImageButton
         android:id="@+id/btn_habitFailed"
@@ -160,11 +170,11 @@
         android:layout_height="39dp"
         android:layout_marginTop="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_action_name"
-        app:layout_constraintBottom_toTopOf="@+id/view"
+        android:src="@drawable/ic_minus_circle"
         app:layout_constraintEnd_toStartOf="@+id/btn_habitEdit"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:tint="@color/buttonTint"/>
 
     <TextView
         android:id="@+id/progressTextView"
@@ -174,8 +184,11 @@
         android:layout_marginTop="12dp"
         android:text="@string/days_without"
         android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/getGoalTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/getGoalTextView"
+        />
 
     <TextView
         android:id="@+id/startTextView"
@@ -185,13 +198,15 @@
         android:layout_marginTop="12dp"
         android:text="@string/start"
         android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/getDescriptionTextView" />
 
     <com.github.mikephil.charting.charts.HorizontalBarChart
         android:id="@+id/detailChart"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="163dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"

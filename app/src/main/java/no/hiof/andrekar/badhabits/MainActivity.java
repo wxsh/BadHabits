@@ -1,11 +1,15 @@
 package no.hiof.andrekar.badhabits;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.solver.widgets.Rectangle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +22,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +41,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.takusemba.spotlight.OnSpotlightStateChangedListener;
+import com.takusemba.spotlight.Spotlight;
+import com.takusemba.spotlight.shape.Circle;
+import com.takusemba.spotlight.shape.Shape;
+import com.takusemba.spotlight.target.SimpleTarget;
 
 import model.SaveData;
 
@@ -165,6 +176,13 @@ public class MainActivity extends AppCompatActivity {
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
+        Log.d("Sharedpref", Boolean.toString(onboarding));
+        if (onboarding == false) {
+            onBoard(findViewById(R.id.fab_addHabit));
+        }
+
         }
 
     public void bottomSheet() {
@@ -242,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+
         updateRecyclerView();
     }
 
@@ -315,15 +334,14 @@ public class MainActivity extends AppCompatActivity {
 
         for (Habit habit : testHabits) {
             if (habit instanceof DateHabit) {
-                saveData.saveData(habit, 2);
                 Habit.habits.add((DateHabit) habit);
+                //saveData.saveData(habit, 2);
             } else if (habit instanceof EconomicHabit) {
-                saveData.saveData(habit, 1);
                 Habit.habits.add((EconomicHabit) habit);
             }
         }
+        updateRecyclerView();
         testHabits.clear();
-        MainActivity.updateRecyclerView();
         }
 
         private void removeData() {
@@ -336,14 +354,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             Habit.habits.clear();
-            initRecyclerView();
+            MainActivity.updateRecyclerView();
         }
 
         public static void updateRecyclerView(){
             adapter.notifyDataSetChanged();
             favAdapter.notifyDataSetChanged();
             updateBottomSheet();
-            swipeContainer.setRefreshing(false);
+            if(swipeContainer.isRefreshing()) {
+                swipeContainer.setRefreshing(false);
+            }
         }
 
         public static void updateBottomSheet() {
@@ -407,5 +427,84 @@ public class MainActivity extends AppCompatActivity {
             bottomSheetPieDate.invalidate();
 
         }
+
+        public void onBoard(final View view) {
+
+
+            view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+
+                    // make an
+                    SimpleTarget firstTarget = new SimpleTarget.Builder(MainActivity.this)
+                            .setPoint(findViewById(R.id.fab_addHabit))
+                            .setShape(new Circle(200f))
+                            .setTitle("Welcome to Bad Habits!")
+                            .setDescription("To add a Habit, click on the floating action button. We have added some habits to show you around.")
+                            .build();
+
+                    View two = findViewById(R.id.favorite_recycler_view);
+                    int[] twoLocation = new int[2];
+                    two.getLocationInWindow(twoLocation);
+                    float twoX = twoLocation[0] + 250;
+                    float twoY = twoLocation[1] + two.getHeight() / 2f;
+
+                    SimpleTarget secondTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(twoX, twoY)
+                            .setShape(new Circle(250f))
+                            .setTitle("Favourites")
+                            .setDescription("Favourites will be displayed on the top of the screen")
+                            .build();
+
+                    float threeX = 1005;
+                    float threeY = 635;
+
+                    SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(threeX, threeY)
+                            .setShape(new Circle(50f))
+                            .setTitle("Favourites")
+                            .setDescription("To add a favourite, touch the heart button")
+                            .build();
+
+                    float fourX = 1025;
+                    float fourY = 135;
+
+                    SimpleTarget fourthTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(fourX, fourY)
+                            .setShape(new Circle(50f))
+                            .setTitle("Settings")
+                            .setDescription("To access settings, touch the menu. We'll remove the habits we added, so you are ready to start your journey")
+                            .build();
+
+                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    Spotlight.with(MainActivity.this)
+                            .setOverlayColor(R.color.background)
+                            .setDuration(100L)
+                            .setAnimation(new DecelerateInterpolator(2f))
+                            .setTargets(firstTarget, secondTarget, thirdTarget, fourthTarget)
+                            .setClosedOnTouchedOutside(true)
+                            .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
+                                @Override
+                                public void onStarted() {
+                                    Toast.makeText(MainActivity.this, "spotlight is started", Toast.LENGTH_SHORT)
+                                            .show();
+                                    populateData();
+                                }
+
+                                @Override
+                                public void onEnded() {
+                                    Toast.makeText(MainActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
+                                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putBoolean(SettingsActivity.KEY_PREF_ONBOARD, true);
+                                    editor.commit();
+                                    SaveData saveData = new SaveData();
+                                    saveData.readFromFile();
+                                }
+                            })
+                            .start();
+                }
+            });
+        }
+
+
+
 }
 
