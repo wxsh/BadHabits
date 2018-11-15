@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,16 +20,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.model.GradientColor;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -235,12 +242,44 @@ public class ShowHabitActivity extends AppCompatActivity {
         BarDataSet set1;
         BarDataSet set2;
 
+        chart.setDrawGridBackground(false);
+        chart.getDescription().setEnabled(false);
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(false);
+        xAxis.setDrawLabels(false);
+
+        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setDrawGridLines(false);
+        leftAxis.setDrawAxisLine(false);
+        leftAxis.setDrawLabels(false);
+
+        YAxis rightAxis = chart.getAxisRight();
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setDrawAxisLine(false);
+        rightAxis.setDrawLabels(true);
+
+        Legend l = chart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setTextSize(14f);
+        l.setXEntrySpace(4f);
+        l.setYEntrySpace(20);
+        l.setForm(Legend.LegendForm.CIRCLE);
+        l.setDrawInside(false);
+
+
+
         if (chart.getData() != null &&
                 chart.getData().getDataSetCount() > 0) {
             set1 = (BarDataSet) chart.getData().getDataSetByIndex(0);
             set2 = (BarDataSet) chart.getData().getDataSetByIndex(1);
+
+
             set1.setValues(values);
             set2.setValues(values);
+
             chart.getData().notifyDataChanged();
             chart.notifyDataSetChanged();
         } else {
@@ -248,6 +287,9 @@ public class ShowHabitActivity extends AppCompatActivity {
             set2 = new BarDataSet(values2, "Would have used");
 
             set1.setDrawIcons(false);
+            set1.setDrawValues(true);
+            set1.setColors(ColorTemplate.COLORFUL_COLORS);
+            set2.setColors(ColorTemplate.MATERIAL_COLORS);
 
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1);
@@ -259,6 +301,9 @@ public class ShowHabitActivity extends AppCompatActivity {
             data.setBarWidth(barWidth);
             chart.setData(data);
         }
+
+
+
     }
 
     public static void setCurrentNumber(int number) {

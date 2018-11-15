@@ -145,8 +145,8 @@ public class Habit {
     };
 
     public static long getDateDiff(long date1, long date2, TimeUnit timeUnit) {
-        long diffInMillis = new Date(date2).getTime() - new Date(date1).getTime();
-        Log.d("TimeUnit", Long.toString(timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS)));
+        //TODO: Look into replacing this function?
+        long diffInMillis = date2 - date1;
         return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
     }
 }
