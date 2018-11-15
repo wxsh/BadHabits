@@ -84,6 +84,16 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
             }
         });
 
+        Preference onboardHabitPref = (Preference) findPreference(SettingsActivity.KEY_PREF_ONBOARDSHOWHABIT);
+        onboardHabitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                editor.putBoolean(SettingsActivity.KEY_PREF_ONBOARDSHOWHABIT, false);
+                editor.commit();
+                return true;
+            }
+        });
+
 
     }
 

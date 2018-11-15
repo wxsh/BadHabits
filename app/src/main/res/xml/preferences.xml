@@ -23,36 +23,48 @@
             android:icon="@drawable/googleg_standard_color_18">
         </ListPreference>
 
+        <PreferenceCategory
+            android:title="Tutorials">
         <Preference
             android:key="key_onboard"
-            android:title="Reset Onboarding"
-            android:summary="Play tutorial again"
+            android:title="Reset main screen tutorial"
+            android:summary="Play the tutorial for the main screen again."
             android:defaultValue="false"
             android:icon="@drawable/ic_flag_triangle">
         </Preference>
+                <Preference
+                    android:key="key_onboard_showhabit"
+                    android:title="Reset habit screen tutorial"
+                    android:summary="Play the tutorial for the habit detail screen again."
+                    android:defaultValue="false"
+                    android:icon="@drawable/ic_flag_triangle">
+                </Preference>
 
-    <!--
-
-    Bare test greier under
-
-    <PreferenceCategory
-        android:title="Color scheme">
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="enable_timer"
-            android:title="Enable sleep timer"
-            android:summary="Enable or disable sleep timer">
-        </CheckBoxPreference>
-
-        <ListPreference
-            android:dependency="enable_timer"
-            android:key="key_sleep_timer"
-            android:summary="Stop playing music after time"
-            android:entries="@array/timerList"
-            android:entryValues="@array/timerListValues">
-        </ListPreference>
+        </PreferenceCategory>
 
 
-    </PreferenceCategory>
-    -->
+        <!--
+
+        Bare test greier under
+
+        <PreferenceCategory
+            android:title="Color scheme">
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="enable_timer"
+                android:title="Enable sleep timer"
+                android:summary="Enable or disable sleep timer">
+            </CheckBoxPreference>
+
+            <ListPreference
+                android:dependency="enable_timer"
+                android:key="key_sleep_timer"
+                android:summary="Stop playing music after time"
+                android:entries="@array/timerList"
+                android:entryValues="@array/timerListValues">
+            </ListPreference>
+
+
+        </PreferenceCategory>
+        -->
 </PreferenceScreen>

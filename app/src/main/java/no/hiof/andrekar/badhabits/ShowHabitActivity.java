@@ -10,14 +10,18 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.Legend;
@@ -29,6 +33,10 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.model.GradientColor;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.takusemba.spotlight.OnSpotlightStateChangedListener;
+import com.takusemba.spotlight.Spotlight;
+import com.takusemba.spotlight.shape.Circle;
+import com.takusemba.spotlight.target.SimpleTarget;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -66,6 +74,11 @@ public class ShowHabitActivity extends AppCompatActivity {
 
         String currency = sharedPref.getString
                 (SettingsActivity.KEY_PREF_CURRENCY, "");
+
+        boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARDSHOWHABIT, false);
+        if (onboarding == false) {
+            onBoard(findViewById(R.id.getStartTextView));
+        }
 
 
         TextView goalView = findViewById(R.id.getGoalTextView);
@@ -309,5 +322,66 @@ public class ShowHabitActivity extends AppCompatActivity {
 
     public static void setCurrentNumber(int number) {
         currentNumber = number;
+    }
+
+    public void onBoard(final View view) {
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                // make an
+                SimpleTarget firstTarget = new SimpleTarget.Builder(ShowHabitActivity.this)
+                        .setPoint(findViewById(R.id.btn_habitDelete))
+                        .setShape(new Circle(50f))
+                        .setTitle("Delete habit.")
+                        .setDescription("Touch this button to delete a habit." +
+                                "You'll get a popup to confirm this action, don't worry")
+                        .build();
+
+                //View two = findViewById(R.id.favorite_recycler_view);
+
+
+                SimpleTarget secondTarget = new SimpleTarget.Builder(ShowHabitActivity.this)
+                        .setPoint(findViewById(R.id.btn_habitEdit))
+                        .setShape(new Circle(50f))
+                        .setTitle("Edit habit")
+                        .setDescription("This button takes you to the screen to edit habits.")
+                        .build();
+
+                SimpleTarget thirdTarget = new SimpleTarget.Builder(ShowHabitActivity.this).setPoint(findViewById(R.id.btn_habitFailed))
+                        .setShape(new Circle(50f))
+                        .setTitle("Failed habit")
+                        .setDescription("Hit a snag? Don't worry. This button will take a note if you spent some money")
+                        .build();
+
+
+
+                Spotlight.with(ShowHabitActivity.this)
+                        .setOverlayColor(R.color.background)
+                        .setDuration(100L)
+                        .setAnimation(new DecelerateInterpolator(2f))
+                        .setTargets(firstTarget, secondTarget, thirdTarget)
+                        .setClosedOnTouchedOutside(true)
+                        .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
+                            @Override
+                            public void onStarted() {
+                                Toast.makeText(ShowHabitActivity.this, "spotlight is started", Toast.LENGTH_SHORT)
+                                        .show();
+                                //populateData();
+                            }
+
+                            @Override
+                            public void onEnded() {
+                                Toast.makeText(ShowHabitActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
+                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ShowHabitActivity.this);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putBoolean(SettingsActivity.KEY_PREF_ONBOARDSHOWHABIT, true);
+                                editor.commit();
+                            }
+                        })
+                        .start();
+            }
+        });
     }
 }
