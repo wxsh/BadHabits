@@ -1,15 +1,12 @@
 package no.hiof.andrekar.badhabits;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.solver.widgets.Rectangle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -51,6 +48,7 @@ import com.takusemba.spotlight.target.SimpleTarget;
 import model.SaveData;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -69,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
     public static MyAdapter adapter;
     public static MyFavoriteAdapter favAdapter;
     private boolean habitexists;
-    private static float totalSaved, totalDays, longestStreak;
-    private static TextView ecoBottomText, dateBottomText, longestStreakText;
+    private static float totalSaved, totalDays, longestStreakEco,longestStreakDate,failedTotal, daysTillFinishedDate,daysTillFinishedEco,longestDateHabit;
+    private static TextView ecoBottomText, dateBottomText, longestStreakEcoText,longestStreakDateText,failedTotalText, daysTillFinishedDateText,daysTillFinishedEcoText,longestDateHabitText;
     private static SwipeRefreshLayout swipeContainer;
-    private static String longestStreakName;
+    private static String longestStreakName,longestDateName;
     private static PieChart bottomSheetPieEco, bottomSheetPieDate;
     private static View targetThreeHolder;
 
@@ -118,7 +116,12 @@ public class MainActivity extends AppCompatActivity {
 
         ecoBottomText = findViewById(R.id.bottom_sheet_top_eco);
         dateBottomText = findViewById(R.id.bottom_sheet_top_date);
-        longestStreakText = findViewById(R.id.longestStreakText);
+        longestStreakEcoText = findViewById(R.id.longestStreakEcoText);
+        longestStreakDateText = findViewById(R.id.longestStreakDateText);
+        daysTillFinishedDateText = findViewById(R.id.daysTillFinishedDateText);
+        daysTillFinishedEcoText = findViewById(R.id.daysTillFinishedEcoText);
+        longestDateHabitText = findViewById(R.id.longestDateHabitText);
+        failedTotalText = findViewById(R.id.failedTotalText);
         bottomSheetPieEco = findViewById(R.id.chart_bottomSheetPieEco);
         bottomSheetPieDate = findViewById(R.id.chart_bottomSheetPieDate);
 
@@ -371,34 +374,83 @@ public class MainActivity extends AppCompatActivity {
         public static void updateBottomSheet() {
             totalSaved = 0;
             totalDays = 0;
-            longestStreak = -1;
+            failedTotal = 0;
+            longestDateHabit = 0;
+            daysTillFinishedDate = -1 ;
+            daysTillFinishedEco = -1 ;
+            longestStreakEco = -1;
+            longestStreakDate = -1;
             ArrayList<PieEntry> entriesEco = new ArrayList<>();
             ArrayList<PieEntry> entriesDate = new ArrayList<>();
 
             for (Habit habit: Habit.habits) {
                 if (habit instanceof EconomicHabit) {
                     totalSaved += ((EconomicHabit) habit).getProgress();
+                    failedTotal += (((EconomicHabit) habit).getFailedTotal());
                     ecoBottomText.setText("Left for goals: " + totalSaved + "NOK");
+                    if(failedTotal > 0){
+                        failedTotalText.setText("Total spent: " + failedTotal);
+                    } else {
+                        failedTotalText.setText("NO FAILS! Hooray!");
+                    }
                     entriesEco.add(new PieEntry(abs(((EconomicHabit) habit).getProgress()), habit.getTitle()));
+
+                    if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreakEco && habit.getFailDate() != 0) {
+                        longestStreakEco = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS);
+                        //Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
+                        longestStreakName = habit.getTitle();
+                        if (longestStreakEco == -1) {
+                            longestStreakEcoText.setText("NO FAILS! Hooray!");
+                        }else {
+                            longestStreakEcoText.setText("Days since last fail: " + longestStreakEco + " (" + longestStreakName + ")");
+                        }
+                    }
+                    //TODO: double check that the math here is correct.
+                    float dateGoalL = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
+                    float saved = (( ((EconomicHabit) habit).getGoalValue() + (dateGoalL*((EconomicHabit) habit).getAlternativePrice()) ) - (dateGoalL*((EconomicHabit) habit).getPrice()) - ((EconomicHabit) habit).getFailedTotal());
+                    long remaining = (long)(saved/dateGoalL);
+                    if (Habit.getDateDiff(remaining ,new Date().getTime(), TimeUnit.DAYS) > daysTillFinishedEco && ((EconomicHabit) habit).getGoalValue() != 0) {
+                        daysTillFinishedEco = Habit.getDateDiff(new Date().getTime(),remaining,  TimeUnit.DAYS);
+                        daysTillFinishedEcoText.setText("Days till finished: " + remaining);
+                    }
+
+
+
                 } if (habit instanceof DateHabit) {
                     totalDays += habit.getDaysFromStart();
                     dateBottomText.setText("Days without: " + totalDays + " days");
                     entriesDate.add(new PieEntry(Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), TimeUnit.DAYS), habit.getTitle()));
+                    if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreakDate && habit.getFailDate() != 0) {
+                        longestStreakDate = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS);
+                        //Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
+                        longestStreakName = habit.getTitle();
+                        if (longestStreakDate == -1) {
+                            longestStreakDateText.setText("NO FAILS! Hooray!");
+                        }else {
+                            longestStreakDateText.setText("Days since last fail: " + longestStreakDate + " (" + longestStreakName + ")");
+                        }
+                    }
+                    if (Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreakDate && habit.getStartDate() != 0) {
+                        longestDateHabit = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(),  TimeUnit.DAYS);
+                        longestDateName = habit.getTitle();
+                        if (longestDateHabit == -1) {
+                            longestDateHabitText.setText("No Date habits");
+                        }else {
+                            longestDateHabitText.setText("Longest habit: " + longestDateHabit + " (" + longestDateName + ")");
+                        }
+                    }
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(new Date(habit.getStartDate()));
+                    c.add(Calendar.DATE,((DateHabit)habit).getDateGoalValue());
+                    if (Habit.getDateDiff(new Date().getTime(),c.getTimeInMillis() , TimeUnit.DAYS) > daysTillFinishedDate && ((DateHabit) habit).getDateGoalValue() != 0) {
+                        daysTillFinishedDate = Habit.getDateDiff(new Date().getTime(),c.getTimeInMillis(),  TimeUnit.DAYS);
+                        daysTillFinishedDateText.setText("Days till finished: " + daysTillFinishedDate);
+                    }
                 }
 
-                if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreak && habit.getFailDate() != 0) {
-                    longestStreak = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS);
-                    Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
-                    longestStreakName = habit.getTitle();
-                } else {
-                    longestStreak = -1;
-                }
 
-                if (longestStreak == -1) {
-                    longestStreakText.setText("NO FAILS! Hooray!");
-                }else {
-                    longestStreakText.setText("Days since last fail: " + longestStreak + " (" + longestStreakName + ")");
-                }
+
+
             }
             PieDataSet dataSetEco = new PieDataSet(entriesEco, "");
             PieData dataEco = new PieData(dataSetEco);
