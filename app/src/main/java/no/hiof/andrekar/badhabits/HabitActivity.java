@@ -94,9 +94,9 @@ public class HabitActivity extends AppCompatActivity {
         economicAlterntivePeriodSpinner.setAdapter(adapter);
 
         if (getIntent().hasExtra("CURRENT_HABIT_INDEX")) {
-            setTitle(getIntent().getStringExtra("HABIT_NAME"));
             //DONE: Fill out fields and change save function to handle existing habit.
             Habit editHabit = Habit.habits.get(getIntent().getIntExtra("CURRENT_HABIT_INDEX", 0));
+            setTitle("Editing " + editHabit.getTitle());
             editIndex = getIntent().getIntExtra("CURRENT_HABIT_INDEX", 0);
             editTitle.setText(editHabit.getTitle());
             editDesc.setText(editHabit.getTitle());
