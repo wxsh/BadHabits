@@ -1,34 +1,34 @@
 package model;
 
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
+import com.google.firebase.firestore.Exclude;
+
+import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 //TODO: Implement maths in class? IE: getters for progress?
-//TODO: Rename variables? ie. Price and InitialValue / GoalValue? - DO we need both or should ie. initialValue be renamed to price for alternative?
-
+//DONE: Rename variables? ie. Price and InitialValue / GoalValue? - DO we need both or should ie. initialValue be renamed to price for alternative?
+//TODO: Clean up unused functions.
 
 public class EconomicHabit extends Habit {
-    private String currency;
+    static private String currency;
     private float goalValue;
     private float price;
     private float alternativePrice;
-
+    private int failedTotal;
+    private Map<String, Integer> failedMap = new HashMap<>();
 
     // Constructor
-    public EconomicHabit(String title, String description, Date startDate, String currency, float alternativePrice, float goalValue, float price) {
-        super(title, description, startDate);
-        this.currency = currency;
+    public EconomicHabit(String title, String description, long startDate, float alternativePrice, float goalValue, float price, Boolean isFavourite) {
+        super(title, description, startDate, isFavourite);
         this.alternativePrice = alternativePrice;
         this.goalValue = goalValue;
         this.price = price;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
+    public EconomicHabit() {}
 
     public float getPrice() { return price; }
 
@@ -36,10 +36,6 @@ public class EconomicHabit extends Habit {
 
     public float getAlternativePrice() {
         return alternativePrice;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 
     public void setAlternativePrice(float alternativePrice) {
@@ -54,19 +50,34 @@ public class EconomicHabit extends Habit {
         this.goalValue = goalValue;
     }
 
-    public String getProgress() {
-        Calendar c = Calendar.getInstance();
-        c.setTime(this.getStartDate());
-        Date startDate = new Date(c.getTimeInMillis());
-        float dateGoalL = ChronoUnit.DAYS.between(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate(), new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().toLocalDate());
-        float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()));
+    public Map<String, Integer> getMappedFail() {
+        return failedMap;
+    }
+
+    @Exclude
+    public float getProgress() {
+        DecimalFormat df = new DecimalFormat("###.##");
+        float dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
+        float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()) - this.getFailedTotal());
         if (saved < 0) {
-            //Should maybe build this string in activity instead if we want to color it
-            return Float.toString(saved)+" "+this.getCurrency();
+            return Float.parseFloat(df.format(saved));
         }
         else {
-            return Float.toString(saved)+" "+this.getCurrency();
+            return Float.parseFloat(df.format(saved));
         }
 
+    }
+
+    public int getFailedTotal() {
+        return failedTotal;
+    }
+
+    public void setFailedTotal(int failedTotal) {
+        this.failedTotal = failedTotal;
+    }
+    
+    public void increaseFailedTotal(int failedAmout){
+        failedMap.put(Long.toString(new Date().getTime()), failedAmout);
+        this.failedTotal += failedAmout;
     }
 }

@@ -1,8 +1,11 @@
 package model;
 //import no.hiof.andrekar.badhabits.R;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -10,17 +13,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class Habit {
     //An ArrayList to contain all habits when they are created
 
     //TODO: implement Math for habits. Return progress values.
 
-    //TODO: make this list create itself from stored files
+    //DONE: make this list create itself from stored files
     public static ArrayList<Habit> habits = new ArrayList<Habit>();
 
 
@@ -31,17 +39,25 @@ public class Habit {
     private boolean isFavourite;
 
     //Start date? - Maybe this is better as a String and cast it later?
-    private Date startDate;
+    private long startDate;
+    private String uid;
+    private String habitType;
+    private long failDate;
 
 
     //Constructors
-    public Habit(String title, String description, Date startDate) {
+    public Habit(String title, String description, long startDate, Boolean isFavourite) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
-        this.isFavourite = false;
+        this.isFavourite = isFavourite;
+        this.uid = UUID.randomUUID().toString();
+        this.failDate = 0;
         //We add habits when we save them, so adding to list is currently not needed.
         //habits.add(this);
+    }
+
+    public Habit() {
     }
 
     //Getters
@@ -53,7 +69,7 @@ public class Habit {
         return description;
     }
 
-    public Date getStartDate() {
+    public long getStartDate() {
         return startDate;
     }
 
@@ -61,12 +77,48 @@ public class Habit {
         return isFavourite;
     }
 
+    public long getFailDate() {
+        return failDate;
+    }
+
+    public void setFailDate(long failDate) {
+        this.failDate = failDate;
+    }
+
+    //staticGetters
+    public static boolean getHaveFavorite(){
+        if (habits != null){
+            for (Habit h : habits) {
+                if (h.getIsFavourite())
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public static int getNumFavourites() {
+        int num = 0;
+        for (Habit habit: habits) {
+            if (habit.getIsFavourite()) {
+                num++;
+            }
+        }
+        return num;
+    }
+
+    @Exclude
+    public float getDaysFromStart() {
+        return Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
+    }
+
+    public String getUid() { return uid; }
 
     //Setters
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(long startDate) {
         this.startDate = startDate;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -91,4 +143,9 @@ public class Habit {
             return result;
         }
     };
+
+    public static long getDateDiff(long date1, long date2, TimeUnit timeUnit) {
+        long diffInMillis = date2 - date1;
+        return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
+    }
 }

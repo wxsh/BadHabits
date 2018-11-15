@@ -4,52 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".HabitActivity">
 
-
-    <EditText
-        android:id="@+id/newHabit_name"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/newHabit_startDateIT"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Habit Name"
-        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/newHabit_descriptionIT">
 
-    <EditText
-        android:id="@+id/newHabit_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Habit Description"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newHabit_name" />
-
-    <EditText
-        android:id="@+id/newHabit_startDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="true"
-        android:ems="10"
-        android:focusable="false"
-        android:hint="Start Date"
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newHabit_description" />
+        <EditText
+            android:id="@+id/newHabit_startDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Start Date"
+            android:inputType="date" />
+    </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/newHabit_saveFab"
@@ -64,112 +41,184 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_save" />
 
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/newHabit_nameTI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/newHabit_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="Habit Name"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/newHabit_descriptionIT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newHabit_nameTI">
+
+        <EditText
+            android:id="@+id/newHabit_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="Habit Description"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
 
     <RadioGroup
         android:id="@+id/radiogroup_typeHabit"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newHabit_startDate">
+        app:layout_constraintTop_toBottomOf="@+id/newHabit_startDateIT">
 
         <RadioButton
             android:id="@+id/newHabit_radioEconomic"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Economic Habit"
-            app:layout_constraintEnd_toStartOf="@+id/newHabit_radioDate"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newHabit_startDate" />
+            android:layout_weight="1"
+            android:text="Economic Habit" />
 
         <RadioButton
             android:id="@+id/newHabit_radioDate"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="Date Habit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/newHabit_radioEconomic"
-            app:layout_constraintTop_toBottomOf="@+id/newHabit_startDate" />
+            android:layout_weight="1"
+            android:text="Date Habit" />
     </RadioGroup>
 
-    <!-- Extra UI elements depending on type of Habit-->
-    <!-- Date Habit -->
-    <EditText
-        android:id="@+id/newHabit_dateHabit_goal"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/newHabit_economicHabit_goalIT"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Mål i antall dager"
-        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radiogroup_typeHabit" />
+        app:layout_constraintTop_toBottomOf="@+id/radiogroup_typeHabit">
 
-    <!-- Economic Habit -->
-    <EditText
-        android:id="@+id/newHabit_economicHabit_goal"
+        <EditText
+            android:id="@+id/newHabit_economicHabit_goal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:hint="Sparingsmål"
+            android:inputType="number" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/newHabit_economicHabit_priceIT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Sparingsmål"
-        android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@+id/newHabit_economicHabit_currency"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/newHabit_economicHabit_periodPrice"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_weight="0.6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radiogroup_typeHabit" />
+        app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_goalIT">
+
+        <EditText
+            android:id="@+id/newHabit_economicHabit_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="Vanens pris"
+            android:inputType="numberDecimal" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/newHabit_dateHabit_goalIT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radiogroup_typeHabit">
+
+        <EditText
+            android:id="@+id/newHabit_dateHabit_goal"
+            android:layout_width="366dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="Mål i antall dager"
+            android:inputType="number" />
+    </android.support.design.widget.TextInputLayout>
 
     <Spinner
-        android:id="@+id/newHabit_economicHabit_currency"
-        android:layout_width="116dp"
+        android:id="@+id/newHabit_economicHabit_periodPrice"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Valuta"
-        app:layout_constraintBottom_toBottomOf="@+id/newHabit_economicHabit_goal"
+        app:layout_constraintBottom_toTopOf="@+id/newHabit_economicHabit_alternativepriceIT"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/newHabit_economicHabit_goal"
-        app:layout_constraintTop_toTopOf="@+id/newHabit_economicHabit_goal" />
+        app:layout_constraintStart_toEndOf="@+id/newHabit_economicHabit_priceIT"
+        app:layout_constraintTop_toTopOf="@+id/newHabit_economicHabit_priceIT" />
 
-    <EditText
-        android:id="@+id/newHabit_economicHabit_price"
+    <Spinner
+        android:id="@+id/newHabit_economicHabit_periodAlternativePrice"
+        android:layout_width="0dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="0dp"
+        android:ems="10"
+        android:hint="Valuta"
+        app:layout_constraintBottom_toBottomOf="@+id/newHabit_economicHabit_alternativepriceIT"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/newHabit_economicHabit_alternativepriceIT"
+        app:layout_constraintTop_toTopOf="@+id/newHabit_economicHabit_alternativepriceIT" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/newHabit_economicHabit_alternativepriceIT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Pris per dag"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="@+id/newHabit_economicHabit_goal"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/newHabit_economicHabit_goal"
-        app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_goal" />
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/newHabit_economicHabit_periodAlternativePrice"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_weight="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_priceIT">
 
-    <EditText
-        android:id="@+id/newHabit_economicHabit_alternativePrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Alternativets Pris Per Dag"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="@+id/newHabit_economicHabit_price"
-        app:layout_constraintStart_toStartOf="@+id/newHabit_economicHabit_price"
-        app:layout_constraintTop_toBottomOf="@+id/newHabit_economicHabit_price" />
+        <EditText
+            android:id="@+id/newHabit_economicHabit_alternativePrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="Alternativets pris"
+            android:inputType="numberDecimal" />
 
+    </android.support.design.widget.TextInputLayout>
 </android.support.constraint.ConstraintLayout>

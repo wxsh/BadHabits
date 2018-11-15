@@ -1,4 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_menu"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="no.hiof.andrekar.badhabits.MainActivity">
@@ -17,4 +18,10 @@
         android:orderInCategory="100"
         android:title="Fjern alle vaner"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="100"
+        android:title="Oppdater"
+        app:showAsAction="never" />
 </menu>
+

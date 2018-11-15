@@ -4,8 +4,24 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Environment;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -42,149 +58,75 @@ import java.util.Date;
 import java.util.Locale;
 
 import no.hiof.andrekar.badhabits.MainActivity;
+import no.hiof.andrekar.badhabits.MyAdapter;
 
 public class SaveData {
-    //Todo: Change this into internal storage, no need to use Downloads
+    //NOT NEEDED: Change this into internal storage, no need to use Downloads
     String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/TestGSon";
-    String ecofile = filename+"Eco.txt";
-    String datefile = filename+"Date.txt";
-    ArrayList<EconomicHabit> ecohabits = new ArrayList<EconomicHabit>();
-    ArrayList<DateHabit> datehabits = new ArrayList<DateHabit>();
+    FirebaseAuth fbAuth = FirebaseAuth.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    //DONE: Fix duplication problem.
+    //DONE: Make Adapter refresh after sync
 
 
     public void readFromFile() {
-        //Create a new Gson object
-        Gson gson = new Gson();
-
+        Log.d("Firestoreread", "Reading file");
+        final String TAG = "Firestoreread";
         Habit.habits.clear();
-
-
-
-        try {
-        //Read the employee.json file
-            BufferedReader br = new BufferedReader(
-                new FileReader(datefile));
-
-            //convert the json to  Java object (Employee)
-
-            Type collectionType = new TypeToken<ArrayList<DateHabit>>(){}.getType();
-            ArrayList<DateHabit> habitsF = gson.fromJson(br, collectionType);
-            for (int i = 0; i < habitsF.size(); i++ ) {
-                    Habit habit = (DateHabit) habitsF.get(i);
-                    Habit.habits.add(habit);
-                }
-            }
-            catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        try {
-            //Read the employee.json file
-            BufferedReader br = new BufferedReader(
-                    new FileReader(ecofile));
-
-            //convert the json to  Java object
-
-            Type collectionType = new TypeToken<ArrayList<EconomicHabit>>(){}.getType();
-            ArrayList<EconomicHabit> habitsF = gson.fromJson(br, collectionType);
-            for (int i = 0; i < habitsF.size(); i++ ) {
-                Habit habit = (EconomicHabit) habitsF.get(i);
-                Habit.habits.add(habit);
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
+        db.collection(fbAuth.getUid()).document("habits").collection("DateHabits")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                DateHabit tempHabit = document.toObject(DateHabit.class);
+                                Habit habit = (DateHabit) tempHabit;
+                                Habit.habits.add(habit);
+                                MainActivity.updateRecyclerView();
+                                Log.d(TAG, "Adding habit");
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        db.collection(fbAuth.getUid()).document("habits").collection("EcoHabits")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                EconomicHabit tempHabit = document.toObject(EconomicHabit.class);
+                                Habit habit = (EconomicHabit) tempHabit;
+                                Habit.habits.add(habit);
+                                MainActivity.updateRecyclerView();
+                                Log.d(TAG, "Adding habit");
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
 }
 
-    public void saveToFile(Habit habit, int typeHabit) {
-        try {
-            // Create a new Gson object
-            Gson gson = new Gson();
-
-            //convert the Java object to json
-            if(typeHabit == 1) {
-                Log.d("InstanceOF", "Got Eco Habit");
-
-                Habit.habits.add(habit);
-                ecohabits.clear();
-                for ( Habit habitListed : Habit.habits ) {
-                    Log.d("InstanceOF", "Looping through habits");
-                    if (habitListed instanceof EconomicHabit) {
-                        Log.d("InstanceOF", "EcoHabit");
-                        ecohabits.add((EconomicHabit) habitListed);
-                    }
-                }
-                String jsonString = gson.toJson(ecohabits);
-
-                FileWriter fileWriter = new FileWriter(ecofile, false);
-                fileWriter.write(jsonString);
-                fileWriter.close();
-                //EconomicHabit.ecohabits.clear();
-            } else if (typeHabit == 2) {
-
-                Log.d("InstanceOF", "Got Date Habit");
-
-                Habit.habits.add(habit);
-                datehabits.clear();
-                for ( Habit habitListed : Habit.habits ) {
-                    Log.d("InstanceOF", "Looping through habits");
-                    if (habitListed instanceof DateHabit) {
-                        Log.d("InstanceOF", "EcoHabit");
-                        datehabits.add((DateHabit) habitListed);
-                    }
-                }
-                String jsonString = gson.toJson(datehabits);
-                FileWriter fileWriter = new FileWriter(datefile, false);
-                fileWriter.write(jsonString);
-                fileWriter.close();
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void saveData(Habit habit, int typeHabit) {
+        if (typeHabit == 1) {
+            db.collection(fbAuth.getUid()).document("habits").collection("EcoHabits").document(habit.getUid()).set(habit);
+        } else if (typeHabit == 2) {
+            db.collection(fbAuth.getUid()).document("habits").collection("DateHabits").document(habit.getUid()).set(habit);
         }
+    };
 
-    }
-
-    public void updateData(int typeHabit) {
-        Gson gson = new Gson();
-
-        try {
-            if (typeHabit == 1) {
-                ecohabits.clear();
-                for ( Habit habitListed : Habit.habits ) {
-                    Log.d("InstanceOF", "Looping through habits");
-                    if (habitListed instanceof EconomicHabit) {
-                        Log.d("InstanceOF", "EcoHabit");
-                        ecohabits.add((EconomicHabit) habitListed);
-                    }
-                }
-                String jsonString = gson.toJson(ecohabits);
-
-                FileWriter fileWriter = new FileWriter(ecofile, false);
-                fileWriter.write(jsonString);
-                fileWriter.close();
-            } else if (typeHabit == 2) {
-                datehabits.clear();
-                for ( Habit habitListed : Habit.habits ) {
-                    Log.d("InstanceOF", "Looping through habits");
-                    if (habitListed instanceof DateHabit) {
-                        Log.d("InstanceOF", "EcoHabit");
-                        datehabits.add((DateHabit) habitListed);
-                    }
-                }
-                String jsonString = gson.toJson(datehabits);
-                FileWriter fileWriter = new FileWriter(datefile, false);
-                fileWriter.write(jsonString);
-                fileWriter.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void removeData(Habit habit, int typeHabit) {
+        if (typeHabit == 1) {
+            db.collection(fbAuth.getUid()).document("habits").collection("EcoHabits").document(habit.getUid()).delete();
+        } else if (typeHabit == 2) {
+            db.collection(fbAuth.getUid()).document("habits").collection("DateHabits").document(habit.getUid()).delete();
         }
     }
 }
