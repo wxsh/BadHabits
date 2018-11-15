@@ -97,7 +97,7 @@
             android:layout_marginRight="35dp"
             android:layout_marginBottom="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_action_name" />
+            android:src="@drawable/ic_minus_circle" />
 
         <TextView
             android:id="@+id/empty_fav"
