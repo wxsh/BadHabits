@@ -13,12 +13,12 @@
         android:id="@+id/habit_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="12dp"
         android:layout_toStartOf="@+id/habit_goal"
+        android:layout_toEndOf="@+id/img_habitIcon"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="@string/habit"
@@ -77,7 +77,20 @@
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:tint="@color/buttonTint" />
+
+    <ImageView
+        android:id="@+id/img_habitIcon"
+        android:tint="#888"
+        android:layout_width="42dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        app:srcCompat="@drawable/ic_coin" />
 
 
 </RelativeLayout>

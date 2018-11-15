@@ -76,28 +76,30 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="top|end"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="2dp"
 
 
-            android:layout_marginEnd="0dp"
+            android:layout_marginEnd="6dp"
             android:background="#00ffffff"
             android:onClick="onToggleStar"
             android:src="@drawable/star_on"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:tint="@color/buttonTint"/>
 
         <ImageButton
             android:id="@+id/fav_btn_habitFailed"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="top|end"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="35dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="40dp"
             android:layout_marginBottom="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_minus_circle" />
+            android:src="@drawable/ic_minus_circle"
+            android:tint="@color/buttonTint"/>
 
         <TextView
             android:id="@+id/empty_fav"

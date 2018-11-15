@@ -3,8 +3,6 @@
     <color name="colorPrimary">#fff</color>
     <color name="colorPrimaryDark">#333</color>
     <color name="colorAccent">#353535</color>
-    <color name="faveHabitBG">#5c6bc0</color>
-    <color name="faveHabitBG2">#737fc2</color>
     <color name="blue">#0000FF</color>
     <color name="dim_grey">#545454</color>
     <color name="grey">#808080</color>
@@ -12,6 +10,7 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000</color>
+    <color name="buttonTint">#777</color>
 
 
 
