@@ -1,8 +1,12 @@
 package no.hiof.andrekar.badhabits;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.preference.EditTextPreference;
@@ -25,6 +29,7 @@ import java.util.Map;
 import model.SaveData;
 
 import static android.app.Activity.RESULT_OK;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class MySettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -37,6 +42,7 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Preference currency = findPreference(SettingsActivity.KEY_PREF_CURRENCY);
         currency.setSummary(sharedPreferences.getString(SettingsActivity.KEY_PREF_CURRENCY,""));
@@ -54,6 +60,25 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
                 //Denne skal kjøres hvis brukeren har en eksisterende konto.
                 //startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), 200);
 
+
+                return true;
+            }
+        });
+
+        Preference onboardPref = (Preference) findPreference(SettingsActivity.KEY_PREF_ONBOARD);
+        onboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                editor.putBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
+                editor.commit();
+
+                Toast.makeText(getActivity(), "Restarting app", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                int mPendingIntentId = 231;
+                PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager mgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                System.exit(0);
 
                 return true;
             }
