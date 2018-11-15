@@ -442,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
                             longestStreakDateText.setText("Days since last fail: " + longestStreakDate + " (" + longestStreakName + ")");
                         }
                     }
-                    if (Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreakDate && habit.getStartDate() != 0) {
+                    if (Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), TimeUnit.DAYS) > longestDateHabit && habit.getStartDate() != 0) {
                         longestDateHabit = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(),  TimeUnit.DAYS);
                         longestDateName = habit.getTitle();
                         if (longestDateHabit == -1) {
