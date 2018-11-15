@@ -15,6 +15,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
@@ -25,6 +27,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -68,8 +75,9 @@ public class ShowHabitActivity extends AppCompatActivity {
     public ImageButton deleteButton;
     public ImageButton editButton;
     public ImageButton failedButton;
+    LineChart chart;
     PieChart dateChart;
-    BarChart chart;
+    //BarChart dateChart;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -305,25 +313,23 @@ public class ShowHabitActivity extends AppCompatActivity {
     }
 
     private void setEcoData() {
+
+        ArrayList<Entry> values = new ArrayList<>();
+        ArrayList<Entry> values2 = new ArrayList<>();
         chart.setVisibility(View.VISIBLE);
         dateChart.setVisibility(View.INVISIBLE);
-        float barWidth = 9f;
-        float spaceForBar = 10f;
-        ArrayList<BarEntry> values = new ArrayList<>();
-        ArrayList<BarEntry> values2 = new ArrayList<>();
-        ArrayList<BarEntry> values3 = new ArrayList<>();
 
         EconomicHabit habit = ((EconomicHabit) Habit.habits.get(currentNumber));
 
-        values.add(new BarEntry(0 * spaceForBar, habit.getAlternativePrice() * habit.getDaysFromStart(),
+        values.add(new Entry(5, habit.getAlternativePrice() * habit.getDaysFromStart(),
                 getResources().getDrawable(R.drawable.star_on)));
-        values2.add(new BarEntry(1 * spaceForBar, habit.getPrice() * habit.getDaysFromStart(),
+
+        values2.add(new Entry(10, habit.getPrice() * habit.getDaysFromStart(),
                 getResources().getDrawable(R.drawable.star_on)));
 
 
-        BarDataSet set1;
-        BarDataSet set2;
-        BarDataSet set3;
+        LineDataSet set1;
+//        LineDataSet set2;
 
         chart.setDrawGridBackground(false);
         chart.getDescription().setEnabled(false);
@@ -356,32 +362,29 @@ public class ShowHabitActivity extends AppCompatActivity {
 
         if (chart.getData() != null &&
                 chart.getData().getDataSetCount() > 0) {
-            set1 = (BarDataSet) chart.getData().getDataSetByIndex(0);
-            set2 = (BarDataSet) chart.getData().getDataSetByIndex(1);
-
-
+            set1 = (LineDataSet) chart.getData().getDataSetByIndex(0);
+//            set2 = (LineDataSet) chart.getData().getDataSetByIndex(1);
             set1.setValues(values);
-            set2.setValues(values);
-
+//            set2.setValues(values);
             chart.getData().notifyDataChanged();
             chart.notifyDataSetChanged();
         } else {
-            set1 = new BarDataSet(values, "The alternative have cost");
-            set2 = new BarDataSet(values2, "Would have used");
+            set1 = new LineDataSet(values, "The alternative have cost");
+//            set2 = new LineDataSet(values2, "Would have used");
 
             set1.setDrawIcons(false);
             set1.setDrawValues(true);
             set1.setColors(ColorTemplate.COLORFUL_COLORS);
             set2.setColors(ColorTemplate.MATERIAL_COLORS);
 
-            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1);
-            dataSets.add(set2);
+//            dataSets.add(set2);
 
-            BarData data = new BarData(dataSets);
+            LineData data = new LineData(dataSets);
             data.setValueTextSize(10f);
             //data.setValueTypeface();
-            data.setBarWidth(barWidth);
+//            data.setBarWidth(barWidth);
             chart.setData(data);
             chart.animateXY(1000, 1000);
         }
