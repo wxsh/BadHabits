@@ -145,8 +145,8 @@ public class Habit {
     };
 
     public static long getDateDiff(long date1, long date2, TimeUnit timeUnit) {
-        //TODO: Look into replacing this function?
+        //TODO: Look into replacing this function? Seems to be one day off.
         long diffInMillis = date2 - date1;
-        return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
+        return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS) + 1;
     }
 }

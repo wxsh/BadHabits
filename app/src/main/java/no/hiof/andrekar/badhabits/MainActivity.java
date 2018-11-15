@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -416,12 +417,16 @@ public class MainActivity extends AppCompatActivity {
 
             bottomSheetPieEco.getDescription().setEnabled(false);
 //            bottomSheetPieEco.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+            bottomSheetPieEco.getLegend().setWordWrapEnabled(true);
+            bottomSheetPieEco.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
             bottomSheetPieEco.setDrawEntryLabels(false);
             bottomSheetPieEco.setData(dataEco);
             bottomSheetPieEco.highlightValue(null);
             bottomSheetPieEco.invalidate();
 
             bottomSheetPieDate.getDescription().setEnabled(false);
+            bottomSheetPieDate.getLegend().setWordWrapEnabled(true);
+            bottomSheetPieDate.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
             bottomSheetPieDate.setDrawEntryLabels(false);
             bottomSheetPieDate.setData(dataDate);
             bottomSheetPieDate.highlightValue(null);

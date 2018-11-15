@@ -22,8 +22,8 @@
         <TextView
             android:id="@+id/bottom_sheet_top_eco"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
             android:text="You have saved"
             android:textColor="#444"
@@ -49,9 +49,9 @@
 
         <ImageButton
             android:id="@+id/btn_bottomSheetToggle"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_gravity="end"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start|end"
             android:layout_marginStart="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
