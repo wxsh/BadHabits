@@ -300,6 +300,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             //data.setValueTypeface();
             data.setBarWidth(barWidth);
             chart.setData(data);
+            chart.animateXY(1000, 1000);
         }
 
 

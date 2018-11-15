@@ -180,15 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
-        Log.d("Sharedpref", Boolean.toString(onboarding));
-        if (onboarding == false) {
-            onBoard(findViewById(R.id.fab_addHabit));
-        }
-
-        }
+    }
 
     public void bottomSheet() {
         // get the bottom sheet view
@@ -214,6 +206,8 @@ public class MainActivity extends AppCompatActivity {
 
         // change the state of the bottom sheet
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetPieEco.setVisibility(View.INVISIBLE);
+        bottomSheetPieDate.setVisibility(View.INVISIBLE);
 
         // set hideable or not
         bottomSheetBehavior.setHideable(false);
@@ -222,18 +216,28 @@ public class MainActivity extends AppCompatActivity {
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
                 switch (newState) {
                     case BottomSheetBehavior.STATE_HIDDEN:
                         break;  
                     case BottomSheetBehavior.STATE_EXPANDED: {
                         //DO stuff when expanded
+                        bottomSheetPieEco.setVisibility(View.VISIBLE);
+                        bottomSheetPieDate.setVisibility(View.VISIBLE);
+                        bottomSheetPieEco.animateXY(1500, 1500);
+                        bottomSheetPieDate.animateXY(1500, 1500);
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
                         //DO stuff when collapsed
+                        bottomSheetPieEco.setVisibility(View.INVISIBLE);
+                        bottomSheetPieDate.setVisibility(View.INVISIBLE);
                     }
                     break;
-                    case BottomSheetBehavior.STATE_DRAGGING:
+                    case BottomSheetBehavior.STATE_DRAGGING: {
+
+                    }
+
                         break;
                     case BottomSheetBehavior.STATE_SETTLING:
                         break;
@@ -321,6 +325,14 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MyAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
+        Log.d("Sharedpref", Boolean.toString(onboarding));
+        if (onboarding == false) {
+            populateData();
+            onBoard(findViewById(R.id.fab_addHabit));
+        }
     }
 
 
@@ -491,6 +503,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onGlobalLayout() {
                     view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    RecyclerView recyclerView = findViewById(R.id.recycler_view);
+                    RecyclerView favRecyclerView = findViewById(R.id.favorite_recycler_view);
+
 
                     // make an
                     SimpleTarget firstTarget = new SimpleTarget.Builder(MainActivity.this)
@@ -500,26 +515,27 @@ public class MainActivity extends AppCompatActivity {
                             .setDescription("To add a Habit, click on the floating action button. We have added some habits to show you around.")
                             .build();
 
-                    View two = findViewById(R.id.favorite_recycler_view);
+                    //View two = findViewById(R.id.favorite_recycler_view);
+                    View two = favRecyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.fav_habit_goal);
+
                     int[] twoLocation = new int[2];
                     two.getLocationInWindow(twoLocation);
-                    float twoX = twoLocation[0] + 250;
+                    float twoX = twoLocation[0] + two.getWidth() / 2f;
                     float twoY = twoLocation[1] + two.getHeight() / 2f;
 
-                    SimpleTarget secondTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(twoX, twoY)
+                    SimpleTarget secondTarget = new SimpleTarget.Builder(MainActivity.this)
+                            .setPoint(two)
                             .setShape(new Circle(250f))
                             .setTitle("Favourites")
                             .setDescription("Favourites will be displayed on the top of the screen")
                             .build();
 
-                    View three = findViewById(R.id.recycler_view);
-                    int[] threeLocation = new int[2];
-                    three.getLocationInWindow(threeLocation);
-                    float threeX = threeLocation[0] + 1005;
-                    float threeY = threeLocation[1] + 70;
 
 
-                    SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(threeX, threeY)
+                    View three = recyclerView.getLayoutManager().findViewByPosition(2).findViewById(R.id.favoriteBtn);
+
+
+                    SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(three)
                             .setShape(new Circle(50f))
                             .setTitle("Favourites")
                             .setDescription("To add a favourite, touch the heart button")
@@ -545,7 +561,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void onStarted() {
                                     Toast.makeText(MainActivity.this, "spotlight is started", Toast.LENGTH_SHORT)
                                             .show();
-                                    populateData();
+                                    //populateData();
                                 }
 
                                 @Override
