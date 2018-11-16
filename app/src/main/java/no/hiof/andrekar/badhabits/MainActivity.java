@@ -187,12 +187,11 @@ public class MainActivity extends AppCompatActivity {
         //DONE: Implement this into habits model?
         Collections.sort(Habit.habits, Habit.HabitComparator);
 
-        initRecyclerView();
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             SaveData saveData = new SaveData();
             saveData.readFromFile();
             }
-
+        initRecyclerView();
 
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -346,7 +345,9 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
+
         Log.d("Sharedpref", Boolean.toString(onboarding));
+
         if (onboarding == false) {
             populateData(false);
             onBoard(findViewById(R.id.fab_addHabit));
@@ -563,9 +564,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onGlobalLayout() {
                     view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    RecyclerView recyclerView = findViewById(R.id.recycler_view);
-                    RecyclerView favRecyclerView = findViewById(R.id.favorite_recycler_view);
-
 
                     // make an
                     SimpleTarget firstTarget = new SimpleTarget.Builder(MainActivity.this)
@@ -576,7 +574,7 @@ public class MainActivity extends AppCompatActivity {
                             .build();
 
                     //View two = findViewById(R.id.favorite_recycler_view);
-                    View two = favRecyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.fav_habit_goal);
+                    View two = favoriteRecyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.fav_habit_goal);
 
                     int[] twoLocation = new int[2];
                     two.getLocationInWindow(twoLocation);
