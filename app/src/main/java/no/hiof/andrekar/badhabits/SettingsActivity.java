@@ -60,10 +60,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         String userTheme = sharedPreferences.getString("key_theme", "");
         if (userTheme.equals("Light")){
-            setTheme(R.style.LightTheme);
+           setTheme(R.style.LightTheme);
         }
         else if (userTheme.equals("Dark")){
-            setTheme(R.style.DarkTheme);
+           setTheme(R.style.DarkTheme);
         }
 
         super.onCreate(savedInstanceState);
@@ -77,8 +77,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         String currency = sharedPref.getString
                 (SettingsActivity.KEY_PREF_CURRENCY, "");
-
-        Toast.makeText(this, currency, Toast.LENGTH_SHORT).show();
 
 
     }

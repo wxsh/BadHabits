@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".ShowHabitActivity">
+    tools:context=".ShowHabitActivity"
+    android:id="@+id/show_habit_parent">
 
     <TextView
         android:id="@+id/getStartTextView"
@@ -36,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_minus_circle"
-        android:tint="#555"
+        android:tint="@color/iconTint"
         app:layout_constraintStart_toStartOf="@+id/progressTextView"
         app:layout_constraintTop_toBottomOf="@+id/progressTextView" />
 
@@ -137,7 +138,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_flag_checkered"
-        android:tint="#555"
+        android:tint="@color/iconTint"
         app:layout_constraintStart_toStartOf="@+id/startTextView"
         app:layout_constraintTop_toBottomOf="@+id/getStartTextView" />
 
@@ -148,7 +149,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="28dp"
         android:src="@drawable/ic_calendar_today"
-        android:tint="#555"
+        android:tint="@color/iconTint"
         app:layout_constraintStart_toStartOf="@+id/getDescriptionTextView"
         app:layout_constraintTop_toBottomOf="@+id/getDescriptionTextView" />
 

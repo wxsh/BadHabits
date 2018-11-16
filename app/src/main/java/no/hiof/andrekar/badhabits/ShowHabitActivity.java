@@ -5,12 +5,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -63,6 +65,8 @@ public class ShowHabitActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         SharedPreferences sharedPref =
                 PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -96,7 +100,12 @@ public class ShowHabitActivity extends AppCompatActivity {
         TextView progressView = findViewById(R.id.getProgressTextView);
         TextView startView = findViewById(R.id.getStartTextView);
         TextView failedView = findViewById(R.id.getFailTextView);
+        View parentView = findViewById(R.id.show_habit_parent);
         chart = findViewById(R.id.detailChart);
+
+        ImageView startViewImg = findViewById(R.id.startTextView);
+        ImageView progressViewImg = findViewById(R.id.progressTextView);
+
 
         SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
         Habit habit = Habit.habits.get(currentNumber);
@@ -246,6 +255,33 @@ public class ShowHabitActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        //Theme
+        if (userTheme.equals("Light")){
+
+            parentView.setBackgroundResource(R.color.colorPrimary);
+            deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            editButton.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            failedButton.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+
+            startViewImg.setColorFilter(ContextCompat.getColor(this, R.color.primaryLightColor), android.graphics.PorterDuff.Mode.SRC_IN);
+            progressViewImg.setColorFilter(ContextCompat.getColor(this, R.color.primaryLightColor), android.graphics.PorterDuff.Mode.SRC_IN);
+            //goalView.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+        }
+        else if (userTheme.equals("Dark")){
+            //goalView.setBackgroundResource(R.color.colorPrimaryDark);
+            parentView.setBackgroundResource(R.color.colorPrimaryDark);
+            deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.primaryTextColorDark), android.graphics.PorterDuff.Mode.SRC_IN);
+            editButton.setColorFilter(ContextCompat.getColor(this, R.color.primaryTextColorDark), android.graphics.PorterDuff.Mode.SRC_IN);
+            failedButton.setColorFilter(ContextCompat.getColor(this, R.color.primaryTextColorDark), android.graphics.PorterDuff.Mode.SRC_IN);
+
+            startViewImg.setColorFilter(ContextCompat.getColor(this, R.color.primaryTextColorDark), android.graphics.PorterDuff.Mode.SRC_IN);
+            progressViewImg.setColorFilter(ContextCompat.getColor(this, R.color.primaryTextColorDark), android.graphics.PorterDuff.Mode.SRC_IN);
+            goalView.setTextColor(getResources().getColor(R.color.primaryTextColorDark));
+
+        }
     }
 
     private void setEcoData() {
