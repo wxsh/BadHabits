@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 // once the network request has completed successfully.
                 SaveData saveData = new SaveData();
                 saveData.readFromFile();
+                //saveData.readFromFile();
             }
         });
         // Configure the refreshing colors
@@ -395,6 +396,10 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             favAdapter.notifyDataSetChanged();
             updateBottomSheet();
+            setRefreshing();
+        }
+
+        public static void setRefreshing() {
             if(swipeContainer.isRefreshing()) {
                 swipeContainer.setRefreshing(false);
             }

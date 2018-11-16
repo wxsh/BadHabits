@@ -56,23 +56,29 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
 
 import no.hiof.andrekar.badhabits.MainActivity;
 import no.hiof.andrekar.badhabits.MyAdapter;
 
-public class SaveData {
+public class SaveData  {
     //NOT NEEDED: Change this into internal storage, no need to use Downloads
-    String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/TestGSon";
+    String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/TestGSon";
     FirebaseAuth fbAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    final CountDownLatch latch = new CountDownLatch(1);
+    volatile boolean ecoHabitsOk;
+    volatile boolean dateHabitsOk;
     //DONE: Fix duplication problem.
     //DONE: Make Adapter refresh after sync
+
 
 
     public void readFromFile() {
         Log.d("Firestoreread", "Reading file");
         final String TAG = "Firestoreread";
+        ecoHabitsOk = false;
+        dateHabitsOk = false;
         Habit.habits.clear();
         db.collection(fbAuth.getUid()).document("habits").collection("DateHabits")
                 .get()
@@ -85,9 +91,9 @@ public class SaveData {
                                 DateHabit tempHabit = document.toObject(DateHabit.class);
                                 Habit habit = (DateHabit) tempHabit;
                                 Habit.habits.add(habit);
-                                MainActivity.updateRecyclerView();
                                 Log.d(TAG, "Adding habit");
                             }
+                            MainActivity.updateRecyclerView();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -104,15 +110,17 @@ public class SaveData {
                                 EconomicHabit tempHabit = document.toObject(EconomicHabit.class);
                                 Habit habit = (EconomicHabit) tempHabit;
                                 Habit.habits.add(habit);
-                                MainActivity.updateRecyclerView();
                                 Log.d(TAG, "Adding habit");
                             }
+                            MainActivity.updateRecyclerView();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-}
+                MainActivity.setRefreshing();
+        }
+
 
     public void saveData(Habit habit, int typeHabit) {
         if (typeHabit == 1) {
@@ -120,7 +128,7 @@ public class SaveData {
         } else if (typeHabit == 2) {
             db.collection(fbAuth.getUid()).document("habits").collection("DateHabits").document(habit.getUid()).set(habit);
         }
-    };
+    }
 
     public void removeData(Habit habit, int typeHabit) {
         if (typeHabit == 1) {
