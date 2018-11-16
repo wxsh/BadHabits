@@ -76,10 +76,11 @@ public class HabitActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (sharedPreferences.equals("Light")){
+        String userTheme = sharedPreferences.getString("key_theme", "");
+        if (userTheme.equals("Light")){
             setTheme(R.style.LightTheme);
         }
-        else if (sharedPreferences.equals("Dark")){
+        else if (userTheme.equals("Dark")){
             setTheme(R.style.DarkTheme);
         }
 

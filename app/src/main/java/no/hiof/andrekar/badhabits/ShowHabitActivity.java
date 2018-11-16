@@ -66,10 +66,11 @@ public class ShowHabitActivity extends AppCompatActivity {
         SharedPreferences sharedPref =
                 PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (sharedPref.equals("Light")){
+        String userTheme = sharedPref.getString("key_theme", "");
+        if (userTheme.equals("Light")){
             setTheme(R.style.LightTheme);
         }
-        else if (sharedPref.equals("Dark")){
+        else if (userTheme.equals("Dark")){
             setTheme(R.style.DarkTheme);
         }
 

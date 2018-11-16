@@ -96,10 +96,12 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        if (sharedPreferences.equals("Light")){
+
+        String userTheme = sharedPreferences.getString("key_theme", "");
+        if (userTheme.equals("Light")){
             view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         }
-        else if (sharedPreferences.equals("Dark")){
+        else if (userTheme.equals("Dark")){
             view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         }
 
