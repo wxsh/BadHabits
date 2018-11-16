@@ -73,8 +73,11 @@ public class SaveData  {
     //DONE: Make Adapter refresh after sync
 
 
-
     public void readFromFile() {
+        readFromFile(true);
+    }
+
+    public void readFromFile(final boolean animate) {
         Log.d("Firestoreread", "Reading file");
         final String TAG = "Firestoreread";
         ecoHabitsOk = false;
@@ -93,7 +96,11 @@ public class SaveData  {
                                 Habit.habits.add(habit);
                                 Log.d(TAG, "Adding habit");
                             }
-                            MainActivity.updateRecyclerView();
+                            if(!animate) {
+                                MainActivity.updateRecyclerView(false, true, true);
+                            } else {
+                                MainActivity.updateRecyclerView();
+                            }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -112,8 +119,11 @@ public class SaveData  {
                                 Habit.habits.add(habit);
                                 Log.d(TAG, "Adding habit");
                             }
-                            MainActivity.updateRecyclerView();
-                        } else {
+                            if(!animate) {
+                                MainActivity.updateRecyclerView(false, true, true);
+                            } else {
+                                MainActivity.updateRecyclerView();
+                            }                        } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }

@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), HabitActivity.class);
                 intent.putExtra("TITLE", "Add new habit");
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivityForResult(intent, 500);
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
@@ -286,14 +286,16 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 
-        updateRecyclerView(false, true);
+        updateRecyclerView(false, true, true);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 500 && resultCode == RESULT_OK) {
-            updateRecyclerView();
+            SaveData saveData = new SaveData();
+            saveData.readFromFile(false);
+            updateRecyclerView(true, true, false);
         }
     }
 
@@ -400,9 +402,9 @@ public class MainActivity extends AppCompatActivity {
             favAdapter.notifyDataSetChanged();
             updateBottomSheet();
             setRefreshing();
-            runLayoutAnimation();
+            runLayoutAnimation(true);
         }
-        public static void updateRecyclerView(boolean animation, boolean bottomsheet){
+        public static void updateRecyclerView(boolean animation, boolean bottomsheet, boolean animatefav){
         adapter.notifyDataSetChanged();
         favAdapter.notifyDataSetChanged();
         if(bottomsheet) {
@@ -410,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (animation)
         {
-            runLayoutAnimation();
+            runLayoutAnimation(animatefav);
         }
         setRefreshing();
         }
@@ -422,19 +424,22 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-    public static void runLayoutAnimation() {
-        if(!favoriteRecyclerView.isAnimating() && ! recyclerView.isAnimating()) {
+    public static void runLayoutAnimation(boolean animatefav) {
+        if(!favoriteRecyclerView.isAnimating() && !recyclerView.isAnimating()) {
             final Context context = recyclerView.getContext();
-            final Context favContext = favoriteRecyclerView.getContext();
+
             final LayoutAnimationController controller =
                     AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
-            final LayoutAnimationController favController =
-                    AnimationUtils.loadLayoutAnimation(favContext, R.anim.layout_animation_from_right);
-
             recyclerView.setLayoutAnimation(controller);
             recyclerView.scheduleLayoutAnimation();
-            favoriteRecyclerView.setLayoutAnimation(favController);
-            favoriteRecyclerView.scheduleLayoutAnimation();
+
+            if (animatefav) {
+                final Context favContext = favoriteRecyclerView.getContext();
+                final LayoutAnimationController favController =
+                        AnimationUtils.loadLayoutAnimation(favContext, R.anim.layout_animation_from_right);
+                favoriteRecyclerView.setLayoutAnimation(favController);
+                favoriteRecyclerView.scheduleLayoutAnimation();
+            }
         }
     }
 
