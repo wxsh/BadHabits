@@ -5,7 +5,7 @@
     android:id="@+id/fav_parent_layout"
     android:layout_width="wrap_content"
     android:layout_height="145dp"
-    android:layoutAnimation="@anim/layout_animation_from_right">
+    >
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
