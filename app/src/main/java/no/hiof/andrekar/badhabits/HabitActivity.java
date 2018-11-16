@@ -287,6 +287,7 @@ public class HabitActivity extends AppCompatActivity {
             if (editMode == false) {
                 EconomicHabit habit = new EconomicHabit(title, description, startDate, alternativePrice, goalValue, price, false);
                 saveData.saveData(habit, typeHabit);
+                Habit.habits.add((EconomicHabit) habit);
             } else if (editMode == true) {
                 EconomicHabit habit = (EconomicHabit) Habit.habits.get(editIndex);
                 habit.setTitle(title);
@@ -302,6 +303,7 @@ public class HabitActivity extends AppCompatActivity {
             if (editMode == false) {
                 DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue, false);
                 saveData.saveData(habit, typeHabit);
+                Habit.habits.add((DateHabit) habit);
             } else if (editMode == true) {
                 //DONE add datehabit edit handling
                 DateHabit habit = (DateHabit) Habit.habits.get(editIndex);
@@ -315,7 +317,6 @@ public class HabitActivity extends AppCompatActivity {
 
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         setResult(Activity.RESULT_OK, intent);
-        //overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
         finish();
     }
 
