@@ -17,5 +17,27 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Onboarding strings -->
+    <string name="tutorial_main_title_welcome">Welcome to Bad Habits!</string>
+    <string name="tutorial_main_title_favourite">Favourites</string>
+    <string name="tutorial_main_title_settings">Settings &amp; Login</string>
+
+    <string name="tutorial_main_desc_newhabit">To add a Habit, click on the floating action button. We have added some habits to show you around.</string>
+
+    <string name="tutorial_main_desc_favdisplay">Favourites will be displayed on the top of the screen</string>
+    <string name="tutorial_main_desc_favadd">To add a favourite, touch the heart button</string>
+    <string name="tutorial_main_desc_settings">To access settings, touch the menu. From here you can register an account to back up your data. We\'ll remove the habits we added, so you are ready to start your journey!</string>
+
+    <string name="tutorial_habit_title_delete">Delete habit</string>
+    <string name="tutorial_habit_title_edit">Edit habit</string>
+    <string name="tutorial_habit_title_failed">Failed habit</string>
+
+    <string name="tutorial_habit_desc_delete">Touch this button to delete a habit. You\'ll get a popup to confirm this action, don\'t worry</string>
+    <string name="tutorial_habit_desc_edit">This button takes you to the screen to edit habits.</string>
+    <string name="tutorial_habit_desc_failed">Hit a snag? Don\'t worry. This button will take a note if you spent some money</string>
+
+
+
+
 
 </resources>
