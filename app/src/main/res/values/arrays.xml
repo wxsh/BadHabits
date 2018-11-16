@@ -17,6 +17,12 @@
         <item>Yearly</item>
     </string-array>
 
+    <string-array name="theme_array">
+        <item>Default</item>
+        <item>Dark</item>
+        <item>Light</item>
+    </string-array>
+
 
     <string-array name="google_array">
         <item>Login</item>

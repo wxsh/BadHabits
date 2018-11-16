@@ -1,70 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
         <ListPreference
-            android:title="Currency"
-            android:key="key_currency"
-            android:summary="Choose currency"
+            android:defaultValue="NOK"
             android:entries="@array/currency_array"
             android:entryValues="@array/currency_array"
-            android:defaultValue="NOK"
-            android:icon="@drawable/ic_currency_usd" >
+            android:icon="@drawable/ic_currency_usd"
+            android:key="key_currency"
+            android:summary="Choose currency"
+            android:title="Currency"></ListPreference>
+
+        <ListPreference
+            android:defaultValue="Dark"
+            android:entries="@array/theme_array"
+            android:entryValues="@array/theme_array"
+            android:icon="@drawable/ic_brush_black"
+            android:key="key_theme"
+            android:title="Theme">
+
         </ListPreference>
 
         <ListPreference
-            android:dialogTitle="Google"
             android:defaultValue="Anonym"
-            android:key="key_google"
-            android:title="Google"
-            android:summary="Sign in with google"
+            android:dialogTitle="Google"
             android:entries="@array/google_array"
             android:entryValues="@array/google_array"
-            android:icon="@drawable/googleg_standard_color_18">
-        </ListPreference>
+            android:icon="@drawable/googleg_standard_color_18"
+            android:key="key_google"
+            android:summary="Sign in with google"
+            android:title="Google"></ListPreference>
 
-        <PreferenceCategory
-            android:title="Tutorials">
-        <Preference
-            android:key="key_onboard"
-            android:title="Reset main screen tutorial"
-            android:summary="Play the tutorial for the main screen again."
-            android:defaultValue="false"
-            android:icon="@drawable/ic_flag_triangle">
-        </Preference>
+
+        <PreferenceCategory android:title="Tutorials">
                 <Preference
-                    android:key="key_onboard_showhabit"
-                    android:title="Reset habit screen tutorial"
-                    android:summary="Play the tutorial for the habit detail screen again."
                     android:defaultValue="false"
-                    android:icon="@drawable/ic_flag_triangle">
-                </Preference>
+                    android:icon="@drawable/ic_flag_triangle"
+                    android:key="key_onboard"
+                    android:summary="Play the tutorial for the main screen again."
+                    android:title="Reset main screen tutorial"></Preference>
+                <Preference
+                    android:defaultValue="false"
+                    android:icon="@drawable/ic_flag_triangle"
+                    android:key="key_onboard_showhabit"
+                    android:summary="Play the tutorial for the habit detail screen again."
+                    android:title="Reset habit screen tutorial"></Preference>
 
         </PreferenceCategory>
 
 
-        <!--
-
-        Bare test greier under
-
-        <PreferenceCategory
-            android:title="Color scheme">
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="enable_timer"
-                android:title="Enable sleep timer"
-                android:summary="Enable or disable sleep timer">
-            </CheckBoxPreference>
-
-            <ListPreference
-                android:dependency="enable_timer"
-                android:key="key_sleep_timer"
-                android:summary="Stop playing music after time"
-                android:entries="@array/timerList"
-                android:entryValues="@array/timerListValues">
-            </ListPreference>
-
-
-        </PreferenceCategory>
-        -->
 </PreferenceScreen>

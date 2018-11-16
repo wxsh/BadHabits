@@ -78,7 +78,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String userTheme = preferences.getString("key_theme", "");
+
+        if (userTheme.equals("Light")){
+            setTheme(R.style.LightTheme);
+            System.out.println("LIGHT");
+        }
+        else if (userTheme.equals("Dark")){
+            System.out.println("DARK");
+            setTheme(R.style.DarkTheme);
+        }
+
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         if(mDatabase == null) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();

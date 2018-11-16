@@ -3,6 +3,8 @@ package no.hiof.andrekar.badhabits;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -71,6 +73,16 @@ public class HabitActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sharedPreferences.equals("Light")){
+            setTheme(R.style.LightTheme);
+        }
+        else if (sharedPreferences.equals("Dark")){
+            setTheme(R.style.DarkTheme);
+        }
+
         super.onCreate(savedInstanceState);
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
         setContentView(R.layout.activity_habit);

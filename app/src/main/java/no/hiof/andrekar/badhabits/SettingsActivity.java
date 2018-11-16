@@ -41,7 +41,7 @@ import android.widget.Toast;
 public class SettingsActivity extends AppCompatActivity {
     public static final String KEY_PREF_CURRENCY = "key_currency";
     public static final String KEY_PREF_GOOGLE = "key_google";
-    public static final String KEY_PREF_EMAIL = "key_email";
+    public static final String KEY_PREF_THEME = "key_theme";
     public static final String KEY_PREF_ONBOARD = "key_onboard";
     public static final String KEY_PREF_ONBOARDSHOWHABIT = "key_onboard_showhabit";
 
@@ -55,6 +55,16 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sharedPreferences.equals("Light")){
+            setTheme(R.style.LightTheme);
+        }
+        else if (sharedPreferences.equals("Dark")){
+            setTheme(R.style.DarkTheme);
+        }
+
         super.onCreate(savedInstanceState);
 
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

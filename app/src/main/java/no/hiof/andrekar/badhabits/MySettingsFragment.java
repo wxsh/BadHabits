@@ -44,23 +44,17 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
+
         Preference currency = findPreference(SettingsActivity.KEY_PREF_CURRENCY);
         currency.setSummary(sharedPreferences.getString(SettingsActivity.KEY_PREF_CURRENCY,""));
 
-//        Preference email = findPreference(SettingsActivity.KEY_PREF_EMAIL);
-//        email.setSummary(sharedPreferences.getString(SettingsActivity.KEY_PREF_EMAIL,""));
+        Preference theme = findPreference(SettingsActivity.KEY_PREF_THEME);
+        theme.setSummary(sharedPreferences.getString(SettingsActivity.KEY_PREF_THEME,""));
 
         Preference googlePref = (Preference) findPreference(SettingsActivity.KEY_PREF_GOOGLE);
         googlePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-
-                //Denne kjøres hvis brukeren skal registreres.
-                //startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).build(), 200);
-
-                //Denne skal kjøres hvis brukeren har en eksisterende konto.
-                //startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), 200);
-
-
+                //onClick
                 return true;
             }
         });
@@ -95,6 +89,21 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         });
 
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        if (sharedPreferences.equals("Light")){
+            view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }
+        else if (sharedPreferences.equals("Dark")){
+            view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+
+        return view;
     }
 
     @Override

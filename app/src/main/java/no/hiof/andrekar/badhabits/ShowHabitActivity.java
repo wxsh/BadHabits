@@ -63,14 +63,22 @@ public class ShowHabitActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPref =
+                PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sharedPref.equals("Light")){
+            setTheme(R.style.LightTheme);
+        }
+        else if (sharedPref.equals("Dark")){
+            setTheme(R.style.DarkTheme);
+        }
+
         super.onCreate(savedInstanceState);
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
         setContentView(R.layout.activity_show_habit);
         EconomicHabit ecohabit;
         DateHabit dateHabit;
 
-        SharedPreferences sharedPref =
-                PreferenceManager.getDefaultSharedPreferences(this);
 
         String currency = sharedPref.getString
                 (SettingsActivity.KEY_PREF_CURRENCY, "");
@@ -79,6 +87,8 @@ public class ShowHabitActivity extends AppCompatActivity {
         if (onboarding == false) {
             onBoard(findViewById(R.id.getStartTextView));
         }
+
+
 
 
         TextView goalView = findViewById(R.id.getGoalTextView);

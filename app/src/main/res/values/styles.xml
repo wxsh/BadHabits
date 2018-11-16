@@ -9,6 +9,39 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="actionBarStyle">@style/Theme.MyApp.ActionBar</item>
         <item name="android:windowBackground">@color/colorPrimary</item>
+
+    </style>
+
+    <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/primaryLightColorDark</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="actionBarStyle">@style/Theme.MyApp.ActionBar</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/primaryTextColorDark</item>
+        <item name="android:editTextColor">#295055</item>
+        <item name="android:textColorPrimary">#295055</item>
+        <item name="android:textColorSecondary">#295055</item>
+        <item name="android:textColorTertiary">#295055</item>
+        <item name="android:textColorPrimaryInverse">#295055</item>
+        <item name="android:textColorSecondaryInverse">#295055</item>
+        <item name="android:textColorTertiaryInverse">#295055</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/colorPrimaryDark</item>
+
+    </style>
+
+    <style name="LightTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryColor</item>
+        <item name="colorAccent">@color/primaryLightColor</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="actionBarStyle">@style/Theme.MyApp.ActionBar</item>
+        <item name="android:windowBackground">@color/primaryColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
