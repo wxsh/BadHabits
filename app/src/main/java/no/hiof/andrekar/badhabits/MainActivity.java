@@ -1,6 +1,7 @@
 package no.hiof.andrekar.badhabits;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,7 +21,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -65,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static MyAdapter adapter;
     public static MyFavoriteAdapter favAdapter;
-    private boolean habitexists;
     private static float totalSaved, totalDays, longestStreakEco,longestStreakDate,failedTotal, daysTillFinishedDate,daysTillFinishedEco,longestDateHabit;
     private static TextView ecoBottomText, dateBottomText, longestStreakEcoText,longestStreakDateText,failedTotalText, daysTillFinishedDateText,daysTillFinishedEcoText,longestDateHabitText;
     private static SwipeRefreshLayout swipeContainer;
     private static String longestStreakName,longestDateName;
     private static PieChart bottomSheetPieEco, bottomSheetPieDate;
-    private static View targetThreeHolder;
+    private static RecyclerView recyclerView;
+    private static RecyclerView favoriteRecyclerView;
 
 
 
@@ -150,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 // once the network request has completed successfully.
                 SaveData saveData = new SaveData();
                 saveData.readFromFile();
+                //saveData.readFromFile();
             }
         });
         // Configure the refreshing colors
@@ -174,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), HabitActivity.class);
                 intent.putExtra("TITLE", "Add new habit");
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivityForResult(intent, 500);
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
@@ -183,12 +187,11 @@ public class MainActivity extends AppCompatActivity {
         //DONE: Implement this into habits model?
         Collections.sort(Habit.habits, Habit.HabitComparator);
 
-
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             SaveData saveData = new SaveData();
             saveData.readFromFile();
             }
-            initRecyclerView();
+        initRecyclerView();
 
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -282,14 +285,16 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 
-        updateRecyclerView();
+        updateRecyclerView(false, true, true);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 500 && resultCode == RESULT_OK) {
-            updateRecyclerView();
+            SaveData saveData = new SaveData();
+            saveData.readFromFile(false);
+            updateRecyclerView(true, true, false);
         }
     }
 
@@ -326,21 +331,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void  initRecyclerView(){
 
-        RecyclerView favoriteRecyclerView = findViewById(R.id.favorite_recycler_view);
+        favoriteRecyclerView = findViewById(R.id.favorite_recycler_view);
 
         favAdapter = new MyFavoriteAdapter(this);
         favoriteRecyclerView.setAdapter(favAdapter);
         favoriteRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
         adapter = new MyAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
+
         Log.d("Sharedpref", Boolean.toString(onboarding));
+
         if (onboarding == false) {
             populateData(false);
             onBoard(findViewById(R.id.fab_addHabit));
@@ -395,10 +402,47 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             favAdapter.notifyDataSetChanged();
             updateBottomSheet();
+            setRefreshing();
+            runLayoutAnimation(true);
+        }
+        public static void updateRecyclerView(boolean animation, boolean bottomsheet, boolean animatefav){
+        adapter.notifyDataSetChanged();
+        favAdapter.notifyDataSetChanged();
+        if(bottomsheet) {
+            updateBottomSheet();
+        }
+        if (animation)
+        {
+            runLayoutAnimation(animatefav);
+        }
+        setRefreshing();
+        }
+
+
+    public static void setRefreshing() {
             if(swipeContainer.isRefreshing()) {
                 swipeContainer.setRefreshing(false);
             }
         }
+
+    public static void runLayoutAnimation(boolean animatefav) {
+        if(!favoriteRecyclerView.isAnimating() && !recyclerView.isAnimating()) {
+            final Context context = recyclerView.getContext();
+
+            final LayoutAnimationController controller =
+                    AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
+            recyclerView.setLayoutAnimation(controller);
+            recyclerView.scheduleLayoutAnimation();
+
+            if (animatefav) {
+                final Context favContext = favoriteRecyclerView.getContext();
+                final LayoutAnimationController favController =
+                        AnimationUtils.loadLayoutAnimation(favContext, R.anim.layout_animation_from_right);
+                favoriteRecyclerView.setLayoutAnimation(favController);
+                favoriteRecyclerView.scheduleLayoutAnimation();
+            }
+        }
+    }
 
         public static void updateBottomSheet() {
             totalSaved = 0;
@@ -520,9 +564,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onGlobalLayout() {
                     view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    RecyclerView recyclerView = findViewById(R.id.recycler_view);
-                    RecyclerView favRecyclerView = findViewById(R.id.favorite_recycler_view);
-
 
                     // make an
                     SimpleTarget firstTarget = new SimpleTarget.Builder(MainActivity.this)
@@ -533,7 +574,7 @@ public class MainActivity extends AppCompatActivity {
                             .build();
 
                     //View two = findViewById(R.id.favorite_recycler_view);
-                    View two = favRecyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.fav_habit_goal);
+                    View two = favoriteRecyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.fav_habit_goal);
 
                     int[] twoLocation = new int[2];
                     two.getLocationInWindow(twoLocation);
