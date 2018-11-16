@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
@@ -86,10 +87,10 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             return holder;
         }
 
-        //DONE: fix some bugs, like clickable when empty
+        //TODO: fix some bugs, like clickable when empty
         //DONE: Empty item view does not show if you remove the last favourite.
 
-        @Override
+    @Override
         public void onBindViewHolder(final MyFavoriteAdapter.ViewHolder holder, final int position) {
 
         if (position == 0){
@@ -123,6 +124,10 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                 } else {
                     holder.itemView.setVisibility(View.VISIBLE);
+                    holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    holder.habitName.setWidth((int)(size.x/1.3) );
+
+                    /*
                     if (Habit.getNumFavourites() == 1) {
                         holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                         holder.habitName.setWidth((int)(size.x/1.3) );
@@ -133,6 +138,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                         holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams((int)(size.x /2.2), ViewGroup.LayoutParams.MATCH_PARENT));
                         holder.habitName.setWidth((int)(holder.itemView.getLayoutParams().width/1.7) );
                     }
+                    // */
                     holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
 
                     holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
@@ -207,6 +213,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                                         habit.setFailDate(new Date().getTime());
                                         saveData.saveData(Habit.habits.get(position), 1);
                                         notifyDataSetChanged();
+                                        MainActivity.updateBottomSheet();
                                     }
                                 });
                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -305,9 +312,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             }
         }
 
-        public void addP(int pos) {
+        public void add(int pos) {
             notifyItemInserted(pos);
         }
-
-
 }

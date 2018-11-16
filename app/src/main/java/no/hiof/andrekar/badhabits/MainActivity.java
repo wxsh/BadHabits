@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -15,20 +16,25 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +69,7 @@ import model.EconomicHabit;
 import model.Habit;
 
 import static java.lang.Math.abs;
+import static model.Habit.habits;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     public static View mainLayout;
     private static RecyclerView recyclerView;
     private static RecyclerView favoriteRecyclerView;
+    private static Context context;
 
 
 
@@ -87,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String userTheme = preferences.getString("key_theme", "");
+        context = getBaseContext();
 
 
         if (userTheme.equals("Light")){
@@ -192,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //DONE: Implement this into habits model?
-        Collections.sort(Habit.habits, Habit.HabitComparator);
+        Collections.sort(habits, Habit.HabitComparator);
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             SaveData saveData = new SaveData();
@@ -303,7 +312,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-
         updateRecyclerView(false, true, true);
     }
 
@@ -311,8 +319,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 500 && resultCode == RESULT_OK) {
-            adapter.notifyItemInserted(Habit.habits.size());
-            favAdapter.notifyItemInserted(Habit.habits.size());
+            adapter.notifyItemInserted(habits.size());
+            favAdapter.notifyItemInserted(habits.size());
         }
     }
 
@@ -341,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_refresh) {
-            updateRecyclerView();
+            resizeFavs();
         }
 
         return super.onOptionsItemSelected(item);
@@ -354,6 +362,7 @@ public class MainActivity extends AppCompatActivity {
         favAdapter = new MyFavoriteAdapter(this);
         favoriteRecyclerView.setAdapter(favAdapter);
         favoriteRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        favoriteRecyclerView.setHasFixedSize(true);
 
 
         recyclerView = findViewById(R.id.recycler_view);
@@ -388,32 +397,36 @@ public class MainActivity extends AppCompatActivity {
 
         for (Habit habit : testHabits) {
             if (habit instanceof DateHabit) {
-                Habit.habits.add((DateHabit) habit);
+                habits.add((DateHabit) habit);
+                adapter.notifyItemInserted(habits.size());
+                favAdapter.notifyItemInserted(habits.size());
                 if(save) {
                     saveData.saveData(habit, 2);
                 }
             } else if (habit instanceof EconomicHabit) {
-                Habit.habits.add((EconomicHabit) habit);
+                habits.add((EconomicHabit) habit);
+                adapter.notifyItemInserted(habits.size());
+                favAdapter.notifyItemInserted(habits.size());
                 if(save) {
                     saveData.saveData(habit, 1);
                 }
             }
         }
-        updateRecyclerView();
         testHabits.clear();
         }
 
         private void removeData() {
             SaveData saveData = new SaveData();
-            for (Habit habit: Habit.habits) {
+            for (Habit habit: habits) {
                 if(habit instanceof EconomicHabit) {
                     saveData.removeData(habit, 1);
                 } else if(habit instanceof DateHabit) {
                     saveData.removeData(habit, 2);
                 }
             }
-            Habit.habits.clear();
-            MainActivity.updateRecyclerView();
+            adapter.notifyItemRangeRemoved(0, habits.size());
+            favAdapter.notifyItemRangeRemoved(0, habits.size());
+            habits.clear();
         }
 
         public static void updateRecyclerView(){
@@ -474,7 +487,7 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<PieEntry> entriesEco = new ArrayList<>();
             ArrayList<PieEntry> entriesDate = new ArrayList<>();
 
-            for (Habit habit: Habit.habits) {
+            for (Habit habit: habits) {
                 if (habit instanceof EconomicHabit) {
                     totalSaved += ((EconomicHabit) habit).getProgress();
                     failedTotal += (((EconomicHabit) habit).getFailedTotal());
@@ -656,7 +669,16 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        public static void resizeFavs() {
+            for (int i = 0; i < Habit.habits.size(); i++) {
+                if(Habit.habits.get(i).getIsFavourite()) {
+                    try {
+                        favoriteRecyclerView.getLayoutManager().findViewByPosition(i).findViewById(R.id.card_view).setLayoutParams(new RelativeLayout.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT));
+                        Log.d("Resize", ((TextView) favoriteRecyclerView.getLayoutManager().findViewByPosition(i).findViewById(R.id.fav_habit_name)).getText().toString());
+                    } catch (Exception e ) {
 
-
+                    }
+                }
+            }
+        }
 }
-
