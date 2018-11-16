@@ -43,6 +43,7 @@ public class Habit {
     private String uid;
     private String habitType;
     private long failDate;
+    private int failureTimes;
 
 
     //Constructors
@@ -53,6 +54,7 @@ public class Habit {
         this.isFavourite = isFavourite;
         this.uid = UUID.randomUUID().toString();
         this.failDate = 0;
+        this.failureTimes = 0;
         //We add habits when we save them, so adding to list is currently not needed.
         //habits.add(this);
     }
@@ -83,6 +85,7 @@ public class Habit {
 
     public void setFailDate(long failDate) {
         this.failDate = failDate;
+        failureTimes++;
     }
 
     //staticGetters
@@ -148,5 +151,13 @@ public class Habit {
         //TODO: Look into replacing this function? Seems to be one day off.
         long diffInMillis = date2 - date1;
         return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
+    }
+
+    public int getFailureTimes() {
+        return failureTimes;
+    }
+
+    public void setFailureTimes(int failureTimes) {
+        this.failureTimes = failureTimes;
     }
 }

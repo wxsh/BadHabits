@@ -1,28 +1,26 @@
 package no.hiof.andrekar.badhabits;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -30,8 +28,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.model.GradientColor;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.takusemba.spotlight.OnSpotlightStateChangedListener;
 import com.takusemba.spotlight.Spotlight;
@@ -39,12 +37,9 @@ import com.takusemba.spotlight.shape.Circle;
 import com.takusemba.spotlight.target.SimpleTarget;
 
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import model.DateHabit;
@@ -59,8 +54,10 @@ public class ShowHabitActivity extends AppCompatActivity {
     public ImageButton deleteButton;
     public ImageButton editButton;
     public ImageButton failedButton;
-    HorizontalBarChart chart;
-
+    BarChart chart;
+    BarChart dateChart;
+    SeekBar seekBarX, seekBarY;
+    private final int months = 12;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPref =
@@ -96,6 +93,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         TextView startView = findViewById(R.id.getStartTextView);
         TextView failedView = findViewById(R.id.getFailTextView);
         chart = findViewById(R.id.detailChart);
+        dateChart = findViewById(R.id.detailChart);
 
         SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
         Habit habit = Habit.habits.get(currentNumber);
@@ -107,6 +105,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             Date date=new Date(habit.getStartDate());
             String dateText = df2.format(date);
             startView.setText(dateText);
+            setDateData();
         }
         else {
             goalView.setText(String.valueOf(((EconomicHabit) habit).getProgress()) + " " + currency);
@@ -253,6 +252,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         float spaceForBar = 10f;
         ArrayList<BarEntry> values = new ArrayList<>();
         ArrayList<BarEntry> values2 = new ArrayList<>();
+        ArrayList<BarEntry> values3 = new ArrayList<>();
 
         EconomicHabit habit = ((EconomicHabit) Habit.habits.get(currentNumber));
 
@@ -264,6 +264,7 @@ public class ShowHabitActivity extends AppCompatActivity {
 
         BarDataSet set1;
         BarDataSet set2;
+        BarDataSet set3;
 
         chart.setDrawGridBackground(false);
         chart.getDescription().setEnabled(false);
@@ -330,6 +331,95 @@ public class ShowHabitActivity extends AppCompatActivity {
 
     }
 
+    public void setDateData(){
+        float barWidth = 9f;
+        float spaceForBar = 10f;
+        ArrayList<BarEntry> values = new ArrayList<>();
+        ArrayList<BarEntry> values2 = new ArrayList<>();
+
+        DateHabit habit = ((DateHabit) Habit.habits.get(currentNumber));
+
+        if(habit.getFailureTimes() <= 1){
+            values.add(new BarEntry(1 * spaceForBar,100));
+        } else {
+            values.add(new BarEntry(1 * spaceForBar,  ( 100 - ( habit.getFailureTimes() / habit.getDaysFromStart() * 100)  )));
+        }
+        if(habit.getFailureTimes() <= 1){
+            values2.add(new BarEntry(0 * spaceForBar,0));
+        } else {
+            values2.add(new BarEntry(0 * spaceForBar,  (  ( habit.getFailureTimes() / habit.getDaysFromStart() * 100)  )));
+        }
+
+        BarDataSet set1;
+        BarDataSet set2;
+
+        dateChart.setDrawGridBackground(false);
+        dateChart.getDescription().setEnabled(false);
+
+        XAxis xAxis = dateChart.getXAxis();
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(false);
+        xAxis.setDrawLabels(false);
+
+        YAxis leftAxis = dateChart.getAxisLeft();
+        leftAxis.setDrawGridLines(false);
+        leftAxis.setDrawAxisLine(false);
+        leftAxis.setDrawLabels(false);
+        leftAxis.setAxisMaximum(100);
+        leftAxis.setAxisMinimum(0);
+
+
+        YAxis rightAxis = dateChart.getAxisRight();
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setDrawAxisLine(false);
+        rightAxis.setDrawLabels(true);
+        rightAxis.setAxisMaximum(100);
+        rightAxis.setAxisMinimum(0);
+
+
+        Legend l = dateChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setTextSize(14f);
+        l.setXEntrySpace(4f);
+        l.setYEntrySpace(20);
+        l.setForm(Legend.LegendForm.CIRCLE);
+        l.setDrawInside(false);
+
+
+
+        if (dateChart.getData() != null &&
+                dateChart.getData().getDataSetCount() > 0) {
+            set1 = (BarDataSet) dateChart.getData().getDataSetByIndex(0);
+            set2 = (BarDataSet) dateChart.getData().getDataSetByIndex(1);
+
+
+            set1.setValues(values);
+            set2.setValues(values2);
+
+            dateChart.getData().notifyDataChanged();
+            dateChart.notifyDataSetChanged();
+        } else {
+            set1 = new BarDataSet(values, "Success rate:");
+            set2 = new BarDataSet(values2, "Failure rate:");
+
+            set1.setDrawIcons(false);
+            set1.setDrawValues(true);
+            set1.setColors(ColorTemplate.MATERIAL_COLORS);
+            set2.setColors(ColorTemplate.COLORFUL_COLORS);
+
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
+            dataSets.add(set2);
+
+            BarData data = new BarData(dataSets);
+            data.setValueTextSize(10f);
+            data.setBarWidth(barWidth);
+            chart.setData(data);
+            dateChart.animateXY(1000, 1000);
+
+        }
+    }
     public static void setCurrentNumber(int number) {
         currentNumber = number;
     }
