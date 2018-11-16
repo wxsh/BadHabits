@@ -68,13 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static MyAdapter adapter;
     public static MyFavoriteAdapter favAdapter;
-    private boolean habitexists;
     private static float totalSaved, totalDays, longestStreakEco,longestStreakDate,failedTotal, daysTillFinishedDate,daysTillFinishedEco,longestDateHabit;
     private static TextView ecoBottomText, dateBottomText, longestStreakEcoText,longestStreakDateText,failedTotalText, daysTillFinishedDateText,daysTillFinishedEcoText,longestDateHabitText;
     private static SwipeRefreshLayout swipeContainer;
     private static String longestStreakName,longestDateName;
     private static PieChart bottomSheetPieEco, bottomSheetPieDate;
-    private static View targetThreeHolder;
     private static RecyclerView recyclerView;
     private static RecyclerView favoriteRecyclerView;
 
@@ -288,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 
-        updateRecyclerView();
+        updateRecyclerView(false, true);
     }
 
     @Override
@@ -404,25 +402,40 @@ public class MainActivity extends AppCompatActivity {
             setRefreshing();
             runLayoutAnimation();
         }
+        public static void updateRecyclerView(boolean animation, boolean bottomsheet){
+        adapter.notifyDataSetChanged();
+        favAdapter.notifyDataSetChanged();
+        if(bottomsheet) {
+            updateBottomSheet();
+        }
+        if (animation)
+        {
+            runLayoutAnimation();
+        }
+        setRefreshing();
+        }
 
-        public static void setRefreshing() {
+
+    public static void setRefreshing() {
             if(swipeContainer.isRefreshing()) {
                 swipeContainer.setRefreshing(false);
             }
         }
 
     public static void runLayoutAnimation() {
-        final Context context = recyclerView.getContext();
-        final Context favContext = favoriteRecyclerView.getContext();
-        final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
-        final LayoutAnimationController favController =
-                AnimationUtils.loadLayoutAnimation(favContext, R.anim.layout_animation_from_right);
+        if(!favoriteRecyclerView.isAnimating() && ! recyclerView.isAnimating()) {
+            final Context context = recyclerView.getContext();
+            final Context favContext = favoriteRecyclerView.getContext();
+            final LayoutAnimationController controller =
+                    AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
+            final LayoutAnimationController favController =
+                    AnimationUtils.loadLayoutAnimation(favContext, R.anim.layout_animation_from_right);
 
-        recyclerView.setLayoutAnimation(controller);
-        recyclerView.scheduleLayoutAnimation();
-        favoriteRecyclerView.setLayoutAnimation(favController);
-        favoriteRecyclerView.scheduleLayoutAnimation();
+            recyclerView.setLayoutAnimation(controller);
+            recyclerView.scheduleLayoutAnimation();
+            favoriteRecyclerView.setLayoutAnimation(favController);
+            favoriteRecyclerView.scheduleLayoutAnimation();
+        }
     }
 
         public static void updateBottomSheet() {
