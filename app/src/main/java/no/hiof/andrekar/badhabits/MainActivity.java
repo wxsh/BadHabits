@@ -149,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
         bottomSheetPieDate = findViewById(R.id.chart_bottomSheetPieDate);
 
         bottomSheet();
-        updateBottomSheet();
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.recyclerSwipeContainer);
         // Setup refresh listener which triggers new data loading
@@ -200,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
             saveData.readFromFile();
             }
         initRecyclerView();
+        updateBottomSheet();
 
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -311,9 +311,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 500 && resultCode == RESULT_OK) {
-            SaveData saveData = new SaveData();
-            saveData.readFromFile(false);
-            updateRecyclerView(true, true, false);
+            adapter.notifyItemInserted(Habit.habits.size());
+            favAdapter.notifyItemInserted(Habit.habits.size());
         }
     }
 

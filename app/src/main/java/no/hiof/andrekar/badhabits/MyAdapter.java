@@ -146,9 +146,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                         saveData.saveData(Habit.habits.get(position), 1);
                     }
 
-                    Collections.sort(Habit.habits, Habit.HabitComparator);
-                    MainActivity.updateRecyclerView();
-
+                    //Collections.sort(Habit.habits, Habit.HabitComparator);
+                    notifyItemChanged(position);
+                    MainActivity.favAdapter.notifyItemChanged(position);
                 }
             });
         }
@@ -157,6 +157,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     @Override
     public int getItemCount() {
         return Habit.habits.size();
+    }
+
+
+    public void addP(int pos) {
+        notifyItemInserted(pos);
     }
 
 

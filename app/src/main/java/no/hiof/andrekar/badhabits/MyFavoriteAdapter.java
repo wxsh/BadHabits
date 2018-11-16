@@ -43,7 +43,9 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
     private Context mContext;
 
-    private boolean mHaveFavorite;
+        private boolean mHaveFavorite;
+        private Point size;
+        private ViewHolder holder;
 
     private SharedPreferences sharedPref;
 
@@ -133,8 +135,6 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     }
                     holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
 
-
-
                     holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
                     //>DONE: DONE
@@ -180,8 +180,9 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                                 saveData.saveData(Habit.habits.get(position), 1);
                             }
 
-                            Collections.sort(Habit.habits, Habit.HabitComparator);
-                            MainActivity.updateRecyclerView();
+                            //Collections.sort(Habit.habits, Habit.HabitComparator);
+                            MainActivity.adapter.notifyItemChanged(position);
+                            MainActivity.favAdapter.notifyItemChanged(position);
                         }
                     });
 
@@ -270,7 +271,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
         }
 
 
-        @Override
+    @Override
         public int getItemCount() {
             return Habit.habits.size();
         }
@@ -302,6 +303,10 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
 
             }
+        }
+
+        public void addP(int pos) {
+            notifyItemInserted(pos);
         }
 
 
