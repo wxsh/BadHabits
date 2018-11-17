@@ -25,7 +25,7 @@
             android:clickable="true"
             android:ems="10"
             android:focusable="false"
-            android:hint="Start Date"
+            android:hint="@string/start_date"
             android:inputType="date" />
     </android.support.design.widget.TextInputLayout>
 
@@ -58,7 +58,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="Habit Name"
+            android:hint="@string/habit_name"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -78,7 +78,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="Habit Description"
+            android:hint="@string/habit_description"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -98,14 +98,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Economic Habit" />
+            android:text="@string/economic_habit" />
 
         <RadioButton
             android:id="@+id/newHabit_radioDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Date Habit" />
+            android:text="@string/date_habit" />
     </RadioGroup>
 
     <android.support.design.widget.TextInputLayout
@@ -123,7 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:ems="10"
-            android:hint="Sparingsmål"
+            android:hint="@string/savings_goal"
             android:inputType="number" />
     </android.support.design.widget.TextInputLayout>
 
@@ -146,7 +146,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="Vanens pris"
+            android:hint="@string/habit_s_price"
             android:inputType="numberDecimal" />
     </android.support.design.widget.TextInputLayout>
 
@@ -165,7 +165,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="Mål i antall dager"
+            android:hint="@string/goal_in_amount_of_days"
             android:inputType="number" />
     </android.support.design.widget.TextInputLayout>
 
@@ -218,7 +218,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="Alternativets pris"
+            android:hint="@string/alternative_price"
             android:inputType="numberDecimal" />
 
     </android.support.design.widget.TextInputLayout>

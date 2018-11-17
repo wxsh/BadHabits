@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Bad Habits</string>
     <string name="action_settings">Settings</string>
-
     <string name="habittitle">HabitTitle</string>
     <string name="description">Description:</string>
     <string name="description_show_habit">Description</string>
@@ -11,33 +10,39 @@
     <string name="enter_amount">Enter amount</string>
     <string name="enter_amount_spent">Enter amount spent:</string>
     <string name="failedDate">Days since last fail:</string>
-    <string name="habit">Habit</string>
     <string name="habit_days">5 days</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <!-- Onboarding strings -->
     <string name="tutorial_main_title_welcome">Welcome to Bad Habits!</string>
     <string name="tutorial_main_title_favourite">Favourites</string>
     <string name="tutorial_main_title_settings">Settings &amp; Login</string>
-
     <string name="tutorial_main_desc_newhabit">To add a Habit, click on the floating action button. We have added some habits to show you around.</string>
-
     <string name="tutorial_main_desc_favdisplay">Favourites will be displayed on the top of the screen</string>
     <string name="tutorial_main_desc_favadd">To add a favourite, touch the heart button</string>
     <string name="tutorial_main_desc_settings">To access settings, touch the menu. From here you can register an account to back up your data. We\'ll remove the habits we added, so you are ready to start your journey!</string>
-
     <string name="tutorial_habit_title_delete">Delete habit</string>
     <string name="tutorial_habit_title_edit">Edit habit</string>
     <string name="tutorial_habit_title_failed">Failed habit</string>
-
     <string name="tutorial_habit_desc_delete">Touch this button to delete a habit. You\'ll get a popup to confirm this action, don\'t worry</string>
     <string name="tutorial_habit_desc_edit">This button takes you to the screen to edit habits.</string>
     <string name="tutorial_habit_desc_failed">Hit a snag? Don\'t worry. This button will take a note if you spent some money</string>
-
-
-
-
+    <string name="economic_summary">Economic Summary</string>
+    <string name="you_have_managed">You have managed</string>
+    <string name="longest_streak">Longest Streak:</string>
+    <string name="date_summary">Date Summary</string>
+    <string name="you_have_saved">You have saved</string>
+    <string name="total_amount_spent">Total amount spent:</string>
+    <string name="longest_habit">Longest habit:</string>
+    <string name="days_till_finished">Days till finished:</string>
+    <string name="start_date">Start Date</string>
+    <string name="habit_name">Habit Name</string>
+    <string name="habit_description">Habit Description</string>
+    <string name="economic_habit">Economic Habit</string>
+    <string name="date_habit">Date Habit</string>
+    <string name="savings_goal">Savings goal</string>
+    <string name="goal_in_amount_of_days">Goal in amount of days</string>
+    <string name="alternative_price">Alternative price</string>
+    <string name="habit_s_price">Habit\'s price</string>
+    <string name="favorites_be_displayed">Here will your favorites be displayed</string>
+    <string name="days">days</string>
+    <string name="habit">Habit</string>
 
 </resources>
