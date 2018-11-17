@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Point;
