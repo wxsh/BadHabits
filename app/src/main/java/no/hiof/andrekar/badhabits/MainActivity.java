@@ -370,13 +370,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateData(boolean save) {
         ArrayList<Habit> testHabits = new ArrayList<Habit>();
-        Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date().getTime(), 10, 100, 10, false);
-        Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date().getTime(), 10, true);
-        Habit poop = new EconomicHabit("Smokes", "Stop with smoking", new Date().getTime(), 10, 100, 10, false);
-        Habit scoop = new DateHabit("Having fun", "Stop having fun", new Date().getTime(), 10, false);
+        Date date = new Date();
+        long dayms = 86400000;
+        Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", (date.getTime() - (dayms*8)), 0, 800, 10, false);
+        Habit sodaHabit = new EconomicHabit("Drink less soda", "Stop drinking soda, it is not good for you, and it is expensive", (date.getTime() - (dayms*15)), 10, 500, 20, true);
+        Habit poop = new EconomicHabit("Smokes", "Stop with smoking, use nicotine gum instead", (date.getTime() - (dayms*4)), 10, 100, 100, false);
+        Habit scoop = new DateHabit("Having fun", "Stop having fun", (date.getTime() - (dayms*15)), 60, false);
 
         testHabits.add((EconomicHabit) gumHabit);
-        testHabits.add((DateHabit) sodaHabit);
+        testHabits.add((EconomicHabit) sodaHabit);
         testHabits.add((EconomicHabit) poop);
         testHabits.add((DateHabit) scoop);
         SaveData saveData = new SaveData();
@@ -401,6 +403,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         testHabits.clear();
+        Collections.sort(Habit.habits, Habit.HabitComparator);
+        favAdapter.notifyDataSetChanged();
         }
 
         private void removeData() {

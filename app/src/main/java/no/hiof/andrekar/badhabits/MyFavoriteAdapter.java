@@ -190,7 +190,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
                             //Collections.sort(Habit.habits, Habit.HabitComparator);
                             MainActivity.adapter.notifyItemChanged(position);
-                            MainActivity.favAdapter.notifyItemChanged(position);
+                            //Collections.sort(Habit.habits, Habit.FavComparator_Help);
                             MainActivity.favAdapter.updateFavs();
                             MainActivity.favAdapter.notifyDataSetChanged();
                         }
@@ -322,5 +322,6 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
     public void updateFavs(){
         fav = Habit.getNumFavourites();
+        mHaveFavorite = Habit.getHaveFavorite();
     }
 }
