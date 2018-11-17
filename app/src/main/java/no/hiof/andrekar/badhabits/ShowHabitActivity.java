@@ -262,9 +262,9 @@ public class ShowHabitActivity extends AppCompatActivity {
         if (userTheme.equals("Light")){
 
             parentView.setBackgroundResource(R.color.colorPrimary);
-            deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
-            editButton.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
-            failedButton.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            //deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            //editButton.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            //failedButton.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
 
             startViewImg.setColorFilter(ContextCompat.getColor(this, R.color.primaryLightColor), android.graphics.PorterDuff.Mode.SRC_IN);
             progressViewImg.setColorFilter(ContextCompat.getColor(this, R.color.primaryLightColor), android.graphics.PorterDuff.Mode.SRC_IN);
