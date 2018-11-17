@@ -54,7 +54,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
     public MyFavoriteAdapter(Context context) {
             mContext = context;
-        sharedPref =
+            sharedPref =
                 PreferenceManager.getDefaultSharedPreferences(mContext);
         }
 
@@ -122,8 +122,6 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                 display.getSize(size);
 
                 if (!Habit.habits.get(position).getIsFavourite()) {
-
-
                     holder.itemView.setVisibility(View.GONE);
                     holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                 } else {

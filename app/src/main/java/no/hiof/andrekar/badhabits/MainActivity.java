@@ -332,6 +332,11 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_refresh) {
             updateRecyclerView();
         }
+        if (id == R.id.action_sort) {
+            Collections.sort(Habit.habits, Habit.HabitComparator);
+            favAdapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0, Habit.habits.size());
+        }
 
         return super.onOptionsItemSelected(item);
     }
