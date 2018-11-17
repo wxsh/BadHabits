@@ -10,14 +10,13 @@
             android:icon="@drawable/ic_currency_usd"
             android:key="key_currency"
             android:summary="Choose currency"
-            android:title="Currency"></ListPreference>
-
+            android:title="Currency"/>
         <ListPreference
-            android:defaultValue="Dark"
             android:entries="@array/theme_array"
             android:entryValues="@array/theme_array"
             android:icon="@drawable/ic_brush_black"
             android:key="key_theme"
+            android:defaultValue="Default"
             android:title="Theme">
 
         </ListPreference>
@@ -30,7 +29,7 @@
             android:icon="@drawable/googleg_standard_color_18"
             android:key="key_google"
             android:summary="Sign in with google"
-            android:title="Google"></ListPreference>
+            android:title="Google"/>
 
 
         <PreferenceCategory android:title="Tutorials">
@@ -39,13 +38,13 @@
                     android:icon="@drawable/ic_flag_triangle"
                     android:key="key_onboard"
                     android:summary="Play the tutorial for the main screen again."
-                    android:title="Reset main screen tutorial"></Preference>
+                    android:title="Reset main screen tutorial"/>
                 <Preference
                     android:defaultValue="false"
                     android:icon="@drawable/ic_flag_triangle"
                     android:key="key_onboard_showhabit"
                     android:summary="Play the tutorial for the habit detail screen again."
-                    android:title="Reset habit screen tutorial"></Preference>
+                    android:title="Reset habit screen tutorial"/>
 
         </PreferenceCategory>
 

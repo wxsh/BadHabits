@@ -96,11 +96,13 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        if (sharedPreferences.equals("Light")){
-            view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+        String userTheme = sharedPreferences.getString("key_theme", "");
+        if (userTheme.equals("Light")){
+            //view.setBackgroundColor(getResources().getColor(R.color.transparent));
         }
-        else if (sharedPreferences.equals("Dark")){
-            view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        else if (userTheme.equals("Dark")){
+            //view.setBackgroundColor(getResources().getColor(R.color.transparent));
         }
 
         return view;
@@ -140,7 +142,12 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
                     preference.setSummary("Login with google");
                 }
 
-            }else
+            }else if (key.equals(SettingsActivity.KEY_PREF_THEME)) {
+                Toast.makeText(getActivity(), "Restart app", Toast.LENGTH_LONG).show();
+                preference.setSummary(sharedPreferences.getString(key,""));
+                ThemeColors.update(getContext());
+            }
+            else
             preference.setSummary(sharedPreferences.getString(key,""));
 
         }catch (Exception e){

@@ -34,10 +34,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
     private Context mContext;
 
+    private SharedPreferences sharedPref;
+
     View view;
 
     public MyAdapter(Context context) {
         mContext = context;
+        sharedPref =
+                PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
     @Override
@@ -45,6 +49,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
 
+        String userTheme = sharedPref.getString("key_theme","");
+
+        if (userTheme.equals("Light")){
+
+        }
+        else if (userTheme.equals("Dark")){
+            holder.habitName.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+
+            holder.habitGoal.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+
+            holder.habitDescription.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+            //holder.habitGoal.setTextColor(R.attr.colorPrimary);
+
+            //holder.cardView.setBackgroundColor(mContext.getResources().getColor(R.color.primaryColorDark));
+            //holder.parentLayout.setBackgroundResource(R.color.colorPrimaryDark);
+        }
         return holder;
     }
 

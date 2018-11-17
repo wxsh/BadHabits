@@ -11,6 +11,7 @@ import android.graphics.Point;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
@@ -42,36 +43,62 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
     private Context mContext;
 
-        private boolean mHaveFavorite;
+    private boolean mHaveFavorite;
+
+    private SharedPreferences sharedPref;
 
     public MyFavoriteAdapter(Context context) {
             mContext = context;
+        sharedPref =
+                PreferenceManager.getDefaultSharedPreferences(mContext);
         }
+
 
         @Override
         public MyFavoriteAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_favorite_listitem, parent, false);
             MyFavoriteAdapter.ViewHolder holder = new MyFavoriteAdapter.ViewHolder(view);
 
+            String userTheme = sharedPref.getString("key_theme", "");
+
+            if (userTheme.equals("Light")){
+                holder.cardView.setCardBackgroundColor(mContext.getResources().getColor(ThemeColors.COLOR_PRIMARY_DARK));
+
+            }
+            else if (userTheme.equals("Dark")){
+                holder.cardView.setCardBackgroundColor(mContext.getResources().getColor(ThemeColors.COLOR_ACENT));
+                holder.habitName.setBackgroundResource(ThemeColors.COLOR_ACENT);
+                holder.habitName.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+
+                holder.habitGoal.setBackgroundResource(ThemeColors.COLOR_ACENT);
+                holder.habitGoal.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+
+                holder.habitDescription.setBackgroundResource(ThemeColors.COLOR_ACENT);
+                holder.habitDescription.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+                //holder.habitGoal.setTextColor(R.attr.colorPrimary);
+
+                //holder.cardView.setBackgroundColor(mContext.getResources().getColor(R.color.primaryColorDark));
+                //holder.parentLayout.setBackgroundResource(R.color.colorPrimaryDark);
+            }
+
             return holder;
         }
 
-        //TODO: fix some bugs, like clickable when empty
-    //DONE: Empty item view does not show if you remove the last favourite.
+        //DONE: fix some bugs, like clickable when empty
+        //DONE: Empty item view does not show if you remove the last favourite.
 
         @Override
         public void onBindViewHolder(final MyFavoriteAdapter.ViewHolder holder, final int position) {
 
+        if (position == 0){
+            mHaveFavorite = Habit.getHaveFavorite();
+        }
 
-        SharedPreferences sharedPref =
-                PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
 
         String currency = sharedPref.getString
                 (SettingsActivity.KEY_PREF_CURRENCY, "");
 
-        if (position == 0){
-            mHaveFavorite = Habit.getHaveFavorite();
-        }
+
 
             if (mHaveFavorite) {
                 holder.parentLayout.setClickable(true);
@@ -257,6 +284,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             ImageButton favoriteButton;
             ImageButton failedButton;
             RelativeLayout parentLayout;
+            CardView cardView;
 
             TextView emptyFav;
 
@@ -268,8 +296,11 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                 favoriteButton = itemView.findViewById(R.id.fav_favoriteBtn);
                 parentLayout = itemView.findViewById(R.id.fav_parent_layout);
                 failedButton = itemView.findViewById(R.id.fav_btn_habitFailed);
+                cardView = itemView.findViewById(R.id.card_view);
 
                 emptyFav = itemView.findViewById(R.id.empty_fav);
+
+
             }
         }
 

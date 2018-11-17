@@ -77,10 +77,11 @@ public class HabitActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (sharedPreferences.equals("Light")){
+        String userTheme = sharedPreferences.getString("key_theme", "");
+        if (userTheme.equals("Light")){
             setTheme(R.style.LightTheme);
         }
-        else if (sharedPreferences.equals("Dark")){
+        else if (userTheme.equals("Dark")){
             setTheme(R.style.DarkTheme);
         }
 
@@ -89,6 +90,13 @@ public class HabitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_habit);
         //Slide slide = TransitionInflater.from(this).inflateTransition(R.transition.slide_and_changebounds);
         //getWindow().setExitTransition(slide);
+
+        View parentView = findViewById(R.id.activity_habit_view);
+        if (userTheme.equals("Light")){
+        }
+        else if (userTheme.equals("Dark")){
+            parentView.setBackgroundColor(getResources().getColor(ThemeColors.COLOR_PRIMARY));
+        }
 
         dateEditText = findViewById(R.id.newHabit_startDate);
         findviews();

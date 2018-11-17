@@ -11,14 +11,16 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000</color>
     <color name="buttonTint">#777</color>
+    <color name="iconTint">#555</color>
 
 
-    <color name="primaryColor">#afff91</color>
-    <color name="primaryLightColor">#e3ffc3</color>
-    <color name="primaryDarkColor">#7ccb61</color>
-    <color name="secondaryColor">#b2ebf2</color>
-    <color name="secondaryLightColor">#a2f785</color>
-    <color name="secondaryDarkColor">#81b9bf</color>
+
+    <color name="primaryColor">#ceffc8</color>
+    <color name="primaryLightColor">#7fce75</color>
+    <color name="primaryDarkColor">#e6ffe3</color>
+    <color name="secondaryColor">#ebff88</color>
+    <color name="secondaryLightColor">#fffffc</color>
+    <color name="secondaryDarkColor">#c3cc98</color>
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#000000</color>
 
@@ -26,6 +28,7 @@
     <color name="primaryColorDark">#212121</color>
     <color name="primaryLightColorDark">#484848</color>
     <color name="primaryDarkColorDark">#000000</color>
-    <color name="primaryTextColorDark">#ffffff</color>
+    <color name="primaryTextColorDark">#dfdfdf</color>
+    <color name="secondaryTextColorDark">#57aeb9</color>
 
 </resources>

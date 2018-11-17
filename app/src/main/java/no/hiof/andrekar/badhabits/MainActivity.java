@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
     private static SwipeRefreshLayout swipeContainer;
     private static String longestStreakName,longestDateName;
     private static PieChart bottomSheetPieEco, bottomSheetPieDate;
+    private static View targetThreeHolder;
+    public static View mainLayout;
     private static RecyclerView recyclerView;
     private static RecyclerView favoriteRecyclerView;
 
@@ -83,14 +88,17 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String userTheme = preferences.getString("key_theme", "");
 
+
         if (userTheme.equals("Light")){
             setTheme(R.style.LightTheme);
-            System.out.println("LIGHT");
         }
         else if (userTheme.equals("Dark")){
-            System.out.println("DARK");
             setTheme(R.style.DarkTheme);
         }
+        else
+            setTheme(R.style.AppTheme);
+
+        ThemeColors.update(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -126,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
         }
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         ecoBottomText = findViewById(R.id.bottom_sheet_top_eco);
         dateBottomText = findViewById(R.id.bottom_sheet_top_date);
@@ -195,6 +203,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+
+        mainLayout = findViewById(R.id.main_parent_layout);
+
+        //TODO:
+        if (userTheme.equals("Light")){
+        }
+        else if (userTheme.equals("Dark")){
+            //mainLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
+        }
+
     }
 
     public void bottomSheet() {

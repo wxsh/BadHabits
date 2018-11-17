@@ -58,11 +58,12 @@ public class SettingsActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (sharedPreferences.equals("Light")){
-            setTheme(R.style.LightTheme);
+        String userTheme = sharedPreferences.getString("key_theme", "");
+        if (userTheme.equals("Light")){
+           setTheme(R.style.LightTheme);
         }
-        else if (sharedPreferences.equals("Dark")){
-            setTheme(R.style.DarkTheme);
+        else if (userTheme.equals("Dark")){
+           setTheme(R.style.DarkTheme);
         }
 
         super.onCreate(savedInstanceState);
@@ -76,8 +77,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         String currency = sharedPref.getString
                 (SettingsActivity.KEY_PREF_CURRENCY, "");
-
-        Toast.makeText(this, currency, Toast.LENGTH_SHORT).show();
 
 
     }
