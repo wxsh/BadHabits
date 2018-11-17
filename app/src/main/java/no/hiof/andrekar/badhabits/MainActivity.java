@@ -400,6 +400,7 @@ public class MainActivity extends AppCompatActivity {
                 habits.add((DateHabit) habit);
                 adapter.notifyItemInserted(habits.size());
                 favAdapter.notifyItemInserted(habits.size());
+                favAdapter.notifyDataSetChanged();
                 if(save) {
                     saveData.saveData(habit, 2);
                 }
@@ -407,6 +408,7 @@ public class MainActivity extends AppCompatActivity {
                 habits.add((EconomicHabit) habit);
                 adapter.notifyItemInserted(habits.size());
                 favAdapter.notifyItemInserted(habits.size());
+                favAdapter.notifyDataSetChanged();
                 if(save) {
                     saveData.saveData(habit, 1);
                 }

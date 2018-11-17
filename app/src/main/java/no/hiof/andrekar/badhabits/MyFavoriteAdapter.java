@@ -95,6 +95,10 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
     @Override
         public void onBindViewHolder(final MyFavoriteAdapter.ViewHolder holder, final int position) {
 
+        if(position == 0) {
+            mHaveFavorite = Habit.getHaveFavorite();
+        }
+
         fav = Habit.getNumFavourites();
 
 
