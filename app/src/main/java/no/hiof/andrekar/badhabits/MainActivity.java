@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_refresh) {
-            resizeFavs();
+            updateRecyclerView();
         }
 
         return super.onOptionsItemSelected(item);
@@ -667,18 +667,5 @@ public class MainActivity extends AppCompatActivity {
                             .start();
                 }
             });
-        }
-
-        public static void resizeFavs() {
-            for (int i = 0; i < Habit.habits.size(); i++) {
-                if(Habit.habits.get(i).getIsFavourite()) {
-                    try {
-                        favoriteRecyclerView.getLayoutManager().findViewByPosition(i).findViewById(R.id.card_view).setLayoutParams(new RelativeLayout.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT));
-                        Log.d("Resize", ((TextView) favoriteRecyclerView.getLayoutManager().findViewByPosition(i).findViewById(R.id.fav_habit_name)).getText().toString());
-                    } catch (Exception e ) {
-
-                    }
-                }
-            }
         }
 }
