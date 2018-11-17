@@ -103,6 +103,7 @@ public class SaveData  {
                                 } else {
                                     MainActivity.adapter.addP(Habit.habits.size());
                                 }
+                                MainActivity.favAdapter.notifyDataSetChanged();
                                 Log.d(TAG, "Adding habit");
                             }
                             if(!animate) {
@@ -132,6 +133,7 @@ public class SaveData  {
                                 } else {
                                     MainActivity.adapter.addP(Habit.habits.size());
                                 }
+                                MainActivity.favAdapter.notifyDataSetChanged();
                             }
                             if(!animate) {
                                 //MainActivity.updateRecyclerView(false, true, true);
@@ -143,6 +145,7 @@ public class SaveData  {
                     }
                 });
                 MainActivity.setRefreshing();
+
         }
 
 

@@ -94,23 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String userTheme = preferences.getString("key_theme", "");
-        context = getBaseContext();
-
-
-        if (userTheme.equals("Light")){
-            setTheme(R.style.LightTheme);
-        }
-        else if (userTheme.equals("Dark")){
-            setTheme(R.style.DarkTheme);
-        }
-        else
-            setTheme(R.style.AppTheme);
-
-        ThemeColors.update(this);
-
         super.onCreate(savedInstanceState);
+        themefunc();
         setContentView(R.layout.activity_main);
 
         if(mDatabase == null) {
@@ -217,12 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
         mainLayout = findViewById(R.id.main_parent_layout);
 
-        //TODO:
-        if (userTheme.equals("Light")){
-        }
-        else if (userTheme.equals("Dark")){
-            //mainLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
-        }
+
 
     }
 
@@ -670,5 +650,30 @@ public class MainActivity extends AppCompatActivity {
                             .start();
                 }
             });
+        }
+
+        private void themefunc() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String userTheme = preferences.getString("key_theme", "");
+            context = getBaseContext();
+
+            if (userTheme.equals("Light")){
+                setTheme(R.style.LightTheme);
+            }
+            else if (userTheme.equals("Dark")){
+                setTheme(R.style.DarkTheme);
+            }
+            else
+                setTheme(R.style.AppTheme);
+
+
+            ThemeColors.update(this);
+
+            //TODO:
+            if (userTheme.equals("Light")){
+            }
+            else if (userTheme.equals("Dark")){
+                //mainLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
+            }
         }
 }
