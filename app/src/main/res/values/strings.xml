@@ -44,5 +44,8 @@
     <string name="favorites_be_displayed">Here will your favorites be displayed</string>
     <string name="days">days</string>
     <string name="habit">Habit</string>
+    <string name="add_test_habits">Add test habits</string>
+    <string name="revmove_all_habits">Revmove all habits</string>
+    <string name="update">Update</string>
 
 </resources>

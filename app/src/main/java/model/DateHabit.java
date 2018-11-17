@@ -41,7 +41,7 @@ public class DateHabit extends Habit {
         if (Long.valueOf(dateGoalL) > 0) {
             return dateGoal + " Remaining";
         }
-        else return "Mål nådd";
+        else return "Goal achieved";
     }
 
     @Exclude

@@ -11,17 +11,17 @@
     <item
         android:id="@+id/action_populate"
         android:orderInCategory="100"
-        android:title="Legg til testvaner"
+        android:title="@string/add_test_habits"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_remove"
         android:orderInCategory="100"
-        android:title="Fjern alle vaner"
+        android:title="@string/revmove_all_habits"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_refresh"
         android:orderInCategory="100"
-        android:title="Oppdater"
+        android:title="@string/update"
         app:showAsAction="never" />
 </menu>
 
