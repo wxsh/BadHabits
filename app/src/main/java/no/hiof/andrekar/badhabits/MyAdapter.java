@@ -129,6 +129,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                     //Collections.sort(Habit.habits, Habit.HabitComparator);
                     notifyItemChanged(position);
                     MainActivity.favAdapter.notifyItemChanged(position);
+                    MainActivity.favAdapter.updateFavs();
+                    MainActivity.favAdapter.notifyDataSetChanged();
                 }
             });
         }
