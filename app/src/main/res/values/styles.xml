@@ -27,6 +27,8 @@
         <item name="android:background">@color/colorPrimaryDark</item>
         <item name="android:colorBackground">@color/colorPrimaryDark</item>
 
+        <item name="editTextColor">@color/secondaryTextColorDark</item>
+
     </style>
 
     <style name="LightTheme" parent="Theme.AppCompat.Light">

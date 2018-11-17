@@ -68,8 +68,13 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             else if (userTheme.equals("Dark")){
                 holder.cardView.setCardBackgroundColor(mContext.getResources().getColor(ThemeColors.COLOR_ACENT));
                 holder.habitName.setBackgroundResource(ThemeColors.COLOR_ACENT);
+                holder.habitName.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+
                 holder.habitGoal.setBackgroundResource(ThemeColors.COLOR_ACENT);
+                holder.habitGoal.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+
                 holder.habitDescription.setBackgroundResource(ThemeColors.COLOR_ACENT);
+                holder.habitDescription.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
                 //holder.habitGoal.setTextColor(R.attr.colorPrimary);
 
                 //holder.cardView.setBackgroundColor(mContext.getResources().getColor(R.color.primaryColorDark));

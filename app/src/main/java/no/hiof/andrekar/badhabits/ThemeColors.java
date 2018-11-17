@@ -12,7 +12,7 @@ import java.util.jar.Attributes;
 
 public class ThemeColors {
 
-    public static int COLOR_PRIMARY, COLOR_PRIMARY_DARK, COLOR_ACENT, WINDOW_BACKGROUND, PRIMARY_TEXT_COLOR_BLACK;
+    public static int COLOR_PRIMARY, COLOR_PRIMARY_DARK, COLOR_ACENT, EDIT_TEXT_COLOR, PRIMARY_TEXT_COLOR_BLACK;
 
     private static ThemeColors single_instance = null;
     private static Context mContext;
@@ -36,6 +36,12 @@ public class ThemeColors {
             int[] attr = {R.attr.colorAccent};
             TypedArray ta = context.obtainStyledAttributes(attr);
             COLOR_ACENT = ta.getResourceId(0, android.R.color.holo_red_light);
+            ta.recycle();
+        }
+        {
+            int[] attr = {R.attr.editTextColor};
+            TypedArray ta = context.obtainStyledAttributes(attr);
+            EDIT_TEXT_COLOR = ta.getResourceId(0, android.R.color.holo_red_light);
             ta.recycle();
         }
     }
@@ -65,6 +71,12 @@ public class ThemeColors {
             int[] attr = {R.attr.colorAccent};
             TypedArray ta = context.obtainStyledAttributes(attr);
             COLOR_ACENT = ta.getResourceId(0, android.R.color.holo_red_light);
+            ta.recycle();
+        }
+        {
+            int[] attr = {R.attr.editTextColor};
+            TypedArray ta = context.obtainStyledAttributes(attr);
+            EDIT_TEXT_COLOR = ta.getResourceId(0, android.R.color.holo_red_light);
             ta.recycle();
         }
     }

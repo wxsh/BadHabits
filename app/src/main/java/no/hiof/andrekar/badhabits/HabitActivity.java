@@ -90,6 +90,13 @@ public class HabitActivity extends AppCompatActivity {
         //Slide slide = TransitionInflater.from(this).inflateTransition(R.transition.slide_and_changebounds);
         //getWindow().setExitTransition(slide);
 
+        View parentView = findViewById(R.id.activity_habit_view);
+        if (userTheme.equals("Light")){
+        }
+        else if (userTheme.equals("Dark")){
+            parentView.setBackgroundColor(getResources().getColor(ThemeColors.COLOR_PRIMARY));
+        }
+
         dateEditText = findViewById(R.id.newHabit_startDate);
         findviews();
 
