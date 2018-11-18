@@ -450,6 +450,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             adapter.notifyItemRangeRemoved(0, habits.size());
             favAdapter.notifyItemRangeRemoved(0, habits.size());
             habits.clear();
+            updateBottomSheet();
         }
 
         public static void updateRecyclerView(){
@@ -510,6 +511,13 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             ArrayList<PieEntry> entriesEco = new ArrayList<>();
             ArrayList<PieEntry> entriesDate = new ArrayList<>();
 
+            //Currency from sharedPrefs
+            SharedPreferences sharedPref =
+                    PreferenceManager.getDefaultSharedPreferences(context);
+
+            String currency = sharedPref.getString
+                    (SettingsActivity.KEY_PREF_CURRENCY, "");
+
 
             for (Habit habit: habits) {
                 if (habit instanceof EconomicHabit) {
@@ -520,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     }
                     //totalSaved += ((EconomicHabit) habit).getProgress();
                     failedTotal += (((EconomicHabit) habit).getFailedTotal());
-                    ecoBottomText.setText("Left for goals: " + Math.abs(totalSaved)) ;
+                    ecoBottomText.setText("Left for goals: " + Math.abs(totalSaved) + " " + currency) ;
                     if(failedTotal > 0){
                         failedTotalText.setText("Total spent: " + failedTotal);
                     } else {
