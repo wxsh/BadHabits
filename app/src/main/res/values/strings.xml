@@ -45,7 +45,8 @@
     <string name="days">days</string>
     <string name="habit">Habit</string>
     <string name="add_test_habits">Add test habits</string>
-    <string name="revmove_all_habits">Revmove all habits</string>
+    <string name="remove_all_habits">Remove all habits</string>
     <string name="update">Update</string>
+    <string name="action_sort">Sort</string>
 
 </resources>

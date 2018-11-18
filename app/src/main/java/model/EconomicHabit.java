@@ -59,6 +59,9 @@ public class EconomicHabit extends Habit {
         DecimalFormat df = new DecimalFormat("#######.##");
         float dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
         float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()) - this.getFailedTotal());
+        int temp = (int)(100*saved);
+        saved = ((float)temp/100);
+
         if (saved < 0) {
             return saved;
         }

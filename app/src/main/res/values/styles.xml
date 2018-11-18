@@ -17,8 +17,9 @@
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/primaryLightColorDark</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="actionBarStyle">@style/Theme.MyApp.ActionBar</item>
+
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/secondaryTextColorDark</item>
         <item name="android:editTextColor">@color/primaryColor</item>
@@ -28,7 +29,6 @@
         <item name="android:colorBackground">@color/colorPrimaryDark</item>
 
         <item name="editTextColor">@color/secondaryTextColorDark</item>
-
     </style>
 
     <style name="LightTheme" parent="Theme.AppCompat.Light">

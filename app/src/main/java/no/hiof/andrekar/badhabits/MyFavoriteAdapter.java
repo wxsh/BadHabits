@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
@@ -36,20 +37,24 @@ import model.SaveData;
 
 public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.ViewHolder>{
 
-        private static final String TAG = "RecyclerViewAdapter";
+    private static final String TAG = "RecyclerViewAdapter";
 
     private String failedAmount = "";
+
+    public int fav = 0;
 
 
     private Context mContext;
 
-    private boolean mHaveFavorite;
+        private boolean mHaveFavorite;
+        private Point size;
+        private ViewHolder holder;
 
     private SharedPreferences sharedPref;
 
     public MyFavoriteAdapter(Context context) {
             mContext = context;
-        sharedPref =
+            sharedPref =
                 PreferenceManager.getDefaultSharedPreferences(mContext);
         }
 
@@ -84,15 +89,17 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             return holder;
         }
 
-        //DONE: fix some bugs, like clickable when empty
+        //TODO: fix some bugs, like clickable when empty
         //DONE: Empty item view does not show if you remove the last favourite.
 
-        @Override
+    @Override
         public void onBindViewHolder(final MyFavoriteAdapter.ViewHolder holder, final int position) {
 
-        if (position == 0){
+        if(position == 0) {
             mHaveFavorite = Habit.getHaveFavorite();
         }
+
+        fav = Habit.getNumFavourites();
 
 
         String currency = sharedPref.getString
@@ -115,25 +122,26 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                 display.getSize(size);
 
                 if (!Habit.habits.get(position).getIsFavourite()) {
-
-
                     holder.itemView.setVisibility(View.GONE);
                     holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                 } else {
                     holder.itemView.setVisibility(View.VISIBLE);
-                    if (Habit.getNumFavourites() == 1) {
+                    //holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    holder.habitName.setWidth((int)(size.x/1.3) );
+
+
+                    if (fav == 1) {
                         holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                         holder.habitName.setWidth((int)(size.x/1.3) );
-                    } else if (Habit.getNumFavourites() == 2) {
+                    } else if (fav == 2) {
                         holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams((int)(size.x /1.5), ViewGroup.LayoutParams.MATCH_PARENT));
                         holder.habitName.setWidth((int)(holder.itemView.getLayoutParams().width/1.5) );
-                    } else if (Habit.getNumFavourites() >= 3) {
+                    } else if (fav >= 3) {
                         holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams((int)(size.x /2.2), ViewGroup.LayoutParams.MATCH_PARENT));
                         holder.habitName.setWidth((int)(holder.itemView.getLayoutParams().width/1.7) );
                     }
+                    // */
                     holder.habitName.setText(Habit.habits.get(position).getTitle().toString());
-
-
 
                     holder.habitDescription.setText(Habit.habits.get(position).getDescription().toString());
 
@@ -180,8 +188,12 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                                 saveData.saveData(Habit.habits.get(position), 1);
                             }
 
-                            Collections.sort(Habit.habits, Habit.HabitComparator);
-                            MainActivity.updateRecyclerView();
+                            //Collections.sort(Habit.habits, Habit.HabitComparator);
+                            MainActivity.adapter.notifyItemChanged(position);
+                            //Collections.sort(Habit.habits, Habit.FavComparator_Help);
+                            MainActivity.refreshUi();
+                            MainActivity.favAdapter.updateFavs();
+                            MainActivity.favAdapter.notifyDataSetChanged();
                         }
                     });
 
@@ -206,6 +218,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                                         habit.setFailDate(new Date().getTime());
                                         saveData.saveData(Habit.habits.get(position), 1);
                                         notifyDataSetChanged();
+                                        MainActivity.updateBottomSheet();
                                     }
                                 });
                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -247,16 +260,18 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     });
                 }
             }
-            else if (position == 0) {
+            //else if (position == 0) {
+            else {
                 holder.parentLayout.setClickable(false);
-                holder.emptyFav.setVisibility(View.VISIBLE);
-                holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                holder.emptyFav.setVisibility(View.GONE);
+                holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0,0));
                 holder.favoriteButton.setVisibility(View.GONE);
                 holder.habitDescription.setVisibility(View.GONE);
                 holder.habitGoal.setVisibility(View.GONE);
                 holder.habitName.setVisibility(View.GONE);
                 holder.failedButton.setVisibility(View.GONE);
             }
+            /*
             else {
                 holder.emptyFav.setVisibility(View.GONE);
                 holder.favoriteButton.setVisibility(View.GONE);
@@ -267,10 +282,11 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                 holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
 
             }
+            //*/
         }
 
 
-        @Override
+    @Override
         public int getItemCount() {
             return Habit.habits.size();
         }
@@ -304,5 +320,12 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             }
         }
 
+        public void add(int pos) {
+            notifyItemInserted(pos);
+        }
 
+    public void updateFavs(){
+        fav = Habit.getNumFavourites();
+        mHaveFavorite = Habit.getHaveFavorite();
+    }
 }

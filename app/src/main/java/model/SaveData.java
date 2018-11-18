@@ -82,7 +82,11 @@ public class SaveData  {
         final String TAG = "Firestoreread";
         ecoHabitsOk = false;
         dateHabitsOk = false;
-        Habit.habits.clear();
+        if (Habit.habits.size() > 0) {
+            Habit.habits.clear();
+            MainActivity.adapter.notifyDataSetChanged();
+            MainActivity.favAdapter.notifyDataSetChanged();
+        }
         db.collection(fbAuth.getUid()).document("habits").collection("DateHabits")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -94,13 +98,15 @@ public class SaveData  {
                                 DateHabit tempHabit = document.toObject(DateHabit.class);
                                 Habit habit = (DateHabit) tempHabit;
                                 Habit.habits.add(habit);
+                                if(habit.getIsFavourite()) {
+                                    MainActivity.favAdapter.notifyDataSetChanged();
+                                } else {
+                                    MainActivity.adapter.addP(Habit.habits.size());
+                                }
+                                MainActivity.favAdapter.notifyDataSetChanged();
                                 Log.d(TAG, "Adding habit");
                             }
-                            if(!animate) {
-                                MainActivity.updateRecyclerView(false, true, true);
-                            } else {
-                                MainActivity.updateRecyclerView();
-                            }
+                            MainActivity.refreshUi();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -118,17 +124,21 @@ public class SaveData  {
                                 Habit habit = (EconomicHabit) tempHabit;
                                 Habit.habits.add(habit);
                                 Log.d(TAG, "Adding habit");
+                                if(habit.getIsFavourite()) {
+                                    MainActivity.favAdapter.notifyDataSetChanged();
+                                } else {
+                                    MainActivity.adapter.addP(Habit.habits.size());
+                                }
+                                MainActivity.favAdapter.notifyDataSetChanged();
                             }
-                            if(!animate) {
-                                MainActivity.updateRecyclerView(false, true, true);
-                            } else {
-                                MainActivity.updateRecyclerView();
-                            }                        } else {
+                            MainActivity.refreshUi();
+                        } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
                 MainActivity.setRefreshing();
+
         }
 
 
