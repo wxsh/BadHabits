@@ -31,7 +31,6 @@ public class Habit {
     //DONE: make this list create itself from stored files
     public static ArrayList<Habit> habits = new ArrayList<Habit>();
 
-
     //We need a title and description for our main class.
     private String title;
     private String description;
