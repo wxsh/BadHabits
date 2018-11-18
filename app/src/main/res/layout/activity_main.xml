@@ -44,6 +44,7 @@
         app:layout_anchor="@id/bottom_sheet"
         app:layout_anchorGravity="top|end"
         app:srcCompat="@android:drawable/ic_input_add"
+        android:tint="@color/fabTint"
         />
 
 </android.support.design.widget.CoordinatorLayout>
