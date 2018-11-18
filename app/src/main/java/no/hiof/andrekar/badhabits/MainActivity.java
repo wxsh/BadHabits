@@ -391,11 +391,13 @@ public class MainActivity extends AppCompatActivity {
         Habit sodaHabit = new EconomicHabit("Drink less soda", "Stop drinking soda, it is not good for you, and it is expensive", (date.getTime() - (dayms*15)), 10, 500, 20, true);
         Habit poop = new EconomicHabit("Smokes", "Stop with smoking, use nicotine gum instead", (date.getTime() - (dayms*4)), 10, 100, 100, false);
         Habit scoop = new DateHabit("Having fun", "Stop having fun", (date.getTime() - (dayms*15)), 60, false);
+        Habit date2 = new DateHabit("Stop playing video games", "They are ruining your life", (date.getTime() - (dayms*12)), 20, false);
 
         testHabits.add((EconomicHabit) gumHabit);
         testHabits.add((EconomicHabit) sodaHabit);
         testHabits.add((EconomicHabit) poop);
         testHabits.add((DateHabit) scoop);
+        testHabits.add((DateHabit) date2);
         SaveData saveData = new SaveData();
 
         for (Habit habit : testHabits) {
