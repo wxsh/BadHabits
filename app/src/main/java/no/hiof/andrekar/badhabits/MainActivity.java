@@ -1,11 +1,12 @@
 package no.hiof.andrekar.badhabits;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -17,8 +18,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -62,6 +61,7 @@ import model.DateHabit;
 import model.EconomicHabit;
 import model.Habit;
 
+import static android.app.NotificationChannel.DEFAULT_CHANNEL_ID;
 import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity {
@@ -98,10 +98,15 @@ public class MainActivity extends AppCompatActivity {
         else
             setTheme(R.style.AppTheme);
 
-        ThemeColors.update(this);
+        GlobalConstants.update(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+
+        //Create serviceChannel and start service
+        createNotificationChannel();
+        Intent serviceIntent = new Intent(MainActivity.this, RSSPullService.class);
+        startService(serviceIntent);
 
         if(mDatabase == null) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -214,7 +219,29 @@ public class MainActivity extends AppCompatActivity {
             //mainLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
         }
 
+
     }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(GlobalConstants.CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = (NotificationManager)
+                    getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+
+        }
+
+    }
+
 
     public void bottomSheet() {
         // get the bottom sheet view

@@ -47,5 +47,7 @@
     <string name="add_test_habits">Add test habits</string>
     <string name="revmove_all_habits">Revmove all habits</string>
     <string name="update">Update</string>
+    <string name="channel_name">NOT_CHANNEL</string>
+    <string name="channel_description">notification channel</string>
 
 </resources>

@@ -6,11 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.v7.preference.EditTextPreference;
-import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import model.SaveData;
 
@@ -145,7 +141,7 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
             }else if (key.equals(SettingsActivity.KEY_PREF_THEME)) {
                 Toast.makeText(getActivity(), "Restart app", Toast.LENGTH_LONG).show();
                 preference.setSummary(sharedPreferences.getString(key,""));
-                ThemeColors.update(getContext());
+                GlobalConstants.update(getContext());
             }
             else
             preference.setSummary(sharedPreferences.getString(key,""));

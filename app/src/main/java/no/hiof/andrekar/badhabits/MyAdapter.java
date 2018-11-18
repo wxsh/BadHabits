@@ -3,25 +3,18 @@ package no.hiof.andrekar.badhabits;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 
 import model.DateHabit;
 import model.EconomicHabit;
@@ -55,11 +48,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
         }
         else if (userTheme.equals("Dark")){
-            holder.habitName.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+            holder.habitName.setTextColor(mContext.getResources().getColor(GlobalConstants.EDIT_TEXT_COLOR));
 
-            holder.habitGoal.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+            holder.habitGoal.setTextColor(mContext.getResources().getColor(GlobalConstants.EDIT_TEXT_COLOR));
 
-            holder.habitDescription.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+            holder.habitDescription.setTextColor(mContext.getResources().getColor(GlobalConstants.EDIT_TEXT_COLOR));
             //holder.habitGoal.setTextColor(R.attr.colorPrimary);
 
             //holder.cardView.setBackgroundColor(mContext.getResources().getColor(R.color.primaryColorDark));

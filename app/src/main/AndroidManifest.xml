@@ -41,6 +41,9 @@
         <activity android:name=".ShowHabitActivity"
             android:label="Habit details"
             android:parentActivityName=".MainActivity"/>
+        <service
+            android:name=".RSSPullService"
+            android:exported="false"/>
     </application>
 
 </manifest>
