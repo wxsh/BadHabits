@@ -336,8 +336,18 @@ public class MainActivity extends AppCompatActivity {
             updateRecyclerView();
             refreshUi();
         }
-        if (id == R.id.action_sort) {
+        if (id == R.id.action_SortMenuAlph) {
             Collections.sort(Habit.habits, Habit.HabitComparator);
+            favAdapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0, Habit.habits.size());
+        }
+        if (id == R.id.action_SortMenuRemain) {
+            Collections.sort(Habit.habits, Habit.HabitComparatorGoal);
+            favAdapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0, Habit.habits.size());
+        }
+        if (id == R.id.action_SortMenuType) {
+            Collections.sort(Habit.habits, Habit.HabitComparatorType);
             favAdapter.notifyDataSetChanged();
             adapter.notifyItemRangeChanged(0, Habit.habits.size());
         }
@@ -381,11 +391,20 @@ public class MainActivity extends AppCompatActivity {
         Habit sodaHabit = new EconomicHabit("Drink less soda", "Stop drinking soda, it is not good for you, and it is expensive", (date.getTime() - (dayms*15)), 10, 500, 20, true);
         Habit poop = new EconomicHabit("Smokes", "Stop with smoking, use nicotine gum instead", (date.getTime() - (dayms*4)), 10, 100, 100, false);
         Habit scoop = new DateHabit("Having fun", "Stop having fun", (date.getTime() - (dayms*15)), 60, false);
+        Habit date2 = new DateHabit("Stop playing video games", "They are ruining your life", (date.getTime() - (dayms*12)), 20, false);
+        date2.setFailureTimes(3);
+        date2.setFailDate(date.getTime()-(dayms*7));
+        scoop.setFailureTimes(6);
+        scoop.setFailDate(date.getTime()-(dayms*4));
+        sodaHabit.setFailDate(date.getTime() - (dayms*3));
+        ((EconomicHabit) sodaHabit).setFailedTotal(100);
+
 
         testHabits.add((EconomicHabit) gumHabit);
         testHabits.add((EconomicHabit) sodaHabit);
         testHabits.add((EconomicHabit) poop);
         testHabits.add((DateHabit) scoop);
+        testHabits.add((DateHabit) date2);
         SaveData saveData = new SaveData();
 
         for (Habit habit : testHabits) {

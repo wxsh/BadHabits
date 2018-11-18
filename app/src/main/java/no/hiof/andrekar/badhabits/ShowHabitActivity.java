@@ -146,7 +146,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             failText.setVisibility(View.GONE);
         } else {
             //DONE: Format this as "Days since last fail, maybe?"
-            failedView.setText(Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS)));
+            failedView.setText(Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS)) + " " + getString(R.string.ecohabitFail_trailing));
         }
 
         setTitle(Habit.habits.get(currentNumber).getTitle());

@@ -8,8 +8,19 @@
         android:orderInCategory="50"
         android:title="@string/action_sort"
         android:icon="@drawable/ic_sort"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+            android:id="@+id/action_SortMenuAlph"
+            android:title="Alphabetically" />
+            <item
+                android:id="@+id/action_SortMenuRemain"
+                android:title="By remaining" />
+            <item
+                android:id="@+id/action_SortMenuType"
+                android:title="By Habit Type" />
+        </menu>
+    </item>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
