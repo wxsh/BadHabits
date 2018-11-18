@@ -249,14 +249,16 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                         break;  
                     case BottomSheetBehavior.STATE_EXPANDED: {
                         //DO stuff when expanded
+                        btnBottomSheet.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_more));
                         bottomSheetPieEco.setVisibility(View.VISIBLE);
                         bottomSheetPieDate.setVisibility(View.VISIBLE);
-                        bottomSheetPieEco.animateXY(1500, 1500);
-                        bottomSheetPieDate.animateXY(1500, 1500);
+                        bottomSheetPieEco.animateXY(500, 500);
+                        bottomSheetPieDate.animateXY(500, 500);
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
                         //DO stuff when collapsed
+                        btnBottomSheet.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_less));
                         bottomSheetPieEco.setVisibility(View.INVISIBLE);
                         bottomSheetPieDate.setVisibility(View.INVISIBLE);
                     }
