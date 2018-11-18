@@ -48,5 +48,6 @@
     <string name="remove_all_habits">Remove all habits</string>
     <string name="update">Update</string>
     <string name="action_sort">Sort</string>
+    <string name="ecohabitFail_trailing">day streak</string>
 
 </resources>
