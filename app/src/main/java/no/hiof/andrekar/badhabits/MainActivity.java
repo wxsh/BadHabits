@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -30,9 +31,11 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
+import android.view.animation.Transformation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -331,6 +334,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (id == R.id.action_refresh) {
             updateRecyclerView();
+            refreshUi();
         }
         if (id == R.id.action_sort) {
             Collections.sort(Habit.habits, Habit.HabitComparator);
@@ -349,7 +353,9 @@ public class MainActivity extends AppCompatActivity {
         favoriteRecyclerView.setAdapter(favAdapter);
         favoriteRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         favoriteRecyclerView.setHasFixedSize(true);
-
+        if(!Habit.getHaveFavorite()) {
+            favoriteRecyclerView.setLayoutParams(new ConstraintLayout.LayoutParams(0,0));
+        }
 
         recyclerView = findViewById(R.id.recycler_view);
         adapter = new MyAdapter(this);
@@ -685,4 +691,34 @@ public class MainActivity extends AppCompatActivity {
                 //mainLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
             }
         }
+
+        public static void refreshUi() {
+            final int Height = 350;
+            if (Habit.getNumFavourites() == 0 && (favoriteRecyclerView.getLayoutParams().height != 0)) {
+                Animation a = new Animation() {
+                    @Override
+                    protected void applyTransformation(float interpolatedTime, Transformation t) {
+                        ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
+                        params.height = (int) (Height - (Height * interpolatedTime));
+                        favoriteRecyclerView.setLayoutParams(params);
+                    }
+                };
+                a.setDuration(500);
+                favoriteRecyclerView.startAnimation(a);
+            } else {
+                if (favoriteRecyclerView.getLayoutParams().height == 0) {
+                    Animation a = new Animation() {
+                        @Override
+                        protected void applyTransformation(float interpolatedTime, Transformation t) {
+                            ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
+                            params.height = (int) ((Height * interpolatedTime));
+                            favoriteRecyclerView.setAlpha(1 * interpolatedTime);
+                            favoriteRecyclerView.setLayoutParams(params);
+                        }
+                    };
+                    a.setDuration(500);
+                    favoriteRecyclerView.startAnimation(a);
+                }
+            }
+        };
 }

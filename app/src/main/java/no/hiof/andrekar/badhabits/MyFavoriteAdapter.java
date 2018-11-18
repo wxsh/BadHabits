@@ -191,6 +191,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                             //Collections.sort(Habit.habits, Habit.HabitComparator);
                             MainActivity.adapter.notifyItemChanged(position);
                             //Collections.sort(Habit.habits, Habit.FavComparator_Help);
+                            MainActivity.refreshUi();
                             MainActivity.favAdapter.updateFavs();
                             MainActivity.favAdapter.notifyDataSetChanged();
                         }
@@ -259,9 +260,10 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     });
                 }
             }
-            else if (position == 0) {
+            //else if (position == 0) {
+            else {
                 holder.parentLayout.setClickable(false);
-                holder.emptyFav.setVisibility(View.VISIBLE);
+                holder.emptyFav.setVisibility(View.GONE);
                 holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 holder.favoriteButton.setVisibility(View.GONE);
                 holder.habitDescription.setVisibility(View.GONE);
@@ -269,6 +271,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                 holder.habitName.setVisibility(View.GONE);
                 holder.failedButton.setVisibility(View.GONE);
             }
+            /*
             else {
                 holder.emptyFav.setVisibility(View.GONE);
                 holder.favoriteButton.setVisibility(View.GONE);
@@ -279,6 +282,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                 holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
 
             }
+            //*/
         }
 
 
