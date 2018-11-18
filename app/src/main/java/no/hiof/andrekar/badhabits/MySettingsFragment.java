@@ -51,6 +51,8 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         Preference theme = findPreference(SettingsActivity.KEY_PREF_THEME);
         theme.setSummary(sharedPreferences.getString(SettingsActivity.KEY_PREF_THEME,""));
 
+
+
         Preference googlePref = (Preference) findPreference(SettingsActivity.KEY_PREF_GOOGLE);
         googlePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -58,6 +60,9 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
                 return true;
             }
         });
+        if (!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+            googlePref.setSummary(getString(R.string.settings_signed_in) + " " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        }
 
         Preference onboardPref = (Preference) findPreference(SettingsActivity.KEY_PREF_ONBOARD);
         onboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -165,13 +170,15 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
+                Preference googlePref = (Preference) findPreference(SettingsActivity.KEY_PREF_GOOGLE);
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user != null) {
                     //userIdTW.setText("Du er logget inn som " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    googlePref.setSummary("Signed in with "+FirebaseAuth.getInstance().getCurrentUser().getEmail());
                     SaveData saveData = new SaveData();
                     saveData.readFromFile();
                 } else {
-                    //userIdTW.setText("Error: sign in failed.");
+                    googlePref.setSummary("Something went wrong.");
                 }
                 // ...
             } else {

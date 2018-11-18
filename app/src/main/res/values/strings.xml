@@ -49,5 +49,6 @@
     <string name="update">Update</string>
     <string name="action_sort">Sort</string>
     <string name="ecohabitFail_trailing">day streak</string>
+    <string name="settings_signed_in">"Signed in as"</string>
 
 </resources>
