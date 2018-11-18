@@ -511,9 +511,14 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
             for (Habit habit: habits) {
                 if (habit instanceof EconomicHabit) {
-                    totalSaved += ((EconomicHabit) habit).getProgress();
+                    if (((EconomicHabit) habit).getProgress() < 0) {
+                        totalSaved += ((EconomicHabit) habit).getProgress();
+                    } else {
+                        totalSaved += 0;
+                    }
+                    //totalSaved += ((EconomicHabit) habit).getProgress();
                     failedTotal += (((EconomicHabit) habit).getFailedTotal());
-                    ecoBottomText.setText("Left for goals: " + totalSaved);
+                    ecoBottomText.setText("Left for goals: " + Math.abs(totalSaved)) ;
                     if(failedTotal > 0){
                         failedTotalText.setText("Total spent: " + failedTotal);
                     } else {
@@ -727,6 +732,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
         }
 
         public static void refreshUi() {
+            updateBottomSheet();
             final int Height = 350;
             if (!Habit.getHaveFavorite() && (favoriteRecyclerView.getLayoutParams().height != 0)) {
                 Animation a = new Animation() {
