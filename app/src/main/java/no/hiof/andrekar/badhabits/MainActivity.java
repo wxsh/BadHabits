@@ -336,8 +336,18 @@ public class MainActivity extends AppCompatActivity {
             updateRecyclerView();
             refreshUi();
         }
-        if (id == R.id.action_sort) {
+        if (id == R.id.action_SortMenuAlph) {
             Collections.sort(Habit.habits, Habit.HabitComparator);
+            favAdapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0, Habit.habits.size());
+        }
+        if (id == R.id.action_SortMenuRemain) {
+            Collections.sort(Habit.habits, Habit.HabitComparatorGoal);
+            favAdapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0, Habit.habits.size());
+        }
+        if (id == R.id.action_SortMenuType) {
+            Collections.sort(Habit.habits, Habit.HabitComparatorType);
             favAdapter.notifyDataSetChanged();
             adapter.notifyItemRangeChanged(0, Habit.habits.size());
         }
