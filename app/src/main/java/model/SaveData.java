@@ -106,11 +106,7 @@ public class SaveData  {
                                 MainActivity.favAdapter.notifyDataSetChanged();
                                 Log.d(TAG, "Adding habit");
                             }
-                            if(!animate) {
-                                //MainActivity.updateRecyclerView(false, true, true);
-                            } else {
-                                //MainActivity.updateRecyclerView();
-                            }
+                            MainActivity.refreshUi();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -135,11 +131,8 @@ public class SaveData  {
                                 }
                                 MainActivity.favAdapter.notifyDataSetChanged();
                             }
-                            if(!animate) {
-                                //MainActivity.updateRecyclerView(false, true, true);
-                            } else {
-                                //MainActivity.updateRecyclerView();
-                            }                        } else {
+                            MainActivity.refreshUi();
+                        } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }

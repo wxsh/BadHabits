@@ -192,11 +192,11 @@ public class MainActivity extends AppCompatActivity {
         //DONE: Implement this into habits model?
         Collections.sort(habits, Habit.HabitComparator);
 
+        initRecyclerView();
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             SaveData saveData = new SaveData();
             saveData.readFromFile();
             }
-        initRecyclerView();
         updateBottomSheet();
 
 
@@ -352,10 +352,7 @@ public class MainActivity extends AppCompatActivity {
         favAdapter = new MyFavoriteAdapter(this);
         favoriteRecyclerView.setAdapter(favAdapter);
         favoriteRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        favoriteRecyclerView.setHasFixedSize(true);
-        if(!Habit.getHaveFavorite()) {
-            favoriteRecyclerView.setLayoutParams(new ConstraintLayout.LayoutParams(0,0));
-        }
+        favoriteRecyclerView.setLayoutParams(new ConstraintLayout.LayoutParams(0,0));
 
         recyclerView = findViewById(R.id.recycler_view);
         adapter = new MyAdapter(this);
@@ -367,8 +364,10 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("Sharedpref", Boolean.toString(onboarding));
 
-        if (onboarding == false) {
-            populateData(false);
+        if (!onboarding) {
+            ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
+            params.height = 350;
+            favoriteRecyclerView.setLayoutParams(params);
             onBoard(findViewById(R.id.fab_addHabit));
         }
     }
@@ -411,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
         testHabits.clear();
         Collections.sort(Habit.habits, Habit.HabitComparator);
         favAdapter.notifyDataSetChanged();
+        refreshUi();
         }
 
         private void removeData() {
@@ -432,7 +432,7 @@ public class MainActivity extends AppCompatActivity {
             favAdapter.notifyDataSetChanged();
             updateBottomSheet();
             setRefreshing();
-            runLayoutAnimation(true);
+            //runLayoutAnimation(true);
         }
         public static void updateRecyclerView(boolean animation, boolean bottomsheet, boolean animatefav){
         adapter.notifyDataSetChanged();
@@ -442,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (animation)
         {
-            runLayoutAnimation(animatefav);
+            //runLayoutAnimation(animatefav);
         }
         setRefreshing();
         }
@@ -589,6 +589,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onBoard(final View view) {
+
+
             view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -603,15 +605,15 @@ public class MainActivity extends AppCompatActivity {
                             .build();
 
                     //View two = findViewById(R.id.favorite_recycler_view);
-                    View two = favoriteRecyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.fav_habit_goal);
+                    View two = findViewById(R.id.favorite_recycler_view);
 
                     int[] twoLocation = new int[2];
                     two.getLocationInWindow(twoLocation);
-                    float twoX = twoLocation[0] + two.getWidth() / 2f;
-                    float twoY = twoLocation[1] + two.getHeight() / 2f;
+                    float twoX = twoLocation[0] + 150;
+                    float twoY = twoLocation[1] + 150;
 
                     SimpleTarget secondTarget = new SimpleTarget.Builder(MainActivity.this)
-                            .setPoint(two)
+                            .setPoint(twoX, twoY)
                             .setShape(new Circle(250f))
                             .setTitle(getString(R.string.tutorial_main_title_favourite))
                             .setDescription(getString(R.string.tutorial_main_desc_favdisplay))
@@ -619,17 +621,21 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                    View three = recyclerView.getLayoutManager().findViewByPosition(2).findViewById(R.id.favoriteBtn);
+                    //View three = recyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.favoriteBtn);
+                    View three = findViewById(R.id.recycler_view);
+                    int[] threeLocation = new int[2];
+                    three.getLocationInWindow(threeLocation);
+                    float threeX = threeLocation[0] + 1015;
+                    float threeY = threeLocation[1] + 55;
 
-
-                    SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(three)
-                            .setShape(new Circle(50f))
+                    SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(threeX, threeY)
+                            .setShape(new Circle(100f))
                             .setTitle(getString(R.string.tutorial_main_title_favourite))
                             .setDescription(getString(R.string.tutorial_main_desc_favadd))
                             .build();
 
                     float fourX = 1025;
-                    float fourY = 135;
+                    float fourY = 125;
 
                     SimpleTarget fourthTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(fourX, fourY)
                             .setShape(new Circle(50f))
@@ -648,7 +654,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void onStarted() {
                                     Toast.makeText(MainActivity.this, "spotlight is started", Toast.LENGTH_SHORT)
                                             .show();
-                                    //populateData();
+                                    populateData(false);
                                 }
 
                                 @Override
@@ -658,8 +664,12 @@ public class MainActivity extends AppCompatActivity {
                                     SharedPreferences.Editor editor = sharedPref.edit();
                                     editor.putBoolean(SettingsActivity.KEY_PREF_ONBOARD, true);
                                     editor.commit();
+                                    ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
+                                    params.height = 0;
+                                    favoriteRecyclerView.setLayoutParams(params);
                                     SaveData saveData = new SaveData();
                                     saveData.readFromFile();
+
                                 }
                             })
                             .start();
@@ -694,7 +704,7 @@ public class MainActivity extends AppCompatActivity {
 
         public static void refreshUi() {
             final int Height = 350;
-            if (Habit.getNumFavourites() == 0 && (favoriteRecyclerView.getLayoutParams().height != 0)) {
+            if (!Habit.getHaveFavorite() && (favoriteRecyclerView.getLayoutParams().height != 0)) {
                 Animation a = new Animation() {
                     @Override
                     protected void applyTransformation(float interpolatedTime, Transformation t) {
@@ -705,7 +715,7 @@ public class MainActivity extends AppCompatActivity {
                 };
                 a.setDuration(500);
                 favoriteRecyclerView.startAnimation(a);
-            } else {
+            } else if (Habit.getHaveFavorite()){
                 if (favoriteRecyclerView.getLayoutParams().height == 0) {
                     Animation a = new Animation() {
                         @Override

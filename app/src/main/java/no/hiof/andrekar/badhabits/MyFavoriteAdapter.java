@@ -126,7 +126,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                     holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
                 } else {
                     holder.itemView.setVisibility(View.VISIBLE);
-                    holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    //holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                     holder.habitName.setWidth((int)(size.x/1.3) );
 
 
@@ -264,7 +264,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             else {
                 holder.parentLayout.setClickable(false);
                 holder.emptyFav.setVisibility(View.GONE);
-                holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                holder.itemView.setLayoutParams(new RelativeLayout.LayoutParams(0,0));
                 holder.favoriteButton.setVisibility(View.GONE);
                 holder.habitDescription.setVisibility(View.GONE);
                 holder.habitGoal.setVisibility(View.GONE);
