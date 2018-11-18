@@ -93,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
     private static RecyclerView favoriteRecyclerView;
     private static Context context;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -504,11 +502,12 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<PieEntry> entriesEco = new ArrayList<>();
             ArrayList<PieEntry> entriesDate = new ArrayList<>();
 
+
             for (Habit habit: habits) {
                 if (habit instanceof EconomicHabit) {
                     totalSaved += ((EconomicHabit) habit).getProgress();
                     failedTotal += (((EconomicHabit) habit).getFailedTotal());
-                    ecoBottomText.setText("Left for goals: " + totalSaved + "NOK");
+                    ecoBottomText.setText("Left for goals: " + totalSaved);
                     if(failedTotal > 0){
                         failedTotalText.setText("Total spent: " + failedTotal);
                     } else {
