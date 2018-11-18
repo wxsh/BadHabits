@@ -147,6 +147,54 @@ public class Habit {
         }
     };
 
+    public static Comparator<Habit> HabitComparatorGoal = new Comparator<Habit>() {
+        @Override
+        public int compare(Habit h2, Habit h1) {
+            int result = Boolean.compare(h1.getIsFavourite(), h2.getIsFavourite());
+            if (result == 0) {
+                // boolean values the same
+                // TODO implement Comparator for sorting by remaining.
+                if (h2 instanceof EconomicHabit && h1 instanceof EconomicHabit) {
+                    if (((EconomicHabit) h2).getProgress() > ((EconomicHabit) h1).getProgress()) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                } else if (h2 instanceof EconomicHabit && h1 instanceof DateHabit) {
+                    return -1;
+                } else if (h2 instanceof DateHabit && h1 instanceof EconomicHabit) {
+                    return 1;
+                } else if (h2 instanceof DateHabit && h1 instanceof DateHabit) {
+                    //Holy stringtrimming batman
+                    if (Integer.parseInt((((DateHabit) h2).getDateGoal().substring(0, ((DateHabit) h2).getDateGoal().indexOf(" ")))) > (Integer.parseInt((((DateHabit) h1).getDateGoal().substring(0, ((DateHabit) h1).getDateGoal().indexOf(" ")))))) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
+                else return 0;
+            }
+            return result;
+        }
+    };
+
+    public static Comparator<Habit> HabitComparatorType = new Comparator<Habit>() {
+        @Override
+        public int compare(Habit h2, Habit h1) {
+            int result = Boolean.compare(h1.getIsFavourite(), h2.getIsFavourite());
+            if (result == 0) {
+                if (h1 instanceof EconomicHabit && h2 instanceof DateHabit) {
+                    return 1;
+                } else if (h1 instanceof DateHabit && h2 instanceof EconomicHabit) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+            return result;
+        }
+    };
+
     public static long getDateDiff(long date1, long date2, TimeUnit timeUnit) {
         //TODO: Look into replacing this function? Seems to be one day off.
         long diffInMillis = date2 - date1;
