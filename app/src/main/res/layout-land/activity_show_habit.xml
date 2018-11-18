@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/show_habit_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".ShowHabitActivity">
+
+    <TextView
+        android:id="@+id/getStartTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/start"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/startTextView"
+        app:layout_constraintStart_toEndOf="@+id/startTextView"
+        app:layout_constraintTop_toTopOf="@+id/startTextView" />
+
+    <TextView
+        android:id="@+id/getProgressTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/days_without"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/progressTextView"
+        app:layout_constraintStart_toEndOf="@+id/progressTextView"
+        app:layout_constraintTop_toTopOf="@+id/progressTextView" />
+
+
+    <ImageView
+        android:id="@+id/failTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_minus_circle"
+        android:tint="@color/iconTint"
+        app:layout_constraintStart_toStartOf="@+id/progressTextView"
+        app:layout_constraintTop_toBottomOf="@+id/progressTextView" />
+
+    <TextView
+        android:id="@+id/getFailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/failedDate"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/failTextView"
+        app:layout_constraintStart_toEndOf="@+id/failTextView"
+        app:layout_constraintTop_toTopOf="@+id/failTextView" />
+
+
+    <TextView
+        android:id="@+id/getDescriptionTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/description"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/getGoalTextView" />
+
+    <TextView
+        android:id="@+id/getGoalTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/goal"
+        android:textColor="@color/black"
+
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <!--
+    <View
+
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/habit_description"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/habitTitleTextView" />
+       -->
+
+    <ImageButton
+        android:id="@+id/btn_habitDelete"
+        android:layout_width="41dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="TODO"
+        android:onClick="deleteHabit"
+        android:src="@drawable/ic_delete"
+        android:tint="@color/buttonTint"
+        app:layout_constraintStart_toEndOf="@+id/btn_habitEdit"
+        app:layout_constraintTop_toTopOf="@+id/btn_habitEdit" />
+
+    <ImageButton
+        android:id="@+id/btn_habitEdit"
+        android:layout_width="41dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_edit_pencil"
+        android:tint="@color/buttonTint"
+        app:layout_constraintStart_toEndOf="@+id/btn_habitFailed"
+        app:layout_constraintTop_toTopOf="@+id/btn_habitFailed" />
+
+    <ImageButton
+        android:id="@+id/btn_habitFailed"
+        android:layout_width="41dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_minus_circle"
+        android:tint="@color/buttonTint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteY="256dp" />
+
+    <ImageView
+        android:id="@+id/progressTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_flag_checkered"
+        android:tint="@color/iconTint"
+        app:layout_constraintStart_toStartOf="@+id/startTextView"
+        app:layout_constraintTop_toBottomOf="@+id/getStartTextView" />
+
+    <ImageView
+        android:id="@+id/startTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/ic_calendar_today"
+        android:tint="@color/iconTint"
+        app:layout_constraintStart_toStartOf="@+id/getDescriptionTextView"
+        app:layout_constraintTop_toBottomOf="@+id/getDescriptionTextView" />
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/detailChart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        app:layout_constraintGuide_percent="0.5" />
+
+
+</android.support.constraint.ConstraintLayout>

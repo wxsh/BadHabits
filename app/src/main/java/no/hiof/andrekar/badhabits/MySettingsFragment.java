@@ -138,10 +138,10 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
 
                 if(sharedPreferences.getString(key,"").equals("Registrier")){
                 System.out.println(key);
-                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).build(), 200);
+                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).setTheme(R.style.AppTheme).setLogo(R.mipmap.ic_launcher).build(), 200);
                 }
                 else if(sharedPreferences.getString(key,"").equals("Login")){
-                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), 200);
+                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(R.style.AppTheme).setLogo(R.mipmap.ic_launcher).build(), 200);
                 }
                 else {
                     preference.setSummary("Login with google");
