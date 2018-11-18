@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Layout;
 import android.util.Log;
 import android.view.Display;
@@ -75,7 +77,7 @@ import model.Habit;
 import static java.lang.Math.abs;
 import static model.Habit.habits;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.RecyclerItemTouchHelperListener {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -366,6 +368,10 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MyAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new rec_SwipeDelete(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
@@ -749,4 +755,50 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof MyAdapter.ViewHolder) {
+            // get the removed item name to display it in snack bar
+            String name = Habit.habits.get(viewHolder.getAdapterPosition()).getTitle();
+            int habitType = 0;
+
+            // backup of removed item for undo purpose
+            final Habit deletedHabit = Habit.habits.get(viewHolder.getAdapterPosition());
+            if (deletedHabit instanceof DateHabit) {
+                habitType = 2;
+            } else if (deletedHabit instanceof EconomicHabit) {
+                habitType = 1;
+            }
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            Habit.habits.remove(viewHolder.getAdapterPosition());
+            final SaveData saveData = new SaveData();
+            saveData.removeData(deletedHabit, habitType);
+            adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(recyclerView, name + " removed", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(deletedHabit instanceof DateHabit) {
+                        Habit.habits.add((DateHabit) deletedHabit);
+                        adapter.notifyItemInserted(Habit.habits.size());
+                        saveData.saveData(deletedHabit, 2);
+                    } else if (deletedHabit instanceof EconomicHabit) {
+                        Habit.habits.add((EconomicHabit) deletedHabit);
+                        adapter.notifyItemInserted(Habit.habits.size());
+                        saveData.saveData(deletedHabit, 1);
+                    }
+                    // undo is selected, restore the deleted item
+
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
+        }
+    }
 }
