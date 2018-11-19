@@ -82,6 +82,10 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 import static model.Habit.habits;
 
+//TODO: Verify days till finished maths (-65 with test dataset)
+//TODO: Verify days till finnished maths (44 with dataset, should be 51)
+
+
 public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.RecyclerItemTouchHelperListener {
 
     private FirebaseAuth mAuth;
@@ -321,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
         super.onResume();
         if(FirebaseAuth.getInstance().getCurrentUser() != null ) {
             updateRecyclerView(false, true, true);
+            refreshUi();
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
@@ -766,6 +771,8 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
         }
 
         public static void refreshUi() {
+
+        //TODO: Look into bug if
             updateBottomSheet();
             final int Height = 350;
             if (!Habit.getHaveFavorite() && (favoriteRecyclerView.getLayoutParams().height != 0)) {

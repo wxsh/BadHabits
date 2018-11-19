@@ -106,37 +106,38 @@ public class SaveData  {
                                 MainActivity.favAdapter.notifyDataSetChanged();
                                 Log.d(TAG, "Adding habit");
                             }
-                            MainActivity.refreshUi();
+                            db.collection(fbAuth.getUid()).document("habits").collection("EcoHabits")
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                                    EconomicHabit tempHabit = document.toObject(EconomicHabit.class);
+                                                    Habit habit = (EconomicHabit) tempHabit;
+                                                    Habit.habits.add(habit);
+                                                    Log.d(TAG, "Adding habit");
+                                                    if(habit.getIsFavourite()) {
+                                                        MainActivity.favAdapter.notifyDataSetChanged();
+                                                    } else {
+                                                        MainActivity.adapter.addP(Habit.habits.size());
+                                                    }
+                                                    MainActivity.favAdapter.notifyDataSetChanged();
+                                                }
+                                                //This is where our main reading process is finished.
+                                                MainActivity.refreshUi();
+                                            } else {
+                                                Log.d(TAG, "Error getting documents: ", task.getException());
+                                            }
+                                        }
+                                    });
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-        db.collection(fbAuth.getUid()).document("habits").collection("EcoHabits")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                EconomicHabit tempHabit = document.toObject(EconomicHabit.class);
-                                Habit habit = (EconomicHabit) tempHabit;
-                                Habit.habits.add(habit);
-                                Log.d(TAG, "Adding habit");
-                                if(habit.getIsFavourite()) {
-                                    MainActivity.favAdapter.notifyDataSetChanged();
-                                } else {
-                                    MainActivity.adapter.addP(Habit.habits.size());
-                                }
-                                MainActivity.favAdapter.notifyDataSetChanged();
-                            }
-                            MainActivity.refreshUi();
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+
                 MainActivity.setRefreshing();
 
         }
