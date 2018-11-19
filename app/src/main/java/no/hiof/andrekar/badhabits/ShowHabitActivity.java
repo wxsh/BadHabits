@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,6 +52,8 @@ import model.EconomicHabit;
 import model.Habit;
 import model.SaveData;
 
+import static model.Habit.habits;
+
 public class ShowHabitActivity extends AppCompatActivity {
 
     public static int currentNumber;
@@ -62,6 +65,15 @@ public class ShowHabitActivity extends AppCompatActivity {
     BarChart dateChart;
     SeekBar seekBarX, seekBarY;
     private final int months = 12;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 500 && resultCode == RESULT_OK) {
+            recreate();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -134,7 +146,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             failText.setVisibility(View.GONE);
         } else {
             //DONE: Format this as "Days since last fail, maybe?"
-            failedView.setText(Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS)));
+            failedView.setText(Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS)) + " " + getString(R.string.ecohabitFail_trailing));
         }
 
         setTitle(Habit.habits.get(currentNumber).getTitle());
@@ -189,10 +201,12 @@ public class ShowHabitActivity extends AppCompatActivity {
                 Intent intent = new Intent(getBaseContext(), HabitActivity.class);
                 intent.putExtra("TITLE", "Editing: " + Habit.habits.get(currentNumber).getTitle());
                 intent.putExtra("CURRENT_HABIT_INDEX", currentNumber);
-                startActivity(intent);
+                startActivityForResult(intent, 500);
                 //Snackbar.make(findViewById(android.R.id.content), "Not yet implemented", Snackbar.LENGTH_LONG).show();
             }
         });
+
+
 
         failedButton = findViewById(R.id.btn_habitFailed);
         failedButton.setOnClickListener(new View.OnClickListener() {

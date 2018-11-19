@@ -10,27 +10,43 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.graphics.Point;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Layout;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
+import android.view.animation.Transformation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,8 +81,9 @@ import model.EconomicHabit;
 import model.Habit;
 
 import static java.lang.Math.abs;
+import static model.Habit.habits;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.RecyclerItemTouchHelperListener {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -82,12 +99,14 @@ public class MainActivity extends AppCompatActivity {
     public static View mainLayout;
     private static RecyclerView recyclerView;
     private static RecyclerView favoriteRecyclerView;
+    private static Context context;
 
 
     public static AlarmManager mAlarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+<<<<<<<
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String userTheme = preferences.getString("key_theme", "");
 
@@ -103,7 +122,12 @@ public class MainActivity extends AppCompatActivity {
 
         GlobalConstants.update(this);
 
+=======
+
+>>>>>>>
         super.onCreate(savedInstanceState);
+        themefunc();
+        setContentView(R.layout.activity_main);
 
 
         //Create serviceChannel and start service
@@ -158,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
         bottomSheetPieDate = findViewById(R.id.chart_bottomSheetPieDate);
 
         bottomSheet();
-        updateBottomSheet();
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.recyclerSwipeContainer);
         // Setup refresh listener which triggers new data loading
@@ -202,13 +225,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //DONE: Implement this into habits model?
-        Collections.sort(Habit.habits, Habit.HabitComparator);
+        Collections.sort(habits, Habit.HabitComparator);
 
+        initRecyclerView();
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             SaveData saveData = new SaveData();
             saveData.readFromFile();
             }
-        initRecyclerView();
+        updateBottomSheet();
 
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -216,12 +240,6 @@ public class MainActivity extends AppCompatActivity {
 
         mainLayout = findViewById(R.id.main_parent_layout);
 
-        //TODO:
-        if (userTheme.equals("Light")){
-        }
-        else if (userTheme.equals("Dark")){
-            //mainLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
-        }
 
 
     }
@@ -293,14 +311,16 @@ public class MainActivity extends AppCompatActivity {
                         break;  
                     case BottomSheetBehavior.STATE_EXPANDED: {
                         //DO stuff when expanded
+                        btnBottomSheet.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_more));
                         bottomSheetPieEco.setVisibility(View.VISIBLE);
                         bottomSheetPieDate.setVisibility(View.VISIBLE);
-                        bottomSheetPieEco.animateXY(1500, 1500);
-                        bottomSheetPieDate.animateXY(1500, 1500);
+                        bottomSheetPieEco.animateXY(500, 500);
+                        bottomSheetPieDate.animateXY(500, 500);
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
                         //DO stuff when collapsed
+                        btnBottomSheet.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_less));
                         bottomSheetPieEco.setVisibility(View.INVISIBLE);
                         bottomSheetPieDate.setVisibility(View.INVISIBLE);
                     }
@@ -340,7 +360,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-
         updateRecyclerView(false, true, true);
     }
 
@@ -348,9 +367,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 500 && resultCode == RESULT_OK) {
-            SaveData saveData = new SaveData();
-            saveData.readFromFile(false);
-            updateRecyclerView(true, true, false);
+            adapter.notifyItemInserted(habits.size());
+            favAdapter.notifyItemInserted(habits.size());
         }
     }
 
@@ -380,6 +398,22 @@ public class MainActivity extends AppCompatActivity {
         }
         if (id == R.id.action_refresh) {
             updateRecyclerView();
+            refreshUi();
+        }
+        if (id == R.id.action_SortMenuAlph) {
+            Collections.sort(Habit.habits, Habit.HabitComparator);
+            favAdapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0, Habit.habits.size());
+        }
+        if (id == R.id.action_SortMenuRemain) {
+            Collections.sort(Habit.habits, Habit.HabitComparatorGoal);
+            favAdapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0, Habit.habits.size());
+        }
+        if (id == R.id.action_SortMenuType) {
+            Collections.sort(Habit.habits, Habit.HabitComparatorType);
+            favAdapter.notifyDataSetChanged();
+            adapter.notifyItemRangeChanged(0, Habit.habits.size());
         }
 
         return super.onOptionsItemSelected(item);
@@ -392,20 +426,26 @@ public class MainActivity extends AppCompatActivity {
         favAdapter = new MyFavoriteAdapter(this);
         favoriteRecyclerView.setAdapter(favAdapter);
         favoriteRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
+        favoriteRecyclerView.setLayoutParams(new ConstraintLayout.LayoutParams(0,0));
 
         recyclerView = findViewById(R.id.recycler_view);
         adapter = new MyAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new rec_SwipeDelete(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
+
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
 
         Log.d("Sharedpref", Boolean.toString(onboarding));
 
-        if (onboarding == false) {
-            populateData(false);
+        if (!onboarding) {
+            ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
+            params.height = 350;
+            favoriteRecyclerView.setLayoutParams(params);
             onBoard(findViewById(R.id.fab_addHabit));
         }
     }
@@ -413,45 +453,66 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateData(boolean save) {
         ArrayList<Habit> testHabits = new ArrayList<Habit>();
-        Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", new Date().getTime(), 10, 100, 10, false);
-        Habit sodaHabit = new DateHabit("Soda", "Stop drinking soda", new Date().getTime(), 10, true);
-        Habit poop = new EconomicHabit("Smokes", "Stop with smoking", new Date().getTime(), 10, 100, 10, false);
-        Habit scoop = new DateHabit("Having fun", "Stop having fun", new Date().getTime(), 10, false);
+        Date date = new Date();
+        long dayms = 86400000;
+        Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", (date.getTime() - (dayms*8)), 0, 800, 10, false);
+        Habit sodaHabit = new EconomicHabit("Drink less soda", "Stop drinking soda, it is not good for you, and it is expensive", (date.getTime() - (dayms*15)), 10, 500, 20, true);
+        Habit poop = new EconomicHabit("Smokes", "Stop with smoking, use nicotine gum instead", (date.getTime() - (dayms*4)), 10, 100, 100, false);
+        Habit scoop = new DateHabit("Having fun", "Stop having fun", (date.getTime() - (dayms*15)), 60, false);
+        Habit date2 = new DateHabit("Stop playing video games", "They are ruining your life", (date.getTime() - (dayms*12)), 20, false);
+        date2.setFailureTimes(3);
+        date2.setFailDate(date.getTime()-(dayms*7));
+        scoop.setFailureTimes(6);
+        scoop.setFailDate(date.getTime()-(dayms*4));
+        sodaHabit.setFailDate(date.getTime() - (dayms*3));
+        ((EconomicHabit) sodaHabit).setFailedTotal(100);
+
 
         testHabits.add((EconomicHabit) gumHabit);
-        testHabits.add((DateHabit) sodaHabit);
+        testHabits.add((EconomicHabit) sodaHabit);
         testHabits.add((EconomicHabit) poop);
         testHabits.add((DateHabit) scoop);
+        testHabits.add((DateHabit) date2);
         SaveData saveData = new SaveData();
 
         for (Habit habit : testHabits) {
             if (habit instanceof DateHabit) {
-                Habit.habits.add((DateHabit) habit);
+                habits.add((DateHabit) habit);
+                adapter.notifyItemInserted(habits.size());
+                favAdapter.notifyItemInserted(habits.size());
+                favAdapter.notifyDataSetChanged();
                 if(save) {
                     saveData.saveData(habit, 2);
                 }
             } else if (habit instanceof EconomicHabit) {
-                Habit.habits.add((EconomicHabit) habit);
+                habits.add((EconomicHabit) habit);
+                adapter.notifyItemInserted(habits.size());
+                favAdapter.notifyItemInserted(habits.size());
+                favAdapter.notifyDataSetChanged();
                 if(save) {
                     saveData.saveData(habit, 1);
                 }
             }
         }
-        updateRecyclerView();
         testHabits.clear();
+        Collections.sort(Habit.habits, Habit.HabitComparator);
+        favAdapter.notifyDataSetChanged();
+        refreshUi();
         }
 
         private void removeData() {
             SaveData saveData = new SaveData();
-            for (Habit habit: Habit.habits) {
+            for (Habit habit: habits) {
                 if(habit instanceof EconomicHabit) {
                     saveData.removeData(habit, 1);
                 } else if(habit instanceof DateHabit) {
                     saveData.removeData(habit, 2);
                 }
             }
-            Habit.habits.clear();
-            MainActivity.updateRecyclerView();
+            adapter.notifyItemRangeRemoved(0, habits.size());
+            favAdapter.notifyItemRangeRemoved(0, habits.size());
+            habits.clear();
+            updateBottomSheet();
         }
 
         public static void updateRecyclerView(){
@@ -459,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
             favAdapter.notifyDataSetChanged();
             updateBottomSheet();
             setRefreshing();
-            runLayoutAnimation(true);
+            //runLayoutAnimation(true);
         }
         public static void updateRecyclerView(boolean animation, boolean bottomsheet, boolean animatefav){
         adapter.notifyDataSetChanged();
@@ -469,7 +530,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (animation)
         {
-            runLayoutAnimation(animatefav);
+            //runLayoutAnimation(animatefav);
         }
         setRefreshing();
         }
@@ -512,11 +573,24 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<PieEntry> entriesEco = new ArrayList<>();
             ArrayList<PieEntry> entriesDate = new ArrayList<>();
 
-            for (Habit habit: Habit.habits) {
+            //Currency from sharedPrefs
+            SharedPreferences sharedPref =
+                    PreferenceManager.getDefaultSharedPreferences(context);
+
+            String currency = sharedPref.getString
+                    (SettingsActivity.KEY_PREF_CURRENCY, "");
+
+
+            for (Habit habit: habits) {
                 if (habit instanceof EconomicHabit) {
-                    totalSaved += ((EconomicHabit) habit).getProgress();
+                    if (((EconomicHabit) habit).getProgress() < 0) {
+                        totalSaved += ((EconomicHabit) habit).getProgress();
+                    } else {
+                        totalSaved += 0;
+                    }
+                    //totalSaved += ((EconomicHabit) habit).getProgress();
                     failedTotal += (((EconomicHabit) habit).getFailedTotal());
-                    ecoBottomText.setText("Left for goals: " + totalSaved + "NOK");
+                    ecoBottomText.setText("Left for goals: " + Math.abs(totalSaved) + " " + currency) ;
                     if(failedTotal > 0){
                         failedTotalText.setText("Total spent: " + failedTotal);
                     } else {
@@ -616,6 +690,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onBoard(final View view) {
+
+
             view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -630,15 +706,15 @@ public class MainActivity extends AppCompatActivity {
                             .build();
 
                     //View two = findViewById(R.id.favorite_recycler_view);
-                    View two = favoriteRecyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.fav_habit_goal);
+                    View two = findViewById(R.id.favorite_recycler_view);
 
                     int[] twoLocation = new int[2];
                     two.getLocationInWindow(twoLocation);
-                    float twoX = twoLocation[0] + two.getWidth() / 2f;
-                    float twoY = twoLocation[1] + two.getHeight() / 2f;
+                    float twoX = twoLocation[0] + 150;
+                    float twoY = twoLocation[1] + 150;
 
                     SimpleTarget secondTarget = new SimpleTarget.Builder(MainActivity.this)
-                            .setPoint(two)
+                            .setPoint(twoX, twoY)
                             .setShape(new Circle(250f))
                             .setTitle(getString(R.string.tutorial_main_title_favourite))
                             .setDescription(getString(R.string.tutorial_main_desc_favdisplay))
@@ -646,17 +722,21 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                    View three = recyclerView.getLayoutManager().findViewByPosition(2).findViewById(R.id.favoriteBtn);
+                    //View three = recyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.favoriteBtn);
+                    View three = findViewById(R.id.recycler_view);
+                    int[] threeLocation = new int[2];
+                    three.getLocationInWindow(threeLocation);
+                    float threeX = threeLocation[0] + 1015;
+                    float threeY = threeLocation[1] + 55;
 
-
-                    SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(three)
-                            .setShape(new Circle(50f))
+                    SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(threeX, threeY)
+                            .setShape(new Circle(100f))
                             .setTitle(getString(R.string.tutorial_main_title_favourite))
                             .setDescription(getString(R.string.tutorial_main_desc_favadd))
                             .build();
 
                     float fourX = 1025;
-                    float fourY = 135;
+                    float fourY = 125;
 
                     SimpleTarget fourthTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(fourX, fourY)
                             .setShape(new Circle(50f))
@@ -675,7 +755,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void onStarted() {
                                     Toast.makeText(MainActivity.this, "spotlight is started", Toast.LENGTH_SHORT)
                                             .show();
-                                    //populateData();
+                                    populateData(false);
                                 }
 
                                 @Override
@@ -685,8 +765,12 @@ public class MainActivity extends AppCompatActivity {
                                     SharedPreferences.Editor editor = sharedPref.edit();
                                     editor.putBoolean(SettingsActivity.KEY_PREF_ONBOARD, true);
                                     editor.commit();
+                                    ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
+                                    params.height = 0;
+                                    favoriteRecyclerView.setLayoutParams(params);
                                     SaveData saveData = new SaveData();
                                     saveData.readFromFile();
+
                                 }
                             })
                             .start();
@@ -694,7 +778,105 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        private void themefunc() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String userTheme = preferences.getString("key_theme", "");
+            context = getBaseContext();
+
+            if (userTheme.equals("Light")){
+                setTheme(R.style.LightTheme);
+            }
+            else if (userTheme.equals("Dark")){
+                setTheme(R.style.DarkTheme);
+            }
+            else
+                setTheme(R.style.AppTheme);
 
 
+            ThemeColors.update(this);
+
+            //TODO:
+            if (userTheme.equals("Light")){
+            }
+            else if (userTheme.equals("Dark")){
+                //mainLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
+            }
+        }
+
+        public static void refreshUi() {
+            updateBottomSheet();
+            final int Height = 350;
+            if (!Habit.getHaveFavorite() && (favoriteRecyclerView.getLayoutParams().height != 0)) {
+                Animation a = new Animation() {
+                    @Override
+                    protected void applyTransformation(float interpolatedTime, Transformation t) {
+                        ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
+                        params.height = (int) (Height - (Height * interpolatedTime));
+                        favoriteRecyclerView.setLayoutParams(params);
+                    }
+                };
+                a.setDuration(500);
+                favoriteRecyclerView.startAnimation(a);
+            } else if (Habit.getHaveFavorite()){
+                if (favoriteRecyclerView.getLayoutParams().height == 0) {
+                    Animation a = new Animation() {
+                        @Override
+                        protected void applyTransformation(float interpolatedTime, Transformation t) {
+                            ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
+                            params.height = (int) ((Height * interpolatedTime));
+                            favoriteRecyclerView.setAlpha(1 * interpolatedTime);
+                            favoriteRecyclerView.setLayoutParams(params);
+                        }
+                    };
+                    a.setDuration(500);
+                    favoriteRecyclerView.startAnimation(a);
+                }
+            }
+        };
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof MyAdapter.ViewHolder) {
+            // get the removed item name to display it in snack bar
+            String name = Habit.habits.get(viewHolder.getAdapterPosition()).getTitle();
+            int habitType = 0;
+
+            // backup of removed item for undo purpose
+            final Habit deletedHabit = Habit.habits.get(viewHolder.getAdapterPosition());
+            if (deletedHabit instanceof DateHabit) {
+                habitType = 2;
+            } else if (deletedHabit instanceof EconomicHabit) {
+                habitType = 1;
+            }
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            Habit.habits.remove(viewHolder.getAdapterPosition());
+            final SaveData saveData = new SaveData();
+            saveData.removeData(deletedHabit, habitType);
+            adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(recyclerView, name + " removed", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(deletedHabit instanceof DateHabit) {
+                        Habit.habits.add((DateHabit) deletedHabit);
+                        adapter.notifyItemInserted(Habit.habits.size());
+                        saveData.saveData(deletedHabit, 2);
+                    } else if (deletedHabit instanceof EconomicHabit) {
+                        Habit.habits.add((EconomicHabit) deletedHabit);
+                        adapter.notifyItemInserted(Habit.habits.size());
+                        saveData.saveData(deletedHabit, 1);
+                    }
+                    // undo is selected, restore the deleted item
+
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
+        }
+    }
 }
-

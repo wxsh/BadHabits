@@ -12,6 +12,7 @@
     <color name="black">#000</color>
     <color name="buttonTint">#777</color>
     <color name="iconTint">#555</color>
+    <color name="fabTint">#FFF</color>
 
 
 

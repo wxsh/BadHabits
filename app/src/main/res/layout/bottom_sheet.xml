@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/bottom_sheet_top_eco"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="23dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
@@ -87,43 +87,47 @@
 
         <TextView
             android:id="@+id/longestStreakEcoText"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/longest_streak"
-            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintEnd_toStartOf="@+id/chart_bottomSheetPieEco"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 
         <TextView
             android:id="@+id/failedTotalText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/total_amount_spent"
+            app:layout_constraintEnd_toStartOf="@+id/chart_bottomSheetPieEco"
             app:layout_constraintStart_toStartOf="@+id/longestStreakEcoText"
             app:layout_constraintTop_toBottomOf="@+id/longestStreakEcoText" />
 
         <TextView
             android:id="@+id/daysTillFinishedEcoText"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/days_till_finished"
+            app:layout_constraintEnd_toStartOf="@+id/chart_bottomSheetPieEco"
             app:layout_constraintStart_toStartOf="@+id/failedTotalText"
             app:layout_constraintTop_toBottomOf="@+id/failedTotalText" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/chart_bottomSheetPieEco"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="0dp"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/failedTotalText"
             app:layout_constraintTop_toTopOf="@+id/longestStreakEcoText"></com.github.mikephil.charting.charts.PieChart>
     </android.support.constraint.ConstraintLayout>
 
@@ -150,44 +154,47 @@
 
         <TextView
             android:id="@+id/longestStreakDateText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/longest_streak"
-            app:layout_constraintStart_toStartOf="@+id/textView7"
+            app:layout_constraintEnd_toStartOf="@+id/chart_bottomSheetPieDate"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
 
         <TextView
             android:id="@+id/longestDateHabitText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/longest_habit"
+            app:layout_constraintEnd_toStartOf="@+id/chart_bottomSheetPieDate"
             app:layout_constraintStart_toStartOf="@+id/longestStreakDateText"
             app:layout_constraintTop_toBottomOf="@+id/longestStreakDateText" />
 
         <TextView
             android:id="@+id/daysTillFinishedDateText"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/days_till_finished"
+            app:layout_constraintEnd_toStartOf="@+id/chart_bottomSheetPieDate"
             app:layout_constraintStart_toStartOf="@+id/longestDateHabitText"
             app:layout_constraintTop_toBottomOf="@+id/longestDateHabitText" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/chart_bottomSheetPieDate"
-            android:layout_width="150dp"
+            android:layout_width="170dp"
             android:layout_height="150dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="0dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/longestDateHabitText"
             app:layout_constraintTop_toTopOf="@+id/longestStreakDateText"></com.github.mikephil.charting.charts.PieChart>
     </android.support.constraint.ConstraintLayout>
 
