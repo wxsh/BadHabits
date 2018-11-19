@@ -118,6 +118,7 @@ public class SaveData  {
                                         MainActivity.favAdapter.notifyDataSetChanged();
                                 }
                             }
+                            Log.d(TAG, "Refreshing");
                             MainActivity.refreshUi();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

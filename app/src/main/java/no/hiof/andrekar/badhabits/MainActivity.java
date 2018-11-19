@@ -460,6 +460,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             favAdapter.notifyItemRangeRemoved(0, habits.size());
             habits.clear();
             updateBottomSheet();
+            refreshUi();
         }
 
         public static void updateRecyclerView(){
