@@ -233,4 +233,13 @@ public class Habit {
     public void setFailureTimes(int failureTimes) {
         this.failureTimes = failureTimes;
     }
+
+    public static long convertMillisToDays(long milliseconds) {
+        return TimeUnit.MILLISECONDS.toDays(milliseconds);
+    }
+
+    public static long convertDaysToMillis(long days) {
+        return TimeUnit.DAYS.toMillis(days);
+    }
+
 }

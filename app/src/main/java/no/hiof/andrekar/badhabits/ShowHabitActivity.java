@@ -3,6 +3,7 @@ package no.hiof.andrekar.badhabits;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -10,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -59,6 +69,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import model.DateHabit;
@@ -103,7 +115,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         }
 
         super.onCreate(savedInstanceState);
-        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         setContentView(R.layout.activity_show_habit);
         EconomicHabit ecohabit;
         DateHabit dateHabit;
@@ -139,7 +151,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             goalView.setText(((DateHabit)habit).getDaysSinceStart());
             progressView.setText(((DateHabit)habit).getDateGoal());
             //temp code?
-            Date date=new Date(habit.getStartDate());
+            Date date = new Date(habit.getStartDate());
             String dateText = df2.format(date);
             startView.setText(dateText);
             setDateData();
@@ -314,50 +326,55 @@ public class ShowHabitActivity extends AppCompatActivity {
 
     private void setEcoData() {
 
-        ArrayList<Entry> values = new ArrayList<>();
-        ArrayList<Entry> values2 = new ArrayList<>();
-        chart.setVisibility(View.VISIBLE);
-        dateChart.setVisibility(View.INVISIBLE);
+        List<Entry> values = new ArrayList<>();
+//        List<Entry> values2 = new ArrayList<>();
 
         EconomicHabit habit = ((EconomicHabit) Habit.habits.get(currentNumber));
 
-        values.add(new Entry(5, habit.getAlternativePrice() * habit.getDaysFromStart(),
-                getResources().getDrawable(R.drawable.star_on)));
+        Map<String, Integer> amountFailed = habit.getMappedFail();
 
-        values2.add(new Entry(10, habit.getPrice() * habit.getDaysFromStart(),
-                getResources().getDrawable(R.drawable.star_on)));
 
+        if (amountFailed.size() > 0) {
+            // TODO: Check if loop can be done better
+            // TODO: Map is empty if app is restarted and a new element is not added to list.
+            for (int i = 1; i <= habit.getDaysFromStart() + 1; i++) {
+
+                for (Map.Entry<String, Integer> entry : amountFailed.entrySet()) {
+                    // Get values from failed map
+                    long mapDate = habit.convertMillisToDays(Long.parseLong(entry.getKey()));
+                    float mapAmount = entry.getValue();
+
+                    // Gets the current date to check up against failed map.
+                    long startDateInDays = habit.convertMillisToDays(habit.getStartDate());
+                    long dateToCheck = startDateInDays + i;
+
+                    // Check if failed date and the current date to plot is the same
+                    if (mapDate == dateToCheck) {
+                        // Holds the amount from previous day, so it can be subtracted.
+                        float previousAmount = (i-1) * habit.getPrice();
+
+                        // Subtract amount the user failed with
+                        values.add(new Entry(i, previousAmount - mapAmount,
+                                getResources().getDrawable(R.drawable.star_on)));
+                    } else {
+                        // Add normally.
+                        values.add(new Entry(i, habit.getPrice() * i,
+                                getResources().getDrawable(R.drawable.star_on)));
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i <= habit.getDaysFromStart(); i++) {
+                values.add(new Entry(i, habit.getPrice() * i,
+                        getResources().getDrawable(R.drawable.star_on)));
+            }
+        }
+
+//        values2.add(new Entry(20, habit.getAlternativePrice() * habit.getDaysFromStart(),
+//                getResources().getDrawable(R.drawable.star_on)));
 
         LineDataSet set1;
 //        LineDataSet set2;
-
-        chart.setDrawGridBackground(false);
-        chart.getDescription().setEnabled(false);
-
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setDrawGridLines(false);
-        xAxis.setDrawAxisLine(false);
-        xAxis.setDrawLabels(false);
-
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setDrawGridLines(false);
-        leftAxis.setDrawAxisLine(false);
-        leftAxis.setDrawLabels(false);
-
-        YAxis rightAxis = chart.getAxisRight();
-        rightAxis.setDrawGridLines(false);
-        rightAxis.setDrawAxisLine(false);
-        rightAxis.setDrawLabels(true);
-
-        Legend l = chart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setTextSize(14f);
-        l.setXEntrySpace(4f);
-        l.setYEntrySpace(20);
-        l.setForm(Legend.LegendForm.CIRCLE);
-        l.setDrawInside(false);
-
 
 
         if (chart.getData() != null &&
@@ -369,8 +386,10 @@ public class ShowHabitActivity extends AppCompatActivity {
             chart.getData().notifyDataChanged();
             chart.notifyDataSetChanged();
         } else {
-            set1 = new LineDataSet(values, "The alternative have cost");
-//            set2 = new LineDataSet(values2, "Would have used");
+            set1 = new LineDataSet(values, "Would have used");
+//            set2 = new LineDataSet(values2, "The alternative would have cost");
+            set1.setColor(R.color.chartsGreen1);
+//            set2.setColor(R.color.chartsBrown1);
 
             set1.setDrawIcons(false);
             set1.setDrawValues(true);
@@ -383,7 +402,7 @@ public class ShowHabitActivity extends AppCompatActivity {
 
             LineData data = new LineData(dataSets);
             data.setValueTextSize(10f);
-            //data.setValueTypeface();
+//            data.setValueTypeface();
 //            data.setBarWidth(barWidth);
             chart.setData(data);
             chart.animateXY(1000, 1000);

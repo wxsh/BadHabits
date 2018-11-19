@@ -1,5 +1,7 @@
 package model;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.Exclude;
 
 import org.threeten.bp.temporal.ChronoUnit;
