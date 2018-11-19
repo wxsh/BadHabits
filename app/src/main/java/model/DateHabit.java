@@ -54,4 +54,13 @@ public class DateHabit extends Habit {
         }
         else return "Has not started yet.";
     }
+
+    public DateHabit findReachGoalFirst(){
+        for (Habit dh: habits) {
+            if(dh instanceof DateHabit){
+                ;;
+            }
+
+        }
+    }
 }

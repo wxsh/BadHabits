@@ -1,8 +1,11 @@
 package no.hiof.andrekar.badhabits;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -61,7 +64,6 @@ import model.DateHabit;
 import model.EconomicHabit;
 import model.Habit;
 
-import static android.app.NotificationChannel.DEFAULT_CHANNEL_ID;
 import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity {
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     private static RecyclerView favoriteRecyclerView;
 
 
+    public static AlarmManager mAlarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +108,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Create serviceChannel and start service
         createNotificationChannel();
-        Intent serviceIntent = new Intent(MainActivity.this, RSSPullService.class);
-        startService(serviceIntent);
+        //Intent serviceIntent = new Intent(MainActivity.this, MyService.class);
+        //this.startService(serviceIntent);
+
 
         if(mDatabase == null) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -222,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -230,13 +235,18 @@ public class MainActivity extends AppCompatActivity {
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(GlobalConstants.CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = (NotificationManager)
-                    getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(channel);
+
+            NotificationChannel notificationChannel = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notificationChannel = new NotificationChannel("default",
+                        "primary", NotificationManager.IMPORTANCE_DEFAULT);
+
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (manager != null) manager.createNotificationChannel(notificationChannel);
+
+                mAlarmManager=(AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
+
+            }
 
         }
 

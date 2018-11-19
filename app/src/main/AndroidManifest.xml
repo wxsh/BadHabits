@@ -42,8 +42,9 @@
             android:label="Habit details"
             android:parentActivityName=".MainActivity"/>
         <service
-            android:name=".RSSPullService"
+            android:name=".MyService"
             android:exported="false"/>
+        <receiver android:name=".NotificationUpdate" />
     </application>
 
 </manifest>
