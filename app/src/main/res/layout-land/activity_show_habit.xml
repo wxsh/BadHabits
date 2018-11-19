@@ -166,6 +166,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/detailChartDate"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent"></com.github.mikephil.charting.charts.PieChart>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
