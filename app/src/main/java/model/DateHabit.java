@@ -15,9 +15,10 @@ import java.util.concurrent.TimeUnit;
 public class DateHabit extends Habit {
     private Integer dateGoalValue;
     public DateHabit() {}
+    private String habitType = "DATE_HABIT";
 
     public DateHabit(String title, String description, long startDate, Integer dateGoalValue, boolean isFavourite) {
-        super(title, description, startDate, isFavourite);
+        super(title, description, startDate, isFavourite, "DATE_HABIT");
         this.dateGoalValue = dateGoalValue;
     }
 
@@ -28,6 +29,14 @@ public class DateHabit extends Habit {
 
     public void setDateGoalValue(Integer dateGoalValue) {
         this.dateGoalValue = dateGoalValue;
+    }
+
+    public String getHabitType() {
+        return habitType;
+    }
+
+    public void setHabitType(String habitType) {
+        this.habitType = habitType;
     }
 
     @Exclude

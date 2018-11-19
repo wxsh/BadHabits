@@ -87,7 +87,7 @@ public class SaveData  {
             MainActivity.adapter.notifyDataSetChanged();
             MainActivity.favAdapter.notifyDataSetChanged();
         }
-        db.collection(fbAuth.getUid()).document("habits").collection("DateHabits")
+        db.collection(fbAuth.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -95,49 +95,64 @@ public class SaveData  {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                DateHabit tempHabit = document.toObject(DateHabit.class);
-                                Habit habit = (DateHabit) tempHabit;
-                                Habit.habits.add(habit);
-                                if(habit.getIsFavourite()) {
-                                    MainActivity.favAdapter.notifyDataSetChanged();
-                                } else {
-                                    MainActivity.adapter.addP(Habit.habits.size());
-                                }
-                                MainActivity.favAdapter.notifyDataSetChanged();
-                                Log.d(TAG, "Adding habit");
-                            }
-                            db.collection(fbAuth.getUid()).document("habits").collection("EcoHabits")
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                                    Log.d(TAG, document.getId() + " => " + document.getData());
-                                                    EconomicHabit tempHabit = document.toObject(EconomicHabit.class);
-                                                    Habit habit = (EconomicHabit) tempHabit;
-                                                    Habit.habits.add(habit);
-                                                    Log.d(TAG, "Adding habit");
-                                                    if(habit.getIsFavourite()) {
-                                                        MainActivity.favAdapter.notifyDataSetChanged();
-                                                    } else {
-                                                        MainActivity.adapter.addP(Habit.habits.size());
-                                                    }
-                                                    MainActivity.favAdapter.notifyDataSetChanged();
-                                                }
-                                                //This is where our main reading process is finished.
-                                                MainActivity.refreshUi();
-                                            } else {
-                                                Log.d(TAG, "Error getting documents: ", task.getException());
-                                            }
+                                Log.d(TAG, Boolean.toString(document.getData().containsValue("DATE_HABIT")));
+                                if(document.getData().containsValue("DATE_HABIT")) {
+                                    Log.d(TAG, "Found date");
+                                    DateHabit tempHabit = document.toObject(DateHabit.class);
+                                    Habit habit = (DateHabit) tempHabit;
+                                    Habit.habits.add(habit);
+                                        if(habit.getIsFavourite()) {
+                                            MainActivity.favAdapter.notifyDataSetChanged();
+                                        } else {
+                                            MainActivity.adapter.addP(Habit.habits.size());
                                         }
-                                    });
+                                } else if (document.getData().containsValue("ECO_HABIT")) {
+                                        EconomicHabit tempHabit = document.toObject(EconomicHabit.class);
+                                        Habit habit = (EconomicHabit) tempHabit;
+                                        Habit.habits.add(habit);
+                                        if(habit.getIsFavourite()) {
+                                            MainActivity.favAdapter.notifyDataSetChanged();
+                                        } else {
+                                            MainActivity.adapter.addP(Habit.habits.size());
+                                        }
+                                        MainActivity.favAdapter.notifyDataSetChanged();
+                                }
+                            }
+                            MainActivity.refreshUi();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
 
+        /*
+        db.collection(fbAuth.getUid()).document("habits").collection("EcoHabits")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                EconomicHabit tempHabit = document.toObject(EconomicHabit.class);
+                                Habit habit = (EconomicHabit) tempHabit;
+                                Habit.habits.add(habit);
+                                Log.d(TAG, "Adding habit");
+                                if(habit.getIsFavourite()) {
+                                    MainActivity.favAdapter.notifyDataSetChanged();
+                                } else {
+                                    MainActivity.adapter.addP(Habit.habits.size());
+                                }
+                                MainActivity.favAdapter.notifyDataSetChanged();
+                            }
+                            //This is where our main reading process is finished.
+                            MainActivity.refreshUi();
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+                //*/
                 MainActivity.setRefreshing();
 
         }
@@ -145,17 +160,17 @@ public class SaveData  {
 
     public void saveData(Habit habit, int typeHabit) {
         if (typeHabit == 1) {
-            db.collection(fbAuth.getUid()).document("habits").collection("EcoHabits").document(habit.getUid()).set(habit);
+            db.collection(fbAuth.getUid()).document(habit.getUid()).set(habit);
         } else if (typeHabit == 2) {
-            db.collection(fbAuth.getUid()).document("habits").collection("DateHabits").document(habit.getUid()).set(habit);
+            db.collection(fbAuth.getUid()).document(habit.getUid()).set(habit);
         }
     }
 
     public void removeData(Habit habit, int typeHabit) {
         if (typeHabit == 1) {
-            db.collection(fbAuth.getUid()).document("habits").collection("EcoHabits").document(habit.getUid()).delete();
+            db.collection(fbAuth.getUid()).document(habit.getUid()).delete();
         } else if (typeHabit == 2) {
-            db.collection(fbAuth.getUid()).document("habits").collection("DateHabits").document(habit.getUid()).delete();
+            db.collection(fbAuth.getUid()).document(habit.getUid()).delete();
         }
     }
 }
