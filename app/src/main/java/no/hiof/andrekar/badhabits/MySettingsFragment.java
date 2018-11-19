@@ -2,10 +2,12 @@ package no.hiof.andrekar.badhabits;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.preference.PreferenceFragmentCompat;
@@ -20,11 +22,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import model.SaveData;
 
 import static android.app.Activity.RESULT_OK;
+import static android.media.CamcorderProfile.get;
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class MySettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -49,10 +53,14 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
 
 
 
-        Preference googlePref = (Preference) findPreference(SettingsActivity.KEY_PREF_GOOGLE);
+        Preference googlePref = (Preference) findPreference(SettingsActivity.KEY_PREF_NOT_TIME);
         googlePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 //onClick
+
+                DialogFragment newFragment  = new TimePickerFragment();
+                newFragment.showNow(getActivity().getSupportFragmentManager(), "tid");
+
                 return true;
             }
         });
@@ -133,7 +141,6 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
             if( key.equals(SettingsActivity.KEY_PREF_GOOGLE)){
 
                 if(sharedPreferences.getString(key,"").equals("Registrier")){
-                System.out.println(key);
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).setTheme(R.style.AppTheme).setLogo(R.mipmap.ic_launcher).build(), 200);
                 }
                 else if(sharedPreferences.getString(key,"").equals("Login")){

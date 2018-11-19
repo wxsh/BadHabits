@@ -31,6 +31,17 @@
             android:summary="Sign in with google"
             android:title="Google"/>
 
+        <PreferenceCategory android:title="Notifications">
+                <Preference
+                    android:defaultValue="12"
+                    android:dialogTitle="Notification time"
+                    android:icon="@drawable/ic_watch_later_black"
+                    android:key="key_not_time"
+                    android:summary="Time of day for notification"
+                    android:title="Notification Time"/>
+
+        </PreferenceCategory>
+
 
         <PreferenceCategory android:title="Tutorials">
                 <Preference

@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-<<<<<<<
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String userTheme = preferences.getString("key_theme", "");
 
@@ -122,18 +121,11 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
         GlobalConstants.update(this);
 
-=======
-
->>>>>>>
         super.onCreate(savedInstanceState);
         themefunc();
         setContentView(R.layout.activity_main);
 
 
-        //Create serviceChannel and start service
-        createNotificationChannel();
-        //Intent serviceIntent = new Intent(MainActivity.this, MyService.class);
-        //this.startService(serviceIntent);
 
 
         if(mDatabase == null) {
@@ -240,34 +232,62 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
         mainLayout = findViewById(R.id.main_parent_layout);
 
-
+        createNotificationChannel();
 
     }
 
 
-    private void createNotificationChannel() {
+    public static void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
             NotificationChannel notificationChannel = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationChannel = new NotificationChannel("default",
+                notificationChannel = new NotificationChannel(GlobalConstants.CHANNEL_ID,
                         "primary", NotificationManager.IMPORTANCE_DEFAULT);
 
-                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 if (manager != null) manager.createNotificationChannel(notificationChannel);
 
-                mAlarmManager=(AlarmManager)getApplicationContext().getSystemService(ALARM_SERVICE);
+                mAlarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
             }
+                if (Habit.habits != null) {
+
+                    long timeLeft = 0;
+                    boolean first = true;
+                    DateHabit closeHabit = null;
+
+                    for (int i = 0; i < Habit.habits.size() - 1; i++) {
+                        if (Habit.habits.get(i) instanceof DateHabit) {
+
+                            if (first) {
+                                timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
+                                closeHabit =(DateHabit) Habit.habits.get(i);
+                                first = false;
+                            }else{
+                                if(timeLeft > ((DateHabit)Habit.habits.get(i)).getDateGoalMillis()){
+                                    timeLeft = ((DateHabit)Habit.habits.get(i)).getDateGoalMillis();
+                                    closeHabit =(DateHabit) Habit.habits.get(i);
+                                }
+                            }
+                        }
+                    }
+
+                    if(closeHabit != null) {
+                        Intent intent = new Intent(context.getApplicationContext(), NotificationUpdate.class);
+                        intent.putExtra("habitName", closeHabit.getTitle());
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
+                                intent, 0);
+                        System.out.println("tiden " + timeLeft);
+                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + timeLeft, pendingIntent);
+                    }
+                }
 
         }
-
     }
 
 
@@ -792,15 +812,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             else
                 setTheme(R.style.AppTheme);
 
-
-            ThemeColors.update(this);
-
-            //TODO:
-            if (userTheme.equals("Light")){
-            }
-            else if (userTheme.equals("Dark")){
-                //mainLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
-            }
         }
 
         public static void refreshUi() {

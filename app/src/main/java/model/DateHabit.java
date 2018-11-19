@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DateHabit extends Habit {
     private Integer dateGoalValue;
+
     public DateHabit() {}
 
     public DateHabit(String title, String description, long startDate, Integer dateGoalValue, boolean isFavourite) {
@@ -55,12 +56,11 @@ public class DateHabit extends Habit {
         else return "Has not started yet.";
     }
 
-    public DateHabit findReachGoalFirst(){
-        for (Habit dh: habits) {
-            if(dh instanceof DateHabit){
-                ;;
-            }
+    public long getDateGoalMillis(){
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date(this.getStartDate()));
+        c.add(Calendar.DATE,this.getDateGoalValue());
+        return getDateDiff(new Date().getTime(), c.getTimeInMillis(), TimeUnit.DAYS);
 
-        }
     }
 }

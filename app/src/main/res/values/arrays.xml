@@ -46,5 +46,11 @@
         <item>20</item>
     </string-array>
 
+    <string-array name="time_array">
+        <item>01:00</item>
+        <item>12:00</item>
+        <item>16:00</item>
+    </string-array>
+
 
 </resources>

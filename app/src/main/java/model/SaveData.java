@@ -107,6 +107,7 @@ public class SaveData  {
                                 Log.d(TAG, "Adding habit");
                             }
                             MainActivity.refreshUi();
+                            MainActivity.createNotificationChannel();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }

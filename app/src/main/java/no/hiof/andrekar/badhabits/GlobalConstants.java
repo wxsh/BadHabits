@@ -7,7 +7,7 @@ public class GlobalConstants {
 
     public static int COLOR_PRIMARY, COLOR_PRIMARY_DARK, COLOR_ACENT, EDIT_TEXT_COLOR, PRIMARY_TEXT_COLOR_BLACK;
 
-    public final static String CHANNEL_ID = "CHANNEL_ID";
+    public final static String CHANNEL_ID = "default";
 
 
     private static GlobalConstants single_instance = null;
