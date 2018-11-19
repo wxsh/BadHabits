@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -27,12 +28,16 @@ import android.widget.Toast;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -61,8 +66,9 @@ public class ShowHabitActivity extends AppCompatActivity {
     public ImageButton deleteButton;
     public ImageButton editButton;
     public ImageButton failedButton;
+    PieChart dateChart;
     BarChart chart;
-    BarChart dateChart;
+    //BarChart dateChart;
     SeekBar seekBarX, seekBarY;
     private final int months = 12;
 
@@ -113,7 +119,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         TextView failedView = findViewById(R.id.getFailTextView);
         View parentView = findViewById(R.id.show_habit_parent);
         chart = findViewById(R.id.detailChart);
-        dateChart = findViewById(R.id.detailChart);
+        dateChart = findViewById(R.id.detailChartDate);
 
         ImageView startViewImg = findViewById(R.id.startTextView);
         ImageView progressViewImg = findViewById(R.id.progressTextView);
@@ -300,7 +306,8 @@ public class ShowHabitActivity extends AppCompatActivity {
     }
 
     private void setEcoData() {
-
+        chart.setVisibility(View.VISIBLE);
+        dateChart.setVisibility(View.INVISIBLE);
         float barWidth = 9f;
         float spaceForBar = 10f;
         ArrayList<BarEntry> values = new ArrayList<>();
@@ -385,93 +392,44 @@ public class ShowHabitActivity extends AppCompatActivity {
     }
 
     public void setDateData(){
-        float barWidth = 9f;
-        float spaceForBar = 10f;
-        ArrayList<BarEntry> values = new ArrayList<>();
-        ArrayList<BarEntry> values2 = new ArrayList<>();
-
+        chart.setVisibility(View.INVISIBLE);
         DateHabit habit = ((DateHabit) Habit.habits.get(currentNumber));
+        Log.d("failureTimes", Integer.toString(habit.getFailureTimes()));
+        Log.d("failureTimes", Float.toString(habit.getDaysFromStart()));
+        ArrayList<PieEntry> entriesDate = new ArrayList<>();
 
-        if(habit.getFailureTimes() <= 1){
-            values.add(new BarEntry(1 * spaceForBar,100));
+        PieDataSet dataSetDate = new PieDataSet(entriesDate, "");
+        PieData dataDate = new PieData(dataSetDate);
+        ArrayList<Integer> colors = new ArrayList<>();
+
+        if(habit.getFailureTimes() < 1){
+            entriesDate.add(new PieEntry(  100, "Success Rate"));
+            entriesDate.add(new PieEntry(0, "Failure Rate"));
+        } else if(habit.getFailureTimes() > habit.getDaysFromStart()){
+            entriesDate.add(new PieEntry(  0, "Success Rate"));
+            entriesDate.add(new PieEntry(  100, "Failure Rate"));
         } else {
-            values.add(new BarEntry(1 * spaceForBar,  ( 100 - ( habit.getFailureTimes() / habit.getDaysFromStart() * 100)  )));
+            entriesDate.add(new PieEntry((100- ( habit.getFailureTimes() / habit.getDaysFromStart() * 100)), "Success Rate"));
+            entriesDate.add(new PieEntry(( ( habit.getFailureTimes() / habit.getDaysFromStart() * 100)), "Failure Rate"));
         }
-        if(habit.getFailureTimes() <= 1){
-            values2.add(new BarEntry(0 * spaceForBar,0));
-        } else {
-            values2.add(new BarEntry(0 * spaceForBar,  (  ( habit.getFailureTimes() / habit.getDaysFromStart() * 100)  )));
-        }
+        colors.add(Color.GREEN);
+        colors.add(Color.RED);
 
-        BarDataSet set1;
-        BarDataSet set2;
-
-        dateChart.setDrawGridBackground(false);
+        dataSetDate.setColors(colors);
+        dataSetDate.setDrawIcons(false);
+        dateChart.setVisibility(View.VISIBLE);
+        dateChart.setDrawHoleEnabled(false);
         dateChart.getDescription().setEnabled(false);
+        dateChart.setDrawCenterText(false);
+        dateChart.getLegend().setWordWrapEnabled(true);
+        dateChart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        dateChart.getLegend().setTextSize(15);
+        dateChart.setData(dataDate);
+        dateChart.highlightValue(null);
+        dateChart.setDrawEntryLabels(false);
+        dateChart.invalidate();
+        dateChart.animateXY(500, 500);
 
-        XAxis xAxis = dateChart.getXAxis();
-        xAxis.setDrawGridLines(false);
-        xAxis.setDrawAxisLine(false);
-        xAxis.setDrawLabels(false);
-
-        YAxis leftAxis = dateChart.getAxisLeft();
-        leftAxis.setDrawGridLines(false);
-        leftAxis.setDrawAxisLine(false);
-        leftAxis.setDrawLabels(false);
-        leftAxis.setAxisMaximum(100);
-        leftAxis.setAxisMinimum(0);
-
-
-        YAxis rightAxis = dateChart.getAxisRight();
-        rightAxis.setDrawGridLines(false);
-        rightAxis.setDrawAxisLine(false);
-        rightAxis.setDrawLabels(true);
-        rightAxis.setAxisMaximum(100);
-        rightAxis.setAxisMinimum(0);
-
-
-        Legend l = dateChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setTextSize(14f);
-        l.setXEntrySpace(4f);
-        l.setYEntrySpace(20);
-        l.setForm(Legend.LegendForm.CIRCLE);
-        l.setDrawInside(false);
-
-
-
-        if (dateChart.getData() != null &&
-                dateChart.getData().getDataSetCount() > 0) {
-            set1 = (BarDataSet) dateChart.getData().getDataSetByIndex(0);
-            set2 = (BarDataSet) dateChart.getData().getDataSetByIndex(1);
-
-
-            set1.setValues(values);
-            set2.setValues(values2);
-
-            dateChart.getData().notifyDataChanged();
-            dateChart.notifyDataSetChanged();
-        } else {
-            set1 = new BarDataSet(values, "Success rate:");
-            set2 = new BarDataSet(values2, "Failure rate:");
-
-            set1.setDrawIcons(false);
-            set1.setDrawValues(true);
-            set1.setColors(ColorTemplate.MATERIAL_COLORS);
-            set2.setColors(ColorTemplate.COLORFUL_COLORS);
-
-            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
-            dataSets.add(set1);
-            dataSets.add(set2);
-
-            BarData data = new BarData(dataSets);
-            data.setValueTextSize(10f);
-            data.setBarWidth(barWidth);
-            chart.setData(data);
-            dateChart.animateXY(1000, 1000);
-
-        }
     }
     public static void setCurrentNumber(int number) {
         currentNumber = number;
