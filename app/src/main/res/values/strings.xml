@@ -51,4 +51,8 @@
     <string name="ecohabitFail_trailing">day streak</string>
     <string name="settings_signed_in">"Signed in as"</string>
 
+
+    <string name="text_main_no_internet">You do not have internet access. </string>
+    <string name="text_main_no_internet_sub">Bad habits will not work unless you launch it with internet access the first time, so we can set up a few things. </string>
+
 </resources>

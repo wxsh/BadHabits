@@ -8,6 +8,8 @@ import android.graphics.Point;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -64,6 +66,8 @@ import com.takusemba.spotlight.target.SimpleTarget;
 
 import model.SaveData;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -75,6 +79,7 @@ import model.EconomicHabit;
 import model.Habit;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
 import static model.Habit.habits;
 
 public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.RecyclerItemTouchHelperListener {
@@ -94,119 +99,136 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
     private static RecyclerView recyclerView;
     private static RecyclerView favoriteRecyclerView;
     private static Context context;
+    private SaveData saveData = new SaveData();
+    boolean hasInternet = false;
+
+    public boolean isConnected() throws InterruptedException, IOException {
+        final String command = "ping -c 1 google.com";
+        return Runtime.getRuntime().exec(command).waitFor() == 0;
+    }
+
+    public boolean isNetworkAvailable(Context context) {
+        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        themefunc();
-        setContentView(R.layout.activity_main);
 
-        if(mDatabase == null) {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            database.setPersistenceEnabled(true);
-            mDatabase = database.getReference();
-            database.getReference(mAuth.getUid()).keepSynced(true);
-        }
         mAuth = FirebaseAuth.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                mAuth.signInAnonymously()
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d("Login Main", "signInAnonymously:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w("Login Main", "signInAnonymously:failure", task.getException());
-                                    Toast.makeText(MainActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-
-                                // ...
+            mAuth.signInAnonymously()
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d("Login Main", "signInAnonymously:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w("Login Main", "signInAnonymously:failure", task.getException());
+                                Toast.makeText(MainActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
                             }
-                        });
-            } else {
+
+
+
+                            // ...
+                        }
+                    });
+        } else {
             FirebaseUser currentUser = mAuth.getCurrentUser();
         }
-        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-        setContentView(R.layout.activity_main);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
-        ecoBottomText = findViewById(R.id.bottom_sheet_top_eco);
-        dateBottomText = findViewById(R.id.bottom_sheet_top_date);
-        longestStreakEcoText = findViewById(R.id.longestStreakEcoText);
-        longestStreakDateText = findViewById(R.id.longestStreakDateText);
-        daysTillFinishedDateText = findViewById(R.id.daysTillFinishedDateText);
-        daysTillFinishedEcoText = findViewById(R.id.daysTillFinishedEcoText);
-        longestDateHabitText = findViewById(R.id.longestDateHabitText);
-        failedTotalText = findViewById(R.id.failedTotalText);
-        bottomSheetPieEco = findViewById(R.id.chart_bottomSheetPieEco);
-        bottomSheetPieDate = findViewById(R.id.chart_bottomSheetPieDate);
+        if (!isNetworkAvailable(this) && (mAuth.getCurrentUser() == null)) {
+            Log.d("Internet", "This is false to has Internet");
+            setContentView(R.layout.content_main_nointernet);
+        } else {
+            if (mDatabase == null) {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                database.setPersistenceEnabled(true);
+                mDatabase = database.getReference();
+                database.getReference(mAuth.getUid()).keepSynced(true);
+            }
+            themefunc();
 
-        bottomSheet();
+            setContentView(R.layout.activity_main);
 
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.recyclerSwipeContainer);
-        // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
+
+
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            setContentView(R.layout.activity_main);
+            //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            //setSupportActionBar(toolbar);
+
+            ecoBottomText = findViewById(R.id.bottom_sheet_top_eco);
+            dateBottomText = findViewById(R.id.bottom_sheet_top_date);
+            longestStreakEcoText = findViewById(R.id.longestStreakEcoText);
+            longestStreakDateText = findViewById(R.id.longestStreakDateText);
+            daysTillFinishedDateText = findViewById(R.id.daysTillFinishedDateText);
+            daysTillFinishedEcoText = findViewById(R.id.daysTillFinishedEcoText);
+            longestDateHabitText = findViewById(R.id.longestDateHabitText);
+            failedTotalText = findViewById(R.id.failedTotalText);
+            bottomSheetPieEco = findViewById(R.id.chart_bottomSheetPieEco);
+            bottomSheetPieDate = findViewById(R.id.chart_bottomSheetPieDate);
+
+            bottomSheet();
+
+            swipeContainer = (SwipeRefreshLayout) findViewById(R.id.recyclerSwipeContainer);
+            // Setup refresh listener which triggers new data loading
+            swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    // Your code to refresh the list here.
+                    // Make sure you call swipeContainer.setRefreshing(false)
+                    // once the network request has completed successfully.
+                    saveData.readFromFile();
+                    //saveData.readFromFile();
+                }
+            });
+            // Configure the refreshing colors
+            swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
+
+
+            //code to ask user for permission to store data.
+            int REQUEST_CODE = 1;
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, REQUEST_CODE);
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addHabit);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getBaseContext(), HabitActivity.class);
+                    intent.putExtra("TITLE", "Add new habit");
+                    //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivityForResult(intent, 500);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+            });
+
+            //DONE: Implement this into habits model?
+            Collections.sort(habits, Habit.HabitComparator);
+
+            initRecyclerView();
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 SaveData saveData = new SaveData();
                 saveData.readFromFile();
-                //saveData.readFromFile();
             }
-        });
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+            updateBottomSheet();
 
 
+            PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 
-
-    //code to ask user for permission to store data.
-        int REQUEST_CODE=1;
-        ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-        }, REQUEST_CODE);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addHabit);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), HabitActivity.class);
-                intent.putExtra("TITLE", "Add new habit");
-                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivityForResult(intent, 500);
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-            }
-        });
-
-        //DONE: Implement this into habits model?
-        Collections.sort(habits, Habit.HabitComparator);
-
-        initRecyclerView();
-        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-            SaveData saveData = new SaveData();
-            saveData.readFromFile();
-            }
-        updateBottomSheet();
-
-
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-
-        mainLayout = findViewById(R.id.main_parent_layout);
-
-
-
+            mainLayout = findViewById(R.id.main_parent_layout);
+        }
     }
 
     public void bottomSheet() {
@@ -297,8 +319,10 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
     @Override
     protected void onResume() {
         super.onResume();
-        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-        updateRecyclerView(false, true, true);
+        if(FirebaseAuth.getInstance().getCurrentUser() != null ) {
+            updateRecyclerView(false, true, true);
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
