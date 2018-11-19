@@ -5,4 +5,6 @@
     <color name="colorAccent">#353535</color>
     <color name="faveHabitBG">#5c6bc0</color>
     <color name="faveHabitBG2">#737fc2</color>
+    <color name="chartsGreen1">#43a047</color>
+    <color name="chartsBrown1">#bf360c</color>
 </resources>

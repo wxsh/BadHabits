@@ -156,4 +156,13 @@ public class Habit {
         long diffInMillies = date2 - date1;
         return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
     }
+
+    public static long convertMillisToDays(long milliseconds) {
+        return TimeUnit.MILLISECONDS.toDays(milliseconds);
+    }
+
+    public static long convertDaysToMillis(long days) {
+        return TimeUnit.DAYS.toMillis(days);
+    }
+
 }
