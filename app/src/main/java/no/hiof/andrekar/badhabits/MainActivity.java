@@ -215,11 +215,12 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     android.R.color.holo_red_light);
 
 
-            //code to ask user for permission to store data.
+            /*code to ask user for permission to store data.
             int REQUEST_CODE = 1;
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             }, REQUEST_CODE);
+            //*/
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addHabit);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -519,6 +520,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
         scoop.setFailDate(date.getTime()-(dayms*4));
         sodaHabit.setFailDate(date.getTime() - (dayms*3));
         ((EconomicHabit) sodaHabit).setFailedTotal(100);
+        sodaHabit.setFailureTimes(1);
 
 
         testHabits.add((EconomicHabit) gumHabit);
