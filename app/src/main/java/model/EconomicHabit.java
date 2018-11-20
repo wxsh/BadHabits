@@ -1,5 +1,7 @@
 package model;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.Exclude;
 
 import org.threeten.bp.temporal.ChronoUnit;
@@ -65,6 +67,10 @@ public class EconomicHabit extends Habit {
         return failedMap;
     }
 
+    public void setMappedFail(Map<String, Integer> failedMap) {
+        this.failedMap = failedMap;
+    }
+
     @Exclude
     public float getProgress() {
         DecimalFormat df = new DecimalFormat("#######.##");
@@ -91,6 +97,7 @@ public class EconomicHabit extends Habit {
     }
     
     public void increaseFailedTotal(int failedAmout){
+        //long newdate = (new Date().getTime() - TimeUnit.DAYS.toMillis(2));
         failedMap.put(Long.toString(new Date().getTime()), failedAmout);
         this.failedTotal += failedAmout;
     }

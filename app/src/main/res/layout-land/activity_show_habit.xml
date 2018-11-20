@@ -155,7 +155,7 @@
         app:layout_constraintStart_toStartOf="@+id/getDescriptionTextView"
         app:layout_constraintTop_toBottomOf="@+id/getDescriptionTextView" />
 
-    <com.github.mikephil.charting.charts.HorizontalBarChart
+    <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/detailChart"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -165,7 +165,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent"></com.github.mikephil.charting.charts.HorizontalBarChart>
+        app:layout_constraintTop_toTopOf="parent"/>
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/detailChartDate"
         android:layout_width="0dp"
@@ -176,7 +176,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent"></com.github.mikephil.charting.charts.PieChart>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
