@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     long timeToNote = (totTimeLeft) - (TimeUnit.HOURS.toMillis(currentHourIn24Format + 1)) - TimeUnit.MINUTES.toMillis(currentMin);
                         System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
                         System.out.println("tiden days " + TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()));
-                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, pendingIntent); ;//+ timeToNote, pendingIntent);
+                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + daysInMillis + timeToNote, pendingIntent); ;//+ timeToNote, pendingIntent);
                     if(timeToNote > 0) {
                     }
                 }
