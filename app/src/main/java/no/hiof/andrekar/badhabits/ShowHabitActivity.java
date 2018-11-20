@@ -327,11 +327,13 @@ public class ShowHabitActivity extends AppCompatActivity {
     private void setEcoData() {
 
         List<Entry> values = new ArrayList<>();
-//        List<Entry> values2 = new ArrayList<>();
+        List<Entry> values2 = new ArrayList<>();
 
         EconomicHabit habit = ((EconomicHabit) Habit.habits.get(currentNumber));
 
         Map<String, Integer> amountFailed = habit.getMappedFail();
+
+        Log.d("setEcoData", Integer.toString(amountFailed.size()));
 
 
         if (amountFailed.size() > 0) {
@@ -360,6 +362,9 @@ public class ShowHabitActivity extends AppCompatActivity {
                         // Add normally.
                         values.add(new Entry(i, habit.getPrice() * i,
                                 getResources().getDrawable(R.drawable.star_on)));
+
+                        values2.add(new Entry(i, habit.getAlternativePrice() * i,
+                                getResources().getDrawable(R.drawable.star_on)));
                     }
                 }
             }
@@ -367,43 +372,42 @@ public class ShowHabitActivity extends AppCompatActivity {
             for (int i = 0; i <= habit.getDaysFromStart(); i++) {
                 values.add(new Entry(i, habit.getPrice() * i,
                         getResources().getDrawable(R.drawable.star_on)));
+
+                values2.add(new Entry(i, habit.getAlternativePrice() * i,
+                    getResources().getDrawable(R.drawable.star_on)));
             }
         }
 
-//        values2.add(new Entry(20, habit.getAlternativePrice() * habit.getDaysFromStart(),
-//                getResources().getDrawable(R.drawable.star_on)));
+
 
         LineDataSet set1;
-//        LineDataSet set2;
+        LineDataSet set2;
 
 
         if (chart.getData() != null &&
                 chart.getData().getDataSetCount() > 0) {
             set1 = (LineDataSet) chart.getData().getDataSetByIndex(0);
-//            set2 = (LineDataSet) chart.getData().getDataSetByIndex(1);
+            set2 = (LineDataSet) chart.getData().getDataSetByIndex(1);
             set1.setValues(values);
-//            set2.setValues(values);
+            set2.setValues(values2);
             chart.getData().notifyDataChanged();
             chart.notifyDataSetChanged();
         } else {
             set1 = new LineDataSet(values, "Would have used");
-//            set2 = new LineDataSet(values2, "The alternative would have cost");
+            set2 = new LineDataSet(values2, "The alternative would have cost");
             set1.setColor(R.color.chartsGreen1);
-//            set2.setColor(R.color.chartsBrown1);
+            set2.setColor(R.color.chartsBrown1);
 
             set1.setDrawIcons(false);
-            set1.setDrawValues(true);
-            set1.setColors(ColorTemplate.COLORFUL_COLORS);
-            set2.setColors(ColorTemplate.MATERIAL_COLORS);
+            set2.setDrawIcons(false);
+
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1);
-//            dataSets.add(set2);
+            dataSets.add(set2);
 
             LineData data = new LineData(dataSets);
             data.setValueTextSize(10f);
-//            data.setValueTypeface();
-//            data.setBarWidth(barWidth);
             chart.setData(data);
             chart.animateXY(1000, 1000);
         }
