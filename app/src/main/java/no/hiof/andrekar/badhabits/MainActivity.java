@@ -278,16 +278,16 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
                 for (int i = 0; i < Habit.habits.size() - 1; i++) {
                     if (Habit.habits.get(i) instanceof DateHabit) {
-
-                        if (first) {
-                            timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
-                            closeHabit =(DateHabit) Habit.habits.get(i);
-                            first = false;
-                        }else{
-                            if(timeLeft > ((DateHabit)Habit.habits.get(i)).getDateGoalMillis()){
-                                timeLeft = ((DateHabit)Habit.habits.get(i)).getDateGoalMillis();
+                        //if(Habit.habits.get(i).){
+                            if (first) {
+                                timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
                                 closeHabit =(DateHabit) Habit.habits.get(i);
-                            }
+                                first = false;
+                            }else{
+                                if(timeLeft > ((DateHabit)Habit.habits.get(i)).getDateGoalMillis()){
+                                    timeLeft = ((DateHabit)Habit.habits.get(i)).getDateGoalMillis();
+                                    closeHabit =(DateHabit) Habit.habits.get(i);
+                                }
                         }
                     }
                 }
@@ -299,19 +299,19 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
                             intent, 0);
 
-                    //DONE: THE RIGH Fu*#n calculations
+                    //DONE: THE RIGH Fu*#'n calculations
                     Calendar rightNow = Calendar.getInstance();
-                    int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY) + 1; // return the hour in 24 hrs format (ranging from 0-23)
+                    int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY); // return the hour in 24 hrs format (ranging from 0-23)
                     int currentMin = rightNow.get(Calendar.MINUTE); // return the min (ranging from 0-59)
                     long totTimeLeft = (long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
                     long daysInMillis = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()));
 
-                    long timeToNote = (totTimeLeft) + daysInMillis - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
+                    long timeToNote = (totTimeLeft) - (TimeUnit.HOURS.toMillis(currentHourIn24Format + 1)) - TimeUnit.MINUTES.toMillis(currentMin);
+                        System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
+                        System.out.println("tiden days " + TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()));
                     if(timeToNote > 0) {
-
+                        System.out.println("asdas");
                         mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + timeToNote, pendingIntent);
-                        //System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
-                        //System.out.println("tiden days " + (TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()))));
                     }
                 }
 
