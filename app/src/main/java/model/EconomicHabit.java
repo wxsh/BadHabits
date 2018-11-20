@@ -70,6 +70,10 @@ public class EconomicHabit extends Habit {
         return failedMap;
     }
 
+    public void setMappedFail(Map<String, Integer> failedMap) {
+        this.failedMap = failedMap;
+    }
+
     @Exclude
     public float getProgress() {
         float dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
@@ -92,7 +96,8 @@ public class EconomicHabit extends Habit {
     }
     
     public void increaseFailedTotal(int failedAmout){
-        failedMap.put(Long.toString(new Date().getTime()), failedAmout);
+        long newdate = (new Date().getTime() - TimeUnit.DAYS.toMillis(2));
+        failedMap.put(Long.toString(newdate), failedAmout);
         this.failedTotal += failedAmout;
     }
 }

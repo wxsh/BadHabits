@@ -64,7 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser != null) {
             if (currentUser.isAnonymous()) {
-                userIdTW.setText("Du er ikke logget inn, data er ikke lagret til en spesifikk konto");
+                userIdTW.setText("Du er ikke logget inn, " +FirebaseAuth.getInstance().getUid());
                 buttonRegUser.setVisibility(View.VISIBLE);
             } else {
                 userIdTW.setText("Du er logget inn som " + currentUser.getEmail());
