@@ -53,8 +53,8 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
 
 
 
-        Preference googlePref = (Preference) findPreference(SettingsActivity.KEY_PREF_NOT_TIME);
-        googlePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference timePref = (Preference) findPreference(SettingsActivity.KEY_PREF_NOT_TIME);
+        timePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 //onClick
 
@@ -64,6 +64,9 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
                 return true;
             }
         });
+
+        Preference googlePref = (Preference) findPreference(SettingsActivity.KEY_PREF_GOOGLE);
+
         if (!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
             googlePref.setSummary(getString(R.string.settings_signed_in) + " " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
         }
