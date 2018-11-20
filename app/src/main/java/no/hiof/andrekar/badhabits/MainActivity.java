@@ -124,11 +124,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
         super.onCreate(savedInstanceState);
 
-<<<<<<<
-
-=======
-
-
 
         if(mDatabase == null) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -136,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             mDatabase = database.getReference();
             database.getReference(mAuth.getUid()).keepSynced(true);
         }
->>>>>>>
+
         mAuth = FirebaseAuth.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             mAuth.signInAnonymously()
@@ -174,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 database.getReference(mAuth.getUid()).keepSynced(true);
             }
             themefunc();
-
             setContentView(R.layout.activity_main);
 
 
@@ -246,8 +240,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
 
             PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-        createNotificationChannel();
 
             mainLayout = findViewById(R.id.main_parent_layout);
         }
