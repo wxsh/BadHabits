@@ -666,11 +666,12 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     }
                     //TODO: double check that the math here is correct.
                     float dateGoalL = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS);
-                    float saved = (( ((EconomicHabit) habit).getGoalValue() + (dateGoalL*((EconomicHabit) habit).getAlternativePrice()) ) - (dateGoalL*((EconomicHabit) habit).getPrice()) - ((EconomicHabit) habit).getFailedTotal());
-                    long remaining = (long)(saved/dateGoalL);
-                    if (Habit.getDateDiff(remaining ,new Date().getTime(), ChronoUnit.DAYS) > daysTillFinishedEco && ((EconomicHabit) habit).getGoalValue() != 0) {
-                        daysTillFinishedEco = Habit.getDateDiff(new Date().getTime(),remaining,  ChronoUnit.DAYS);
-                        daysTillFinishedEcoText.setText("Days till finished: " + remaining);
+                    float saved = (( ((EconomicHabit) habit).getGoalValue() + (dateGoalL*((EconomicHabit) habit).getAlternativePrice()) ) - (dateGoalL*((EconomicHabit) habit).getPrice()) + ((EconomicHabit) habit).getFailedTotal());
+                    float pricePerDay = ( ((EconomicHabit) habit).getPrice() - ((EconomicHabit) habit).getAlternativePrice());
+                    float daysRemaining = (saved/pricePerDay);
+                    if (daysRemaining > daysTillFinishedEco && ((EconomicHabit) habit).getGoalValue() != 0) {
+                        daysTillFinishedEco = daysRemaining;
+                        daysTillFinishedEcoText.setText("Days till finished: " + Math.round(daysRemaining));
                     }
 
 

@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -358,6 +360,7 @@ public class HabitActivity extends AppCompatActivity {
             return Float.parseFloat(df.format(price/365));
         } else return 0;
     }
+
 
 }
 
