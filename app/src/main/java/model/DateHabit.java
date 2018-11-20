@@ -73,6 +73,12 @@ public class DateHabit extends Habit {
         c.setTime(new Date(this.getStartDate()));
         c.add(Calendar.DATE,this.getDateGoalValue());
         //TODO: Double check this conversion
-        return TimeUnit.DAYS.toMillis(getDateDiff(new Date().getTime(), c.getTimeInMillis(), ChronoUnit.DAYS));
+        long t = TimeUnit.DAYS.toMillis(getDateDiff(new Date().getTime(), c.getTimeInMillis(), ChronoUnit.DAYS));
+        if (t < 0)
+            return -1;
+        else if (TimeUnit.MILLISECONDS.toDays(t) == 0)
+            return 0;
+        else
+            return t;
     }
 }
