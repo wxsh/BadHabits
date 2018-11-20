@@ -335,7 +335,7 @@ public class ShowHabitActivity extends AppCompatActivity {
 
         Log.d("setEcoData", Integer.toString(amountFailed.size()));
 
-
+       /*
         if (amountFailed.size() > 0) {
             // TODO: Check if loop can be done better
             // TODO: Map is empty if app is restarted and a new element is not added to list.
@@ -368,15 +368,37 @@ public class ShowHabitActivity extends AppCompatActivity {
                     }
                 }
             }
-        } else {
-            for (int i = 0; i <= habit.getDaysFromStart(); i++) {
-                values.add(new Entry(i, habit.getPrice() * i,
+        }*/
+        float totalPrice = 0;
+        for (int i = 0; i <= habit.getDaysFromStart(); i++) {
+                float price = habit.getPrice();
+                for(Map.Entry<String, Integer> entry : amountFailed.entrySet()) {
+                    Log.d("MAPS", "Found map entry");
+                    long mapDate = habit.convertMillisToDays(Long.parseLong(entry.getKey()));
+                    float mapAmount = entry.getValue();
+
+                    Log.d("MAPS", Long.toString(mapDate-1));
+
+                    long startDateInDays = habit.convertMillisToDays(habit.getStartDate());
+                    long dateToCheck = startDateInDays + i;
+                    Log.d("MAPS", Long.toString(dateToCheck));
+
+
+                    if( (mapDate-1) == dateToCheck) {
+                        Log.d("MAPS", "Found matching entry");
+                        price = price - mapAmount;
+                    }
+                }
+
+                totalPrice = totalPrice + price;
+
+                values.add(new Entry(i, totalPrice,
                         getResources().getDrawable(R.drawable.star_on)));
 
                 values2.add(new Entry(i, habit.getAlternativePrice() * i,
                     getResources().getDrawable(R.drawable.star_on)));
             }
-        }
+
 
 
 
