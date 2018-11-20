@@ -70,9 +70,6 @@ public class ShowHabitActivity extends AppCompatActivity {
     public ImageButton failedButton;
     PieChart dateChart;
     BarChart chart;
-    //BarChart dateChart;
-    SeekBar seekBarX, seekBarY;
-    private final int months = 12;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -403,23 +400,14 @@ public class ShowHabitActivity extends AppCompatActivity {
         PieDataSet dataSetDate = new PieDataSet(entriesDate, "");
         PieData dataDate = new PieData(dataSetDate);
         ArrayList<Integer> colors = new ArrayList<>();
-        /*
-        if(habit.getFailureTimes() < 1){
-            entriesDate.add(new PieEntry(  100, "Success Rate"));
-            entriesDate.add(new PieEntry(0, "Failure Rate"));
-        } else if(habit.getFailureTimes() > habit.getDaysFromStart()){
-            entriesDate.add(new PieEntry(  0, "Success Rate"));
-            entriesDate.add(new PieEntry(  100, "Failure Rate"));
-        } else {
-
-        }*/
+        //TODO: uses failure times not days, so if a a fail happens twice in a day it would subtract an addition day.
         if((habit.getDaysFromStart() - habit.getFailureTimes())< 0){
             entriesDate.add(new PieEntry(( 0 ), "Successful days"));
         } else {
             entriesDate.add(new PieEntry((  habit.getDaysFromStart() - habit.getFailureTimes() ), "Successful days"));
         }
 
-            entriesDate.add(new PieEntry(( habit.getFailureTimes() ), "Failed days"));
+        entriesDate.add(new PieEntry(( habit.getFailureTimes() ), "Failed days"));
 
         for (int c : ColorTemplate.MATERIAL_COLORS)
         colors.add(c);
@@ -427,7 +415,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         dataSetDate.setColors(colors);
         dataSetDate.setDrawIcons(false);
         dataSetDate.setValueTextSize(15f);
-        dataSetDate.setValueTextColor(Color.WHITE);
+        dataSetDate.setValueTextColor(Color.BLACK);
         dateChart.setVisibility(View.VISIBLE);
         dateChart.setDrawHoleEnabled(false);
         dateChart.getDescription().setEnabled(false);
