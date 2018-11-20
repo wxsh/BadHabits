@@ -278,16 +278,17 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
                 for (int i = 0; i < Habit.habits.size() - 1; i++) {
                     if (Habit.habits.get(i) instanceof DateHabit) {
-                        //if(Habit.habits.get(i).){
+                        if(((DateHabit) Habit.habits.get(i)).getDateGoalMillis() >= 0){
                             if (first) {
                                 timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
                                 closeHabit =(DateHabit) Habit.habits.get(i);
                                 first = false;
-                            }else{
-                                if(timeLeft > ((DateHabit)Habit.habits.get(i)).getDateGoalMillis()){
-                                    timeLeft = ((DateHabit)Habit.habits.get(i)).getDateGoalMillis();
-                                    closeHabit =(DateHabit) Habit.habits.get(i);
+                            }else {
+                                if (timeLeft > ((DateHabit) Habit.habits.get(i)).getDateGoalMillis()) {
+                                    timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
+                                    closeHabit = (DateHabit) Habit.habits.get(i);
                                 }
+                            }
                         }
                     }
                 }
@@ -310,7 +311,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                         System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
                         System.out.println("tiden days " + TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()));
                     if(timeToNote > 0) {
-                        System.out.println("asdas");
                         mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + timeToNote, pendingIntent);
                     }
                 }
