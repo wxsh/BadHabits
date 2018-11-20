@@ -403,7 +403,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         PieDataSet dataSetDate = new PieDataSet(entriesDate, "");
         PieData dataDate = new PieData(dataSetDate);
         ArrayList<Integer> colors = new ArrayList<>();
-
+        /*
         if(habit.getFailureTimes() < 1){
             entriesDate.add(new PieEntry(  100, "Success Rate"));
             entriesDate.add(new PieEntry(0, "Failure Rate"));
@@ -411,9 +411,16 @@ public class ShowHabitActivity extends AppCompatActivity {
             entriesDate.add(new PieEntry(  0, "Success Rate"));
             entriesDate.add(new PieEntry(  100, "Failure Rate"));
         } else {
-            entriesDate.add(new PieEntry((100- ( habit.getFailureTimes() / habit.getDaysFromStart() * 100)), "Success Rate"));
-            entriesDate.add(new PieEntry(( ( habit.getFailureTimes() / habit.getDaysFromStart() * 100)), "Failure Rate"));
+
+        }*/
+        if((habit.getDaysFromStart() - habit.getFailureTimes())< 0){
+            entriesDate.add(new PieEntry(( 0 ), "Successful days"));
+        } else {
+            entriesDate.add(new PieEntry((  habit.getDaysFromStart() - habit.getFailureTimes() ), "Successful days"));
         }
+
+            entriesDate.add(new PieEntry(( habit.getFailureTimes() ), "Failed days"));
+
         for (int c : ColorTemplate.MATERIAL_COLORS)
         colors.add(c);
 
