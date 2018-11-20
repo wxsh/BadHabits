@@ -325,7 +325,8 @@ public class ShowHabitActivity extends AppCompatActivity {
     }
 
     private void setEcoData() {
-
+        dateChart.setVisibility(View.GONE);
+        chart.setVisibility(View.VISIBLE);
         List<Entry> values = new ArrayList<>();
         List<Entry> values2 = new ArrayList<>();
 
@@ -410,27 +411,76 @@ public class ShowHabitActivity extends AppCompatActivity {
                 chart.getData().getDataSetCount() > 0) {
             set1 = (LineDataSet) chart.getData().getDataSetByIndex(0);
             set2 = (LineDataSet) chart.getData().getDataSetByIndex(1);
-            set1.setValues(values);
-            set2.setValues(values2);
+            if(values.size() > 10) {
+                set1.setValues(values.subList(values.size()-10, values.size()));
+                set2.setValues(values2.subList(values.size()-10, values.size()));
+            } else {
+                set1.setValues(values);
+                set2.setValues(values2);
+            }
             chart.getData().notifyDataChanged();
             chart.notifyDataSetChanged();
+
+
+
         } else {
-            set1 = new LineDataSet(values, "Would have used");
-            set2 = new LineDataSet(values2, "The alternative would have cost");
-            set1.setColor(R.color.chartsGreen1);
-            set2.setColor(R.color.chartsBrown1);
+            if (values.size() > 10) {
+                set1 = new LineDataSet(values.subList(values.size() - 10, values.size()), "Would have used");
+                set2 = new LineDataSet(values2.subList(values.size() - 10, values.size()), "The alternative have cost");
+            } else {
+                set1 = new LineDataSet(values, "Would have used");
+                set2 = new LineDataSet(values2, "The alternative have cost");
+            }
+
+            set1.setColor(ColorTemplate.MATERIAL_COLORS[0]);
+            set2.setColor(ColorTemplate.MATERIAL_COLORS[1]);
+            set1.setCircleColor(ColorTemplate.MATERIAL_COLORS[0]);
+            set2.setCircleColor(ColorTemplate.MATERIAL_COLORS[1]);
 
             set1.setDrawIcons(false);
             set2.setDrawIcons(false);
+            set1.setLineWidth(5f);
+            set2.setLineWidth(5f);
 
+            set1.setDrawCircleHole(true);
+            set2.setDrawCircleHole(true);
+            set1.setCircleHoleRadius(3f);
+            set2.setCircleHoleRadius(3f);
+
+            set1.setCircleRadius(7f);
+            set2.setCircleRadius(7f);
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1);
             dataSets.add(set2);
 
+
             LineData data = new LineData(dataSets);
             data.setValueTextSize(10f);
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setDrawGridLines(false);
+            xAxis.setDrawLabels(false);
+            xAxis.setDrawAxisLine(false);
+
+            YAxis yAxis1 = chart.getAxisLeft();
+            yAxis1.setDrawGridLines(false);
+            yAxis1.setDrawLabels(false);
+
+            YAxis yAxis2 = chart.getAxisRight();
+            yAxis2.setDrawGridLines(false);
+            yAxis2.setDrawLabels(false);
+
+            chart.getDescription().setEnabled(false);
+            chart.setDoubleTapToZoomEnabled(false);
+            chart.setPinchZoom(false);
+
+            Legend legend = chart.getLegend();
+            legend.setTextSize(16f);
+            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+
             chart.setData(data);
+//            chart.setVisibleXRange(chart.getHighestVisibleX()-10, chart.getHighestVisibleX());
             chart.animateXY(1000, 1000);
         }
 

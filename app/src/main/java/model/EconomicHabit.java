@@ -97,8 +97,8 @@ public class EconomicHabit extends Habit {
     }
     
     public void increaseFailedTotal(int failedAmout){
-        long newdate = (new Date().getTime() - TimeUnit.DAYS.toMillis(2));
-        failedMap.put(Long.toString(newdate), failedAmout);
+        //long newdate = (new Date().getTime() - TimeUnit.DAYS.toMillis(2));
+        failedMap.put(Long.toString(new Date().getTime()), failedAmout);
         this.failedTotal += failedAmout;
     }
 }

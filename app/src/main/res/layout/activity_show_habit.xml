@@ -156,18 +156,11 @@
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/detailChart"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_margin="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/getProgressTextView"></com.github.mikephil.charting.charts.LineChart>
-
-    </com.github.mikephil.charting.charts.HorizontalBarChart>
+        app:layout_constraintTop_toBottomOf="@+id/getFailTextView" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/detailChartDate"
@@ -176,7 +169,7 @@
         android:layout_margin="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/getFailTextView"
-        tools:layout_editor_absoluteX="0dp"></com.github.mikephil.charting.charts.PieChart>
+        tools:layout_editor_absoluteX="0dp" />
 
 
 </android.support.constraint.ConstraintLayout>
