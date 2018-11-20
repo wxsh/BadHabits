@@ -349,18 +349,34 @@ public class HabitActivity extends AppCompatActivity {
     }
 
     private float convertPrice(float price, Spinner spinner) {
-        DecimalFormat df = new DecimalFormat("###.##");
+
         if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[0])) {
-            return Float.parseFloat(df.format(price));
+            return round(price, 2);
         } else if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[1])) {
-            return Float.parseFloat(df.format(price/7));
+            return round(price/7, 2);
         } else if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[2])) {
-            return Float.parseFloat(df.format(price/30));
+            return round(price/30, 2);
         } else if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[3])) {
-            return Float.parseFloat(df.format(price/365));
+            return round(price/30, 2);
         } else return 0;
     }
 
+    public static float round(float value, int scale) {
+        int pow = 10;
+        for (int i = 1; i < scale; i++) {
+            pow *= 10;
+        }
+        float tmp = value * pow;
+        float tmpSub = tmp - (int) tmp;
 
+        return ( (float) ( (int) (
+                value >= 0
+                        ? (tmpSub >= 0.5f ? tmp + 1 : tmp)
+                        : (tmpSub >= -0.5f ? tmp : tmp - 1)
+        ) ) ) / pow;
+
+        // Below will only handles +ve values
+        // return ( (float) ( (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) ) ) / pow;
+    }
 }
 
