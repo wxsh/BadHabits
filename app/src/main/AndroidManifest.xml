@@ -44,6 +44,8 @@
         <activity android:name=".ShowHabitActivity"
             android:label="Habit details"
             android:parentActivityName=".MainActivity"/>
+
+        <receiver android:name=".NotificationUpdate" />
     </application>
 
 </manifest>

@@ -1,12 +1,10 @@
 package no.hiof.andrekar.badhabits;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -67,19 +65,19 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             String userTheme = sharedPref.getString("key_theme", "");
 
             if (userTheme.equals("Light")){
-                holder.cardView.setCardBackgroundColor(mContext.getResources().getColor(ThemeColors.COLOR_PRIMARY_DARK));
+                holder.cardView.setCardBackgroundColor(mContext.getResources().getColor(GlobalConstants.COLOR_PRIMARY_DARK));
 
             }
             else if (userTheme.equals("Dark")){
-                holder.cardView.setCardBackgroundColor(mContext.getResources().getColor(ThemeColors.COLOR_ACENT));
-                holder.habitName.setBackgroundResource(ThemeColors.COLOR_ACENT);
-                holder.habitName.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+                holder.cardView.setCardBackgroundColor(mContext.getResources().getColor(GlobalConstants.COLOR_ACENT));
+                holder.habitName.setBackgroundResource(GlobalConstants.COLOR_ACENT);
+                holder.habitName.setTextColor(mContext.getResources().getColor(GlobalConstants.EDIT_TEXT_COLOR));
 
-                holder.habitGoal.setBackgroundResource(ThemeColors.COLOR_ACENT);
-                holder.habitGoal.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+                holder.habitGoal.setBackgroundResource(GlobalConstants.COLOR_ACENT);
+                holder.habitGoal.setTextColor(mContext.getResources().getColor(GlobalConstants.EDIT_TEXT_COLOR));
 
-                holder.habitDescription.setBackgroundResource(ThemeColors.COLOR_ACENT);
-                holder.habitDescription.setTextColor(mContext.getResources().getColor(ThemeColors.EDIT_TEXT_COLOR));
+                holder.habitDescription.setBackgroundResource(GlobalConstants.COLOR_ACENT);
+                holder.habitDescription.setTextColor(mContext.getResources().getColor(GlobalConstants.EDIT_TEXT_COLOR));
                 //holder.habitGoal.setTextColor(R.attr.colorPrimary);
 
                 //holder.cardView.setBackgroundColor(mContext.getResources().getColor(R.color.primaryColorDark));

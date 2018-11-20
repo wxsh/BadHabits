@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DateHabit extends Habit {
     private Integer dateGoalValue;
+
     public DateHabit() {}
     private String habitType = "DATE_HABIT";
 
@@ -62,5 +63,13 @@ public class DateHabit extends Habit {
             return dateGoal + " Days since start";
         }
         else return "Has not started yet.";
+    }
+
+    public long getDateGoalMillis(){
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date(this.getStartDate()));
+        c.add(Calendar.DATE,this.getDateGoalValue());
+        return getDateDiff(new Date().getTime(), c.getTimeInMillis(), TimeUnit.MILLISECONDS);
+
     }
 }

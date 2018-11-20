@@ -47,6 +47,8 @@
     <string name="add_test_habits">Add test habits</string>
     <string name="remove_all_habits">Remove all habits</string>
     <string name="update">Update</string>
+    <string name="channel_name">NOT_CHANNEL</string>
+    <string name="channel_description">notification channel</string>
     <string name="action_sort">Sort</string>
     <string name="ecohabitFail_trailing">day streak</string>
     <string name="settings_signed_in">"Signed in as"</string>

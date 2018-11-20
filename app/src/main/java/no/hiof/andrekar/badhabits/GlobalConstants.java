@@ -1,23 +1,19 @@
 package no.hiof.andrekar.badhabits;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.support.annotation.ColorInt;
 
-import org.w3c.dom.Attr;
-
-import java.security.KeyStore;
-import java.util.jar.Attributes;
-
-public class ThemeColors {
+public class GlobalConstants {
 
     public static int COLOR_PRIMARY, COLOR_PRIMARY_DARK, COLOR_ACENT, EDIT_TEXT_COLOR, PRIMARY_TEXT_COLOR_BLACK;
 
-    private static ThemeColors single_instance = null;
+    public final static String CHANNEL_ID = "default";
+
+
+    private static GlobalConstants single_instance = null;
     private static Context mContext;
 
-    private ThemeColors(Context context) {
+    private GlobalConstants(Context context) {
         this.mContext = context;
 
         {
@@ -46,10 +42,10 @@ public class ThemeColors {
         }
     }
 
-    public static ThemeColors getInstance()
+    public static GlobalConstants getInstance()
     {
         if (single_instance == null)
-            single_instance = new ThemeColors(mContext);
+            single_instance = new GlobalConstants(mContext);
 
         return single_instance;
     }

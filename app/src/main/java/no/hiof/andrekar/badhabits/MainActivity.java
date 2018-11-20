@@ -1,9 +1,14 @@
 package no.hiof.andrekar.badhabits;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -91,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
     private static Context context;
     private SaveData saveData = new SaveData();
 
+
+    public static SharedPreferences preferences;
+    public static AlarmManager mAlarmManager;
+
     public boolean isNetworkAvailable(Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
@@ -98,8 +107,36 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String userTheme = preferences.getString("key_theme", "");
+
+
+        if (userTheme.equals("Light")){
+            setTheme(R.style.LightTheme);
+        }
+        else if (userTheme.equals("Dark")){
+            setTheme(R.style.DarkTheme);
+        }
+        else
+            setTheme(R.style.AppTheme);
+
+        GlobalConstants.update(this);
+
         super.onCreate(savedInstanceState);
 
+<<<<<<<
+
+=======
+
+
+
+        if(mDatabase == null) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            database.setPersistenceEnabled(true);
+            mDatabase = database.getReference();
+            database.getReference(mAuth.getUid()).keepSynced(true);
+        }
+>>>>>>>
         mAuth = FirebaseAuth.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             mAuth.signInAnonymously()
@@ -210,10 +247,76 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
             PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
+        createNotificationChannel();
 
             mainLayout = findViewById(R.id.main_parent_layout);
         }
     }
+
+
+    public static void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationChannel notificationChannel = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notificationChannel = new NotificationChannel(GlobalConstants.CHANNEL_ID,
+                        "primary", NotificationManager.IMPORTANCE_DEFAULT);
+
+                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                if (manager != null) manager.createNotificationChannel(notificationChannel);
+
+                mAlarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+
+            }
+            if (Habit.habits != null && preferences.getBoolean(SettingsActivity.KEY_PREF_NOT_ON, false)) {
+
+                long timeLeft = 0;
+                boolean first = true;
+                DateHabit closeHabit = null;
+
+                for (int i = 0; i < Habit.habits.size() - 1; i++) {
+                    if (Habit.habits.get(i) instanceof DateHabit) {
+
+                        if (first) {
+                            timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
+                            closeHabit =(DateHabit) Habit.habits.get(i);
+                            first = false;
+                        }else{
+                            if(timeLeft > ((DateHabit)Habit.habits.get(i)).getDateGoalMillis()){
+                                timeLeft = ((DateHabit)Habit.habits.get(i)).getDateGoalMillis();
+                                closeHabit =(DateHabit) Habit.habits.get(i);
+                            }
+                        }
+                    }
+                }
+
+
+                if(closeHabit != null) {
+                    Intent intent = new Intent(context.getApplicationContext(), NotificationUpdate.class);
+                    intent.putExtra("habitName", closeHabit.getTitle());
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
+                            intent, 0);
+
+                    //DONE: THE RIGH Fu*#n calculations
+                    Calendar rightNow = Calendar.getInstance();
+                    int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY) + 1; // return the hour in 24 hrs format (ranging from 0-23)
+                    int currentMin = rightNow.get(Calendar.MINUTE); // return the min (ranging from 0-59)
+                    long totTimeLeft = (long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
+
+                    long timeToNote = ((long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f)) - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
+
+                    mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  System.currentTimeMillis() + timeToNote, pendingIntent);
+                    System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
+                }
+
+            }
+        }
+    }
+
 
     public void bottomSheet() {
         // get the bottom sheet view
@@ -740,15 +843,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             else
                 setTheme(R.style.AppTheme);
 
-
-            ThemeColors.update(this);
-
-            //TODO:
-            if (userTheme.equals("Light")){
-            }
-            else if (userTheme.equals("Dark")){
-                //mainLayout.setBackgroundColor(getResources().getColor(R.color.primaryColorDark));
-            }
         }
 
         public static void refreshUi() {

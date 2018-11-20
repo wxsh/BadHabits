@@ -95,7 +95,7 @@ public class HabitActivity extends AppCompatActivity {
         if (userTheme.equals("Light")){
         }
         else if (userTheme.equals("Dark")){
-            parentView.setBackgroundColor(getResources().getColor(ThemeColors.COLOR_PRIMARY));
+            parentView.setBackgroundColor(getResources().getColor(GlobalConstants.COLOR_PRIMARY));
         }
 
         dateEditText = findViewById(R.id.newHabit_startDate);

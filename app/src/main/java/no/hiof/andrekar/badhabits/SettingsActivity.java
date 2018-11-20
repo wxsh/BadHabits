@@ -44,6 +44,8 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String KEY_PREF_THEME = "key_theme";
     public static final String KEY_PREF_ONBOARD = "key_onboard";
     public static final String KEY_PREF_ONBOARDSHOWHABIT = "key_onboard_showhabit";
+    public static final String KEY_PREF_NOT_TIME = "key_not_time";
+    public static final String KEY_PREF_NOT_ON = "key_not_on";
 
     private FirebaseAuth mAuth;
 
