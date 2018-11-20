@@ -378,14 +378,14 @@ public class ShowHabitActivity extends AppCompatActivity {
                     long mapDate = habit.convertMillisToDays(Long.parseLong(entry.getKey()));
                     float mapAmount = entry.getValue();
 
-                    Log.d("MAPS", Long.toString(mapDate-1));
+                    Log.d("MAPS", Long.toString(mapDate));
 
                     long startDateInDays = habit.convertMillisToDays(habit.getStartDate());
                     long dateToCheck = startDateInDays + i;
                     Log.d("MAPS", Long.toString(dateToCheck));
 
 
-                    if( (mapDate-1) == dateToCheck) {
+                    if( (mapDate) == dateToCheck) {
                         Log.d("MAPS", "Found matching entry");
                         price = price - mapAmount;
                     }
@@ -465,10 +465,12 @@ public class ShowHabitActivity extends AppCompatActivity {
             YAxis yAxis1 = chart.getAxisLeft();
             yAxis1.setDrawGridLines(false);
             yAxis1.setDrawLabels(false);
+            yAxis1.setDrawAxisLine(false);
 
             YAxis yAxis2 = chart.getAxisRight();
             yAxis2.setDrawGridLines(false);
             yAxis2.setDrawLabels(false);
+            yAxis2.setDrawAxisLine(false);
 
             chart.getDescription().setEnabled(false);
             chart.setDoubleTapToZoomEnabled(false);
