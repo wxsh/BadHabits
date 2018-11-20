@@ -46,7 +46,7 @@ public class Habit {
 
 
     //Constructors
-    public Habit(String title, String description, long startDate, Boolean isFavourite) {
+    public Habit(String title, String description, long startDate, Boolean isFavourite, String habitType) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
@@ -54,6 +54,7 @@ public class Habit {
         this.uid = UUID.randomUUID().toString();
         this.failDate = 0;
         this.failureTimes = 0;
+        this.habitType = habitType;
         //We add habits when we save them, so adding to list is currently not needed.
         //habits.add(this);
     }
@@ -145,6 +146,15 @@ public class Habit {
             return result;
         }
     };
+
+    @Exclude
+    public String getHabitType() {
+        return habitType;
+    }
+
+    public void setHabitType(String habitType) {
+        this.habitType = habitType;
+    }
 
     public static Comparator<Habit> HabitComparatorGoal = new Comparator<Habit>() {
         @Override

@@ -174,7 +174,7 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user != null) {
                     //userIdTW.setText("Du er logget inn som " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                    googlePref.setSummary("Signed in with "+FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    googlePref.setSummary("Signed in with "+FirebaseAuth.getInstance().getCurrentUser().getUid());
                     SaveData saveData = new SaveData();
                     saveData.readFromFile();
                 } else {
