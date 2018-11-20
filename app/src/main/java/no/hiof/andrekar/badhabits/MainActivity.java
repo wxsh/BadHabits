@@ -276,23 +276,24 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
                                 intent, 0);
 
-                        //TODO calculate correct time
+                        //TODO: THE RIGH Fu*#n calculations
                         Calendar rightNow = Calendar.getInstance();
-                        int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY); // return the hour in 24 hrs format (ranging from 0-23)
+                        int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY) + 1; // return the hour in 24 hrs format (ranging from 0-23)
                         long baseTime = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(currentHourIn24Format);
-                        long daysInMillis   =  TimeUnit.HOURS.toMillis(timeLeft);
-                        long totTimeLeft = (TimeUnit.HOURS.toMillis((long)preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0)));
+                        long daysInMillis   =  TimeUnit.DAYS.toMillis(timeLeft);
+                        long totTimeLeft = (long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
                         long totTime = (baseTime + daysInMillis + totTimeLeft);
 
-                        long he = System.currentTimeMillis() + totTimeLeft;
+                        long temp = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(currentHourIn24Format + 1) + totTimeLeft;
 
-                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  totTime, pendingIntent);
 
-                        System.out.println("tiden Day in m " + TimeUnit.MILLISECONDS.toMinutes(daysInMillis));
-                        System.out.println("tiden totTimeL " + TimeUnit.MILLISECONDS.toMinutes(totTimeLeft));
-                        System.out.println("tiden D O M " + TimeUnit.MILLISECONDS.toMinutes(timeLeft));
-                        System.out.println("tiden sys Tim " + TimeUnit.MILLISECONDS.toMinutes((System.currentTimeMillis())));
-                        System.out.println("tiden base Ti " + TimeUnit.MILLISECONDS.toMinutes(baseTime));
+
+                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  temp, pendingIntent);
+                        System.out.println("tidenDim " + TimeUnit.MILLISECONDS.toMinutes(daysInMillis));
+                        System.out.println("tidenTtl " + TimeUnit.MILLISECONDS.toMinutes(totTimeLeft));
+                        System.out.println("tiden " + TimeUnit.HOURS.toMinutes(rightNow.get(Calendar.HOUR_OF_DAY ) + 1));
+
+                        System.out.println("tiden temp " + (TimeUnit.HOURS.toMillis(currentHourIn24Format + 1) - totTimeLeft ));
                     }
 
                 }
