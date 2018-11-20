@@ -301,12 +301,12 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     long totTimeLeft = (long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
                     long daysInMillis = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()));
 
-                    long timeToNote = ((long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f)) + daysInMillis - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
+                    long timeToNote = (totTimeLeft) + daysInMillis - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
+                    if(timeToNote > 0) {
 
-                    if(timeToNote > 0 || daysInMillis > 1) {
                         mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + timeToNote, pendingIntent);
-                        System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
-                        System.out.println("tiden days " + (TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()))));
+                        //System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
+                        //System.out.println("tiden days " + (TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()))));
                     }
                 }
 
