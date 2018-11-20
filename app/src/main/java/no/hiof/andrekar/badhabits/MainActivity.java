@@ -55,10 +55,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.takusemba.spotlight.OnSpotlightStateChangedListener;
 import com.takusemba.spotlight.Spotlight;
 import com.takusemba.spotlight.shape.Circle;
 import com.takusemba.spotlight.target.SimpleTarget;
+
+import org.threeten.bp.temporal.ChronoUnit;
 
 import model.SaveData;
 
@@ -110,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
     protected void onCreate(Bundle savedInstanceState) {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String userTheme = preferences.getString("key_theme", "");
+        AndroidThreeTen.init(this);
 
 
         if (userTheme.equals("Light")){
@@ -648,8 +652,8 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     }
                     entriesEco.add(new PieEntry(abs(((EconomicHabit) habit).getProgress()), habit.getTitle()));
 
-                    if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreakEco && habit.getFailDate() != 0) {
-                        longestStreakEco = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS);
+                    if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), ChronoUnit.DAYS) > longestStreakEco && habit.getFailDate() != 0) {
+                        longestStreakEco = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  ChronoUnit.DAYS);
                         //Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
                         longestStreakName = habit.getTitle();
                         if (longestStreakEco == -1) {
@@ -659,11 +663,11 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                         }
                     }
                     //TODO: double check that the math here is correct.
-                    float dateGoalL = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
+                    float dateGoalL = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS);
                     float saved = (( ((EconomicHabit) habit).getGoalValue() + (dateGoalL*((EconomicHabit) habit).getAlternativePrice()) ) - (dateGoalL*((EconomicHabit) habit).getPrice()) - ((EconomicHabit) habit).getFailedTotal());
                     long remaining = (long)(saved/dateGoalL);
-                    if (Habit.getDateDiff(remaining ,new Date().getTime(), TimeUnit.DAYS) > daysTillFinishedEco && ((EconomicHabit) habit).getGoalValue() != 0) {
-                        daysTillFinishedEco = Habit.getDateDiff(new Date().getTime(),remaining,  TimeUnit.DAYS);
+                    if (Habit.getDateDiff(remaining ,new Date().getTime(), ChronoUnit.DAYS) > daysTillFinishedEco && ((EconomicHabit) habit).getGoalValue() != 0) {
+                        daysTillFinishedEco = Habit.getDateDiff(new Date().getTime(),remaining,  ChronoUnit.DAYS);
                         daysTillFinishedEcoText.setText("Days till finished: " + remaining);
                     }
 
@@ -672,9 +676,9 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 } if (habit instanceof DateHabit) {
                     totalDays += habit.getDaysFromStart();
                     dateBottomText.setText("Days without: " + totalDays + " days");
-                    entriesDate.add(new PieEntry(Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), TimeUnit.DAYS), habit.getTitle()));
-                    if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS) > longestStreakDate && habit.getFailDate() != 0) {
-                        longestStreakDate = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS);
+                    entriesDate.add(new PieEntry(Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS), habit.getTitle()));
+                    if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), ChronoUnit.DAYS) > longestStreakDate && habit.getFailDate() != 0) {
+                        longestStreakDate = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  ChronoUnit.DAYS);
                         //Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
                         longestStreakName = habit.getTitle();
                         if (longestStreakDate == -1) {
@@ -683,8 +687,8 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                             longestStreakDateText.setText("Days since last fail: " + longestStreakDate + " (" + longestStreakName + ")");
                         }
                     }
-                    if (Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), TimeUnit.DAYS) > longestDateHabit && habit.getStartDate() != 0) {
-                        longestDateHabit = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(),  TimeUnit.DAYS);
+                    if (Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS) > longestDateHabit && habit.getStartDate() != 0) {
+                        longestDateHabit = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(),  ChronoUnit.DAYS);
                         longestDateName = habit.getTitle();
                         if (longestDateHabit == -1) {
                             longestDateHabitText.setText("No Date habits");
@@ -695,8 +699,8 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     Calendar c = Calendar.getInstance();
                     c.setTime(new Date(habit.getStartDate()));
                     c.add(Calendar.DATE,((DateHabit)habit).getDateGoalValue());
-                    if (Habit.getDateDiff(new Date().getTime(),c.getTimeInMillis() , TimeUnit.DAYS) > daysTillFinishedDate && ((DateHabit) habit).getDateGoalValue() != 0) {
-                        daysTillFinishedDate = Habit.getDateDiff(new Date().getTime(),c.getTimeInMillis(),  TimeUnit.DAYS);
+                    if (Habit.getDateDiff(new Date().getTime(),c.getTimeInMillis() , ChronoUnit.DAYS) > daysTillFinishedDate && ((DateHabit) habit).getDateGoalValue() != 0) {
+                        daysTillFinishedDate = Habit.getDateDiff(new Date().getTime(),c.getTimeInMillis(),  ChronoUnit.DAYS);
                         daysTillFinishedDateText.setText("Days till finished: " + daysTillFinishedDate);
                     }
                 }

@@ -4,11 +4,14 @@ import android.util.Log;
 
 import com.google.firebase.firestore.Exclude;
 
+import org.threeten.bp.temporal.ChronoUnit;
+
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import static org.threeten.bp.temporal.ChronoUnit.DAYS;
 
 //DONE: Implement maths in class? IE: getters for progress?
 
@@ -46,7 +49,7 @@ public class DateHabit extends Habit {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(this.getStartDate()));
         c.add(Calendar.DATE,this.getDateGoalValue());
-        long dateGoalL = Habit.getDateDiff(new Date().getTime(), c.getTimeInMillis(), TimeUnit.DAYS);
+        long dateGoalL = Habit.getDateDiff(new Date().getTime(), c.getTimeInMillis(), DAYS);
         dateGoal = Long.toString(dateGoalL);
         if (Long.valueOf(dateGoalL) > 0) {
             return dateGoal + " Remaining";
@@ -57,7 +60,7 @@ public class DateHabit extends Habit {
     @Exclude
     public String getDaysSinceStart(){
         String dateGoal;
-        long dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
+        long dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), DAYS);
         dateGoal = Long.toString(dateGoalL);
         if(Long.valueOf(dateGoalL) > 0){
             return dateGoal + " Days since start";
@@ -69,7 +72,7 @@ public class DateHabit extends Habit {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(this.getStartDate()));
         c.add(Calendar.DATE,this.getDateGoalValue());
-        return getDateDiff(new Date().getTime(), c.getTimeInMillis(), TimeUnit.MILLISECONDS);
-
+        //TODO: Double check this conversion
+        return TimeUnit.DAYS.toMillis(getDateDiff(new Date().getTime(), c.getTimeInMillis(), ChronoUnit.DAYS));
     }
 }

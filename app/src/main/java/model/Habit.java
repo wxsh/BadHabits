@@ -12,9 +12,12 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.Year;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.temporal.ChronoUnit;
 
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -22,6 +25,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import static org.threeten.bp.temporal.ChronoUnit.DAYS;
+import static org.threeten.bp.temporal.ChronoUnit.MILLIS;
+import static org.threeten.bp.temporal.ChronoUnit.YEARS;
 
 public class Habit {
     //An ArrayList to contain all habits when they are created
@@ -111,7 +118,7 @@ public class Habit {
 
     @Exclude
     public float getDaysFromStart() {
-        return Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
+        return Habit.getDateDiff(this.getStartDate(), new Date().getTime(), ChronoUnit.DAYS);
     }
 
     public String getUid() { return uid; }
@@ -206,10 +213,17 @@ public class Habit {
         }
     };
 
-    public static long getDateDiff(long date1, long date2, TimeUnit timeUnit) {
+    public static long getDateDiff(long date1, long date2, ChronoUnit timeUnit) {
         //TODO: Look into replacing this function? Seems to be one day off.
-        long diffInMillis = date2 - date1;
-        return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
+
+        LocalDate lDate1 =
+                Instant.ofEpochMilli(date1).atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate lDate2 =
+                Instant.ofEpochMilli(date2).atZone(ZoneId.systemDefault()).toLocalDate();
+        return timeUnit.between(lDate1, lDate2);
+
+        //long diffInMillis = date2 - date1;
+        //return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
     }
 
     public int getFailureTimes() {
