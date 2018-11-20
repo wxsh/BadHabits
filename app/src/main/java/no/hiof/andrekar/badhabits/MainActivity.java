@@ -91,9 +91,8 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
     private static RecyclerView favoriteRecyclerView;
     private static Context context;
 
+
     public static SharedPreferences preferences;
-
-
     public static AlarmManager mAlarmManager;
 
     @Override
@@ -247,49 +246,48 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 mAlarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
             }
-                if (Habit.habits != null) {
+            if (Habit.habits != null && preferences.getBoolean(SettingsActivity.KEY_PREF_NOT_ON, false)) {
 
-                    long timeLeft = 0;
-                    boolean first = true;
-                    DateHabit closeHabit = null;
+                long timeLeft = 0;
+                boolean first = true;
+                DateHabit closeHabit = null;
 
-                    for (int i = 0; i < Habit.habits.size() - 1; i++) {
-                        if (Habit.habits.get(i) instanceof DateHabit) {
+                for (int i = 0; i < Habit.habits.size() - 1; i++) {
+                    if (Habit.habits.get(i) instanceof DateHabit) {
 
-                            if (first) {
-                                timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
+                        if (first) {
+                            timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
+                            closeHabit =(DateHabit) Habit.habits.get(i);
+                            first = false;
+                        }else{
+                            if(timeLeft > ((DateHabit)Habit.habits.get(i)).getDateGoalMillis()){
+                                timeLeft = ((DateHabit)Habit.habits.get(i)).getDateGoalMillis();
                                 closeHabit =(DateHabit) Habit.habits.get(i);
-                                first = false;
-                            }else{
-                                if(timeLeft > ((DateHabit)Habit.habits.get(i)).getDateGoalMillis()){
-                                    timeLeft = ((DateHabit)Habit.habits.get(i)).getDateGoalMillis();
-                                    closeHabit =(DateHabit) Habit.habits.get(i);
-                                }
                             }
                         }
                     }
-
-
-                    if(closeHabit != null) {
-                        Intent intent = new Intent(context.getApplicationContext(), NotificationUpdate.class);
-                        intent.putExtra("habitName", closeHabit.getTitle());
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
-                                intent, 0);
-
-                        //DONE: THE RIGH Fu*#n calculations
-                        Calendar rightNow = Calendar.getInstance();
-                        int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY) + 1; // return the hour in 24 hrs format (ranging from 0-23)
-                        int currentMin = rightNow.get(Calendar.MINUTE); // return the min (ranging from 0-59)
-                        long totTimeLeft = (long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
-
-                        long timeToNote = ((long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f)) - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
-
-                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  System.currentTimeMillis() + timeToNote, pendingIntent);
-                        System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
-                    }
-
                 }
 
+
+                if(closeHabit != null) {
+                    Intent intent = new Intent(context.getApplicationContext(), NotificationUpdate.class);
+                    intent.putExtra("habitName", closeHabit.getTitle());
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
+                            intent, 0);
+
+                    //DONE: THE RIGH Fu*#n calculations
+                    Calendar rightNow = Calendar.getInstance();
+                    int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY) + 1; // return the hour in 24 hrs format (ranging from 0-23)
+                    int currentMin = rightNow.get(Calendar.MINUTE); // return the min (ranging from 0-59)
+                    long totTimeLeft = (long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
+
+                    long timeToNote = ((long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f)) - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
+
+                    mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  System.currentTimeMillis() + timeToNote, pendingIntent);
+                    System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
+                }
+
+            }
         }
     }
 
