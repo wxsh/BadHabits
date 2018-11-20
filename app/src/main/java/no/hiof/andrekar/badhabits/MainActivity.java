@@ -41,6 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
@@ -353,8 +354,10 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                         btnBottomSheet.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_more));
                         bottomSheetPieEco.setVisibility(View.VISIBLE);
                         bottomSheetPieDate.setVisibility(View.VISIBLE);
-                        bottomSheetPieEco.animateXY(500, 500);
-                        bottomSheetPieDate.animateXY(500, 500);
+                        bottomSheetPieEco.animateY(500, Easing.EaseInOutQuad);
+
+                        //bottomSheetPieEco.animateXY(500, 500);
+                        bottomSheetPieDate.animateY(500, Easing.EaseInOutQuad);
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
@@ -718,6 +721,8 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             bottomSheetPieEco.getLegend().setWordWrapEnabled(true);
             bottomSheetPieEco.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
             bottomSheetPieEco.setDrawEntryLabels(false);
+            bottomSheetPieEco.setDragDecelerationFrictionCoef(2f);
+            bottomSheetPieEco.setDrawHoleEnabled(false);
             bottomSheetPieEco.setData(dataEco);
             bottomSheetPieEco.highlightValue(null);
             bottomSheetPieEco.invalidate();
@@ -726,6 +731,8 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             bottomSheetPieDate.getLegend().setWordWrapEnabled(true);
             bottomSheetPieDate.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
             bottomSheetPieDate.setDrawEntryLabels(false);
+            bottomSheetPieDate.setDrawHoleEnabled(false);
+            bottomSheetPieDate.setDragDecelerationFrictionCoef(2f);
             bottomSheetPieDate.setData(dataDate);
             bottomSheetPieDate.highlightValue(null);
             bottomSheetPieDate.invalidate();

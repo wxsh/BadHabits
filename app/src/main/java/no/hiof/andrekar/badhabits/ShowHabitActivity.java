@@ -412,19 +412,22 @@ public class ShowHabitActivity extends AppCompatActivity {
             entriesDate.add(new PieEntry((100- ( habit.getFailureTimes() / habit.getDaysFromStart() * 100)), "Success Rate"));
             entriesDate.add(new PieEntry(( ( habit.getFailureTimes() / habit.getDaysFromStart() * 100)), "Failure Rate"));
         }
-        colors.add(Color.GREEN);
-        colors.add(Color.RED);
+        for (int c : ColorTemplate.MATERIAL_COLORS)
+        colors.add(c);
 
         dataSetDate.setColors(colors);
         dataSetDate.setDrawIcons(false);
+        dataSetDate.setValueTextSize(15f);
+        dataSetDate.setValueTextColor(Color.WHITE);
         dateChart.setVisibility(View.VISIBLE);
         dateChart.setDrawHoleEnabled(false);
         dateChart.getDescription().setEnabled(false);
         dateChart.setDrawCenterText(false);
         dateChart.getLegend().setWordWrapEnabled(true);
         dateChart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        dateChart.getLegend().setTextSize(15);
+        dateChart.getLegend().setTextSize(15f);
         dateChart.setData(dataDate);
+        dateChart.setExtraOffsets(0,0,0,0);
         dateChart.highlightValue(null);
         dateChart.setDrawEntryLabels(false);
         dateChart.invalidate();
