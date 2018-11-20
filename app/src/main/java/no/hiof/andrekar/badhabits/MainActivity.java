@@ -298,11 +298,15 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY) + 1; // return the hour in 24 hrs format (ranging from 0-23)
                     int currentMin = rightNow.get(Calendar.MINUTE); // return the min (ranging from 0-59)
                     long totTimeLeft = (long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
+                    long daysInMillis = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()));
 
-                    long timeToNote = ((long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f)) - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
+                    long timeToNote = ((long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f)) + daysInMillis - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
 
-                    mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  System.currentTimeMillis() + timeToNote, pendingIntent);
-                    System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
+                    if(timeToNote > 0 || daysInMillis > 1) {
+                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + timeToNote, pendingIntent);
+                        System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
+                        System.out.println("tiden days " + (TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()))));
+                    }
                 }
 
             }
