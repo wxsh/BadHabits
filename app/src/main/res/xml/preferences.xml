@@ -10,7 +10,7 @@
             android:icon="@drawable/ic_currency_usd"
             android:key="key_currency"
             android:summary="Choose currency"
-            android:title="Currency"/>
+            android:title="Currency" />
         <ListPreference
             android:entries="@array/theme_array"
             android:entryValues="@array/theme_array"
@@ -26,10 +26,10 @@
             android:dialogTitle="Google"
             android:entries="@array/google_array"
             android:entryValues="@array/google_array"
-            android:icon="@drawable/googleg_standard_color_18"
+            android:icon="@drawable/ic_google"
             android:key="key_google"
             android:summary="Sign in with google"
-            android:title="Google"/>
+            android:title="Google" />
 
         <PreferenceCategory android:title="Notifications">
                 <SwitchPreference

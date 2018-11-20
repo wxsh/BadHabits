@@ -162,7 +162,8 @@ public class Habit {
             int result = Boolean.compare(h1.getIsFavourite(), h2.getIsFavourite());
             if (result == 0) {
                 // boolean values the same
-                // TODO implement Comparator for sorting by remaining.
+                // TODO: Look into sorting both date habits and economic habit
+                // DONE implement Comparator for sorting by remaining.
                 if (h2 instanceof EconomicHabit && h1 instanceof EconomicHabit) {
                     if (((EconomicHabit) h2).getProgress() > ((EconomicHabit) h1).getProgress()) {
                         return 1;
@@ -174,7 +175,8 @@ public class Habit {
                 } else if (h2 instanceof DateHabit && h1 instanceof EconomicHabit) {
                     return 1;
                 } else if (h2 instanceof DateHabit && h1 instanceof DateHabit) {
-                    //Holy stringtrimming batman
+                    //TODO: Fix crash when goal is reached and sorting by Goal.
+                    // Holy stringtrimming batman
                     if (Integer.parseInt((((DateHabit) h2).getDateGoal().substring(0, ((DateHabit) h2).getDateGoal().indexOf(" ")))) > (Integer.parseInt((((DateHabit) h1).getDateGoal().substring(0, ((DateHabit) h1).getDateGoal().indexOf(" ")))))) {
                         return -1;
                     } else {
@@ -193,9 +195,9 @@ public class Habit {
             int result = Boolean.compare(h1.getIsFavourite(), h2.getIsFavourite());
             if (result == 0) {
                 if (h1 instanceof EconomicHabit && h2 instanceof DateHabit) {
-                    return 1;
-                } else if (h1 instanceof DateHabit && h2 instanceof EconomicHabit) {
                     return -1;
+                } else if (h1 instanceof DateHabit && h2 instanceof EconomicHabit) {
+                    return 1;
                 } else {
                     return 0;
                 }
