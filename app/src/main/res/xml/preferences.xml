@@ -33,7 +33,7 @@
 
         <PreferenceCategory android:title="Notifications">
                 <Preference
-                    android:defaultValue="12"
+                    android:defaultValue="12.0f"
                     android:dialogTitle="Notification time"
                     android:icon="@drawable/ic_watch_later_black"
                     android:key="key_not_time"

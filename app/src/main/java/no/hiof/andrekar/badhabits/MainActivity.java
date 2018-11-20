@@ -2,7 +2,6 @@ package no.hiof.andrekar.badhabits;
 
 import android.Manifest;
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,10 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.graphics.Point;
-import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -25,20 +21,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.text.Layout;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -46,7 +37,6 @@ import android.view.animation.LayoutAnimationController;
 import android.view.animation.Transformation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -101,12 +91,14 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
     private static RecyclerView favoriteRecyclerView;
     private static Context context;
 
+    public static SharedPreferences preferences;
+
 
     public static AlarmManager mAlarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String userTheme = preferences.getString("key_theme", "");
 
 
@@ -277,14 +269,32 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                         }
                     }
 
+
                     if(closeHabit != null) {
                         Intent intent = new Intent(context.getApplicationContext(), NotificationUpdate.class);
                         intent.putExtra("habitName", closeHabit.getTitle());
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
                                 intent, 0);
-                        System.out.println("tiden " + timeLeft);
-                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + timeLeft, pendingIntent);
+
+                        //TODO calculate correct time
+                        Calendar rightNow = Calendar.getInstance();
+                        int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY); // return the hour in 24 hrs format (ranging from 0-23)
+                        long baseTime = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(currentHourIn24Format);
+                        long daysInMillis   =  TimeUnit.HOURS.toMillis(timeLeft);
+                        long totTimeLeft = (TimeUnit.HOURS.toMillis((long)preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0)));
+                        long totTime = (baseTime + daysInMillis + totTimeLeft);
+
+                        long he = System.currentTimeMillis() + totTimeLeft;
+
+                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  totTime, pendingIntent);
+
+                        System.out.println("tiden Day in m " + TimeUnit.MILLISECONDS.toMinutes(daysInMillis));
+                        System.out.println("tiden totTimeL " + TimeUnit.MILLISECONDS.toMinutes(totTimeLeft));
+                        System.out.println("tiden D O M " + TimeUnit.MILLISECONDS.toMinutes(timeLeft));
+                        System.out.println("tiden sys Tim " + TimeUnit.MILLISECONDS.toMinutes((System.currentTimeMillis())));
+                        System.out.println("tiden base Ti " + TimeUnit.MILLISECONDS.toMinutes(baseTime));
                     }
+
                 }
 
         }

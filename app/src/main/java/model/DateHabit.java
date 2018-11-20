@@ -60,7 +60,7 @@ public class DateHabit extends Habit {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(this.getStartDate()));
         c.add(Calendar.DATE,this.getDateGoalValue());
-        return getDateDiff(new Date().getTime(), c.getTimeInMillis(), TimeUnit.DAYS);
+        return getDateDiff(new Date().getTime(), c.getTimeInMillis(), TimeUnit.HOURS);
 
     }
 }

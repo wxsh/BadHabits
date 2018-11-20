@@ -10,6 +10,8 @@ import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
 
+import java.util.Calendar;
+
 public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
 
@@ -20,8 +22,9 @@ public class TimePickerFragment extends DialogFragment
         int minute = 0;
 
         // Create a new instance of TimePickerDialog and return it
-        return new TimePickerDialog(getActivity(), this, hour, minute,
+        TimePickerDialog tpd = new TimePickerDialog(getActivity(), this, hour, minute,
                 DateFormat.is24HourFormat(getActivity()));
+        return tpd;
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -32,7 +35,9 @@ public class TimePickerFragment extends DialogFragment
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putFloat(SettingsActivity.KEY_PREF_NOT_TIME, hourOfDay + ((minute/100.0f * 60.0f))/100.0f);
+        float timeInHours = ((float)hourOfDay + (float)(minute)/(float)60);
+        editor.putFloat(SettingsActivity.KEY_PREF_NOT_TIME, timeInHours);
+        System.out.println("Shared pref time: " + timeInHours);
         editor.commit();
 
 
