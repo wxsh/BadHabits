@@ -46,6 +46,8 @@ import com.takusemba.spotlight.Spotlight;
 import com.takusemba.spotlight.shape.Circle;
 import com.takusemba.spotlight.target.SimpleTarget;
 
+import org.threeten.bp.temporal.ChronoUnit;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -152,7 +154,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             failText.setVisibility(View.GONE);
         } else {
             //DONE: Format this as "Days since last fail, maybe?"
-            failedView.setText(Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), TimeUnit.DAYS)) + " " + getString(R.string.ecohabitFail_trailing));
+            failedView.setText(Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), ChronoUnit.DAYS)) + " " + getString(R.string.ecohabitFail_trailing));
         }
 
         setTitle(Habit.habits.get(currentNumber).getTitle());

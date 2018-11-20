@@ -2,6 +2,8 @@ package model;
 
 import com.google.firebase.firestore.Exclude;
 
+import org.threeten.bp.temporal.ChronoUnit;
+
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,7 +68,7 @@ public class EconomicHabit extends Habit {
     @Exclude
     public float getProgress() {
         DecimalFormat df = new DecimalFormat("#######.##");
-        float dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), TimeUnit.DAYS);
+        float dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), ChronoUnit.DAYS);
         float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()) - this.getFailedTotal());
         int temp = (int)(100*saved);
         saved = ((float)temp/100);
