@@ -276,24 +276,16 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
                                 intent, 0);
 
-                        //TODO: THE RIGH Fu*#n calculations
+                        //DONE: THE RIGH Fu*#n calculations
                         Calendar rightNow = Calendar.getInstance();
                         int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY) + 1; // return the hour in 24 hrs format (ranging from 0-23)
-                        long baseTime = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(currentHourIn24Format);
-                        long daysInMillis   =  TimeUnit.DAYS.toMillis(timeLeft);
+                        int currentMin = rightNow.get(Calendar.MINUTE); // return the min (ranging from 0-59)
                         long totTimeLeft = (long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
-                        long totTime = (baseTime + daysInMillis + totTimeLeft);
 
-                        long temp = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(currentHourIn24Format + 1) + totTimeLeft;
+                        long timeToNote = ((long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f)) - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
 
-
-
-                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  temp, pendingIntent);
-                        System.out.println("tidenDim " + TimeUnit.MILLISECONDS.toMinutes(daysInMillis));
-                        System.out.println("tidenTtl " + TimeUnit.MILLISECONDS.toMinutes(totTimeLeft));
-                        System.out.println("tiden " + TimeUnit.HOURS.toMinutes(rightNow.get(Calendar.HOUR_OF_DAY ) + 1));
-
-                        System.out.println("tiden temp " + (TimeUnit.HOURS.toMillis(currentHourIn24Format + 1) - totTimeLeft ));
+                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,  System.currentTimeMillis() + timeToNote, pendingIntent);
+                        System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
                     }
 
                 }

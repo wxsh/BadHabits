@@ -26,7 +26,7 @@ public class NotificationUpdate extends BroadcastReceiver {
     private void updateNotification(Context context){
         Notification notification = new Notification.Builder(context.getApplicationContext(), GlobalConstants.CHANNEL_ID)
                 .setContentTitle(extras.getString("habitName"))
-                .setContentText("Congratulations!")
+                .setContentText("Congratulations, you reached your goal!")
                 .setSmallIcon(R.drawable.ic_coin)
                 .setAutoCancel(true)
                 .build();
