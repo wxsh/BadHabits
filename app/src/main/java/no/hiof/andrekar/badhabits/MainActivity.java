@@ -1,6 +1,5 @@
 package no.hiof.andrekar.badhabits;
 
-import android.Manifest;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -19,7 +18,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -103,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
     public static SharedPreferences preferences;
     public static AlarmManager mAlarmManager;
+    public static NotificationChannel notificationChannel = null;
 
     public boolean isNetworkAvailable(Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
@@ -255,70 +254,69 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
     public static void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationChannel == null) {
 
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            notificationChannel = new NotificationChannel(GlobalConstants.CHANNEL_ID,
+                    GlobalConstants.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
 
-            NotificationChannel notificationChannel = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationChannel = new NotificationChannel(GlobalConstants.CHANNEL_ID,
-                        "primary", NotificationManager.IMPORTANCE_DEFAULT);
-
-                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                if (manager != null) manager.createNotificationChannel(notificationChannel);
-
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager != null) manager.createNotificationChannel(notificationChannel);
                 mAlarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        }
 
-            }
-            if (Habit.habits != null && preferences.getBoolean(SettingsActivity.KEY_PREF_NOT_ON, false)) {
+        if (Habit.habits != null && preferences.getBoolean(GlobalConstants.KEY_PREF_NOT_ON, false)) {
 
-                long timeLeft = 0;
-                boolean first = true;
-                DateHabit closeHabit = null;
+            long timeLeft = 0;
+            boolean first = true;
+            DateHabit closeHabit = null;
 
-                for (int i = 0; i < Habit.habits.size() - 1; i++) {
-                    if (Habit.habits.get(i) instanceof DateHabit) {
-                        if(((DateHabit) Habit.habits.get(i)).getDateGoalMillis() >= -1){
-                            if (first) {
+            Calendar rightNow = Calendar.getInstance();
+            int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY); // return the hour in 24 hrs format (ranging from 0-23)
+            int currentMin = rightNow.get(Calendar.MINUTE);
+
+            long desiredTime = (long)((preferences.getFloat(GlobalConstants.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
+            long timeToNote = (desiredTime) - (TimeUnit.HOURS.toMillis(currentHourIn24Format + 1)) - TimeUnit.MINUTES.toMillis(currentMin);
+            long fullDaysInMillis = 0;
+
+
+            //DONE: THE RIGHT calculations
+            for (int i = 0; i < Habit.habits.size() - 1; i++) {
+                if (Habit.habits.get(i) instanceof DateHabit) {
+                    long tempDaysInMillis = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis() + TimeUnit.DAYS.toMillis(1);
+                    long tempFullDaysInMillis = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(tempDaysInMillis));
+
+                    if ((tempFullDaysInMillis > 0) || (tempFullDaysInMillis == 0 && timeToNote > 0))  {
+
+                        if (first) {
+                            timeLeft = tempDaysInMillis;
+                            closeHabit = (DateHabit) Habit.habits.get(i);
+                            first = false;
+                        } else {
+                            if (timeLeft > tempDaysInMillis){
+                                fullDaysInMillis = tempFullDaysInMillis;
+                                closeHabit = (DateHabit) Habit.habits.get(i);
                                 timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
-                                closeHabit =(DateHabit) Habit.habits.get(i);
-                                first = false;
-                            }else {
-                                if (timeLeft > ((DateHabit) Habit.habits.get(i)).getDateGoalMillis()) {
-                                    timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
-                                    closeHabit = (DateHabit) Habit.habits.get(i);
-                                }
                             }
                         }
                     }
                 }
+            }
+            if(closeHabit != null) {
+                Intent intent = new Intent(context.getApplicationContext(), NotificationUpdate.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
+                        intent, 0);
 
+                long accurateTime = System.currentTimeMillis() + fullDaysInMillis + timeToNote;
 
-                if(closeHabit != null) {
-                    Intent intent = new Intent(context.getApplicationContext(), NotificationUpdate.class);
-                    intent.putExtra("habitName", closeHabit.getTitle());
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
-                            intent, 0);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
+                else
+                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
 
-                    //DONE: THE RIGH Fu*#'n calculations
-                    Calendar rightNow = Calendar.getInstance();
-                    int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY); // return the hour in 24 hrs format (ranging from 0-23)
-                    int currentMin = rightNow.get(Calendar.MINUTE); // return the min (ranging from 0-59)
-                    long totTimeLeft = (long)((preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
-                    long daysInMillis = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(closeHabit.getDateGoalMillis()));
-
-                    long timeToNote = (totTimeLeft) - (TimeUnit.HOURS.toMillis(currentHourIn24Format + 1)) - TimeUnit.MINUTES.toMillis(currentMin);
-
-                        System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(timeToNote)));
-                        System.out.println("tiden days " + TimeUnit.MILLISECONDS.toDays(daysInMillis));
-                    if(!(daysInMillis == 0 && timeToNote < 0)) {
-                        mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + daysInMillis + timeToNote, pendingIntent);
-                        System.out.println("tiden kmi " + (TimeUnit.MILLISECONDS.toMinutes(totTimeLeft)));
-                    }
-                }
-
+                Log.d("Notification", "Notification created and will occur in: " + TimeUnit.MILLISECONDS.toMinutes(fullDaysInMillis + timeToNote) + " min");
             }
         }
+
     }
 
 
@@ -417,6 +415,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             refreshUi();
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        createNotificationChannel();
     }
 
     @Override
@@ -494,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
+        boolean onboarding = sharedPref.getBoolean(GlobalConstants.KEY_PREF_ONBOARD, false);
 
         Log.d("Sharedpref", Boolean.toString(onboarding));
 
@@ -636,7 +635,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     PreferenceManager.getDefaultSharedPreferences(context);
 
             String currency = sharedPref.getString
-                    (SettingsActivity.KEY_PREF_CURRENCY, "");
+                    (GlobalConstants.KEY_PREF_CURRENCY, "");
 
 
             for (Habit habit: habits) {
@@ -826,7 +825,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                                     Toast.makeText(MainActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
                                     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                                     SharedPreferences.Editor editor = sharedPref.edit();
-                                    editor.putBoolean(SettingsActivity.KEY_PREF_ONBOARD, true);
+                                    editor.putBoolean(GlobalConstants.KEY_PREF_ONBOARD, true);
                                     editor.commit();
                                     ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
                                     params.height = 0;

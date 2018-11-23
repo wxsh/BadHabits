@@ -6,57 +6,33 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
-import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.CombinedChart;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.takusemba.spotlight.OnSpotlightStateChangedListener;
 import com.takusemba.spotlight.Spotlight;
@@ -71,14 +47,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import model.DateHabit;
 import model.EconomicHabit;
 import model.Habit;
 import model.SaveData;
-
-import static model.Habit.habits;
 
 public class ShowHabitActivity extends AppCompatActivity {
 
@@ -122,9 +95,9 @@ public class ShowHabitActivity extends AppCompatActivity {
 
 
         String currency = sharedPref.getString
-                (SettingsActivity.KEY_PREF_CURRENCY, "");
+                (GlobalConstants.KEY_PREF_CURRENCY, "");
 
-        boolean onboarding = sharedPref.getBoolean(SettingsActivity.KEY_PREF_ONBOARDSHOWHABIT, false);
+        boolean onboarding = sharedPref.getBoolean(GlobalConstants.KEY_PREF_ONBOARDSHOWHABIT, false);
         if (onboarding == false) {
             onBoard(findViewById(R.id.getStartTextView));
         }
@@ -586,7 +559,7 @@ public class ShowHabitActivity extends AppCompatActivity {
                                 Toast.makeText(ShowHabitActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ShowHabitActivity.this);
                                 SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putBoolean(SettingsActivity.KEY_PREF_ONBOARDSHOWHABIT, true);
+                                editor.putBoolean(GlobalConstants.KEY_PREF_ONBOARDSHOWHABIT, true);
                                 editor.commit();
                             }
                         })

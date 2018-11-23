@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
@@ -21,11 +20,10 @@ public class TimePickerFragment extends DialogFragment
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
 
         Calendar c = Calendar.getInstance();
-        int hour = (c.get(Calendar.HOUR_OF_DAY));
-        int minute = c.get(Calendar.MINUTE);
-        float hourWc = preferences.getFloat(SettingsActivity.KEY_PREF_NOT_TIME, 0.0f);
-        hour = (int)(hourWc);
-        minute = (int)((hourWc*60)%60);
+
+        float hourWc = preferences.getFloat(GlobalConstants.KEY_PREF_NOT_TIME, 0.0f);
+        int hour = (int)(hourWc);
+        int minute = (int)((hourWc*60)%60);
 
         // Create a new instance of TimePickerDialog and return it
         TimePickerDialog tpd = new TimePickerDialog(getActivity(), this, hour, minute,
@@ -36,14 +34,12 @@ public class TimePickerFragment extends DialogFragment
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
 
-        //TODO: change the value in SharedPref
+        //DONE: change the value in SharedPref
         SharedPreferences.Editor editor = preferences.edit();
         float timeInHours = ((float)hourOfDay + (float)(minute)/(float)60);
-        editor.putFloat(SettingsActivity.KEY_PREF_NOT_TIME, timeInHours);
+        editor.putFloat(GlobalConstants.KEY_PREF_NOT_TIME, timeInHours);
         System.out.println("Shared pref time: " + timeInHours);
         editor.commit();
-        //TODO: Change to sliderClock
-
 
     }
 }

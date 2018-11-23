@@ -2,12 +2,12 @@ package no.hiof.andrekar.badhabits;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.SwitchPreference;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
@@ -24,12 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
-import model.DateHabit;
-import model.EconomicHabit;
-import model.Habit;
 import model.SaveData;
 
 import static android.app.Activity.RESULT_OK;
@@ -50,15 +46,15 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
 
-        Preference currency = findPreference(SettingsActivity.KEY_PREF_CURRENCY);
-        currency.setSummary(sharedPreferences.getString(SettingsActivity.KEY_PREF_CURRENCY,""));
+        Preference currency = findPreference(GlobalConstants.KEY_PREF_CURRENCY);
+        currency.setSummary(sharedPreferences.getString(GlobalConstants.KEY_PREF_CURRENCY,""));
 
-        Preference theme = findPreference(SettingsActivity.KEY_PREF_THEME);
-        theme.setSummary(sharedPreferences.getString(SettingsActivity.KEY_PREF_THEME,""));
+        Preference theme = findPreference(GlobalConstants.KEY_PREF_THEME);
+        theme.setSummary(sharedPreferences.getString(GlobalConstants.KEY_PREF_THEME,""));
 
 
 
-        Preference timePref = (Preference) findPreference(SettingsActivity.KEY_PREF_NOT_TIME);
+        Preference timePref = (Preference) findPreference(GlobalConstants.KEY_PREF_NOT_TIME);
         timePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 //onClick
@@ -70,17 +66,17 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
             }
         });
 
-        Preference googlePref = (Preference) findPreference(SettingsActivity.KEY_PREF_GOOGLE);
+        Preference googlePref = (Preference) findPreference(GlobalConstants.KEY_PREF_GOOGLE);
 
         if (!FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
             googlePref.setSummary(getString(R.string.settings_signed_in) + " " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
         }
 
-        final Preference onboardPref = (Preference) findPreference(SettingsActivity.KEY_PREF_ONBOARD);
+        final Preference onboardPref = (Preference) findPreference(GlobalConstants.KEY_PREF_ONBOARD);
         onboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                editor.putBoolean(SettingsActivity.KEY_PREF_ONBOARD, false);
+                editor.putBoolean(GlobalConstants.KEY_PREF_ONBOARD, false);
                 editor.commit();
 
                 restartSnackbar();
@@ -88,11 +84,11 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
             }
         });
 
-        Preference onboardHabitPref = (Preference) findPreference(SettingsActivity.KEY_PREF_ONBOARDSHOWHABIT);
+        Preference onboardHabitPref = (Preference) findPreference(GlobalConstants.KEY_PREF_ONBOARDSHOWHABIT);
         onboardHabitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                editor.putBoolean(SettingsActivity.KEY_PREF_ONBOARDSHOWHABIT, false);
+                editor.putBoolean(GlobalConstants.KEY_PREF_ONBOARDSHOWHABIT, false);
                 editor.commit();
                 return true;
             }
@@ -139,7 +135,7 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
         Preference preference = findPreference(key);
         try {
-            if( key.equals(SettingsActivity.KEY_PREF_GOOGLE)){
+            if( key.equals(GlobalConstants.KEY_PREF_GOOGLE)){
 
                 if(sharedPreferences.getString(key,"").equals("Registrier")){
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).setTheme(R.style.AppTheme).setLogo(R.mipmap.ic_launcher).build(), 200);
@@ -151,11 +147,17 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
                     preference.setSummary("Login with google");
                 }
 
-            }else if (key.equals(SettingsActivity.KEY_PREF_THEME)) {
+            }else if (key.equals(GlobalConstants.KEY_PREF_THEME)) {
                 Toast.makeText(getActivity(), "Restart app", Toast.LENGTH_LONG).show();
                 preference.setSummary(sharedPreferences.getString(key,""));
                 GlobalConstants.update(getContext());
                 restartSnackbar();
+            }else if(key.equals((GlobalConstants.KEY_PREF_NOT_ON))){
+                Preference switchPreference = (Preference) findPreference(GlobalConstants.KEY_PREF_NOT_ON);
+                if (sharedPreferences.getBoolean(GlobalConstants.KEY_PREF_NOT_ON, false))
+                    switchPreference.setIcon(R.drawable.ic_notifications_active_black);
+                else
+                    switchPreference.setIcon(R.drawable.ic_notifications_off_black);
             }
             else
             preference.setSummary(sharedPreferences.getString(key,""));
@@ -175,7 +177,7 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                Preference googlePref = (Preference) findPreference(SettingsActivity.KEY_PREF_GOOGLE);
+                Preference googlePref = (Preference) findPreference(GlobalConstants.KEY_PREF_GOOGLE);
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user != null) {
                     //userIdTW.setText("Du er logget inn som " + FirebaseAuth.getInstance().getCurrentUser().getEmail());

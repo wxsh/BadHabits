@@ -26,8 +26,8 @@
 
     <string-array name="google_array">
         <item>Login</item>
-        <item>Registrier</item>
-        <item>Anonym</item>
+        <item>Register</item>
+        <item>Anonymous</item>
     </string-array>
 
 

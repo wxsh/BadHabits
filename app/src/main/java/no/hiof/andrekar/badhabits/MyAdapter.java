@@ -14,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.Collections;
-
 import model.DateHabit;
 import model.EconomicHabit;
 import model.Habit;
@@ -87,7 +85,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                 PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
 
             String currency = sharedPref.getString
-                (SettingsActivity.KEY_PREF_CURRENCY, "");
+                (GlobalConstants.KEY_PREF_CURRENCY, "");
 
 
             holder.habitName.setText(Habit.habits.get(position).getTitle().toString());

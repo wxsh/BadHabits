@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -25,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 
 import model.DateHabit;
@@ -101,7 +97,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
 
 
         String currency = sharedPref.getString
-                (SettingsActivity.KEY_PREF_CURRENCY, "");
+                (GlobalConstants.KEY_PREF_CURRENCY, "");
 
 
 
