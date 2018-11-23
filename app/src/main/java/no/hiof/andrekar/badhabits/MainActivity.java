@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,8 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -275,6 +278,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             int currentMin = rightNow.get(Calendar.MINUTE);
 
             long desiredTime = (long)((preferences.getFloat(GlobalConstants.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
+            //TODO: Find out why I need plus 1 hour and others don't
             long timeToNote = (desiredTime) - (TimeUnit.HOURS.toMillis(currentHourIn24Format + 1)) - TimeUnit.MINUTES.toMillis(currentMin);
             long fullDaysInMillis = 0;
 
@@ -285,38 +289,43 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     long tempDaysInMillis = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis() + TimeUnit.DAYS.toMillis(1);
                     long tempFullDaysInMillis = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(tempDaysInMillis));
 
-                    if ((tempFullDaysInMillis > 0) || (tempFullDaysInMillis == 0 && timeToNote > 0))  {
+                    if (tempFullDaysInMillis + timeToNote > 0)  {
 
                         if (first) {
-                            timeLeft = tempDaysInMillis;
+                            timeLeft = TimeUnit.MILLISECONDS.toMinutes(tempFullDaysInMillis + timeToNote);
                             closeHabit = (DateHabit) Habit.habits.get(i);
                             first = false;
                         } else {
-                            if (timeLeft > tempDaysInMillis){
+                            if (timeLeft > TimeUnit.MILLISECONDS.toMinutes(tempFullDaysInMillis + timeToNote)){
                                 fullDaysInMillis = tempFullDaysInMillis;
                                 closeHabit = (DateHabit) Habit.habits.get(i);
-                                timeLeft = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis();
+                                timeLeft = TimeUnit.MILLISECONDS.toMinutes(tempFullDaysInMillis + timeToNote);
                             }
                         }
                     }
                 }
             }
             if(closeHabit != null) {
-                Intent intent = new Intent(context.getApplicationContext(), NotificationUpdate.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 1234,
+
+                Intent intent = new Intent(context, NotificationUpdate.class);
+                intent.putExtra("habitName", closeHabit.getTitle());
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1234,
                         intent, 0);
 
                 long accurateTime = System.currentTimeMillis() + fullDaysInMillis + timeToNote;
 
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, GlobalConstants.CHANNEL_ID);
+
+
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
-                else
+                }else
                     mAlarmManager.set(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
 
-                Log.d("Notification", "Notification created and will occur in: " + TimeUnit.MILLISECONDS.toMinutes(fullDaysInMillis + timeToNote) + " min");
+                Log.d("Notification", "Notification for: \""+ closeHabit.getTitle() + "\" created and will occur in: " + TimeUnit.MILLISECONDS.toMinutes(fullDaysInMillis + timeToNote) + " min");
             }
         }
-
     }
 
 

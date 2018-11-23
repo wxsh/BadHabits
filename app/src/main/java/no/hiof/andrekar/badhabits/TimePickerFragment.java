@@ -38,7 +38,6 @@ public class TimePickerFragment extends DialogFragment
         SharedPreferences.Editor editor = preferences.edit();
         float timeInHours = ((float)hourOfDay + (float)(minute)/(float)60);
         editor.putFloat(GlobalConstants.KEY_PREF_NOT_TIME, timeInHours);
-        System.out.println("Shared pref time: " + timeInHours);
         editor.commit();
 
     }
