@@ -68,11 +68,16 @@ public class DateHabit extends Habit {
         else return "Has not started yet.";
     }
 
-    public long getDateGoalMillis(){
+    public long getDateGoalMillis() {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(this.getStartDate()));
-        c.add(Calendar.DATE,this.getDateGoalValue());
+        c.add(Calendar.DATE, this.getDateGoalValue());
         //TODO: Double check this conversion
-        return TimeUnit.DAYS.toMillis(getDateDiff(new Date().getTime(), c.getTimeInMillis(), ChronoUnit.DAYS));
+
+        long a = c.getTimeInMillis() - new Date().getTime();
+
+        //long t = (getDateDiff(new Date().getTime(), c.getTimeInMillis(), ChronoUnit.MILLIS));
+        //if (t < 0)
+        return a;
     }
 }

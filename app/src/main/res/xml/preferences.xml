@@ -22,7 +22,7 @@
         </ListPreference>
 
         <ListPreference
-            android:defaultValue="Anonym"
+            android:defaultValue="Anonymous"
             android:dialogTitle="Google"
             android:entries="@array/google_array"
             android:entryValues="@array/google_array"
