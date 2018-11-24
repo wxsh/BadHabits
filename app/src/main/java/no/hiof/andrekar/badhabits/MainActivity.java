@@ -279,33 +279,33 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
             long desiredTime = (long)((preferences.getFloat(GlobalConstants.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
             //TODO: Find out why I need plus 1 hour and others don't
-            long timeToNote = (desiredTime) - (TimeUnit.HOURS.toMillis(currentHourIn24Format + 1)) - TimeUnit.MINUTES.toMillis(currentMin);
+            long timeToNote = (desiredTime) - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
             long fullDaysInMillis = 0;
-
 
             //DONE: THE RIGHT calculations
             for (int i = 0; i < Habit.habits.size() - 1; i++) {
                 if (Habit.habits.get(i) instanceof DateHabit) {
+                    //TODO: Find out why I need plus 1 day and others don't
                     long tempDaysInMillis = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis() + TimeUnit.DAYS.toMillis(1);
                     long tempFullDaysInMillis = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(tempDaysInMillis));
 
                     if (tempFullDaysInMillis + timeToNote > 0)  {
 
                         if (first) {
-                            timeLeft = TimeUnit.MILLISECONDS.toMinutes(tempFullDaysInMillis + timeToNote);
+                            timeLeft = (tempFullDaysInMillis + timeToNote);
                             closeHabit = (DateHabit) Habit.habits.get(i);
                             first = false;
-                        } else {
-                            if (timeLeft > TimeUnit.MILLISECONDS.toMinutes(tempFullDaysInMillis + timeToNote)){
-                                fullDaysInMillis = tempFullDaysInMillis;
-                                closeHabit = (DateHabit) Habit.habits.get(i);
-                                timeLeft = TimeUnit.MILLISECONDS.toMinutes(tempFullDaysInMillis + timeToNote);
-                            }
+
+                        } else if (timeLeft > (tempFullDaysInMillis + timeToNote)) {
+                            fullDaysInMillis = tempFullDaysInMillis;
+                            closeHabit = (DateHabit) Habit.habits.get(i);
+                            timeLeft = (tempFullDaysInMillis + timeToNote);
                         }
                     }
                 }
             }
             if(closeHabit != null) {
+                Log.d("Notification", "Notification for: \"" + closeHabit.getTitle() + "\" would occur in: " + TimeUnit.MILLISECONDS.toMinutes(timeLeft) + " min");
 
                 Intent intent = new Intent(context, NotificationUpdate.class);
                 intent.putExtra("habitName", closeHabit.getTitle());
@@ -313,17 +313,14 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1234,
                         intent, 0);
 
-                long accurateTime = System.currentTimeMillis() + fullDaysInMillis + timeToNote;
-
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, GlobalConstants.CHANNEL_ID);
-
+                long accurateTime = System.currentTimeMillis() + timeLeft;
 
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
                 }else
                     mAlarmManager.set(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
 
-                Log.d("Notification", "Notification for: \""+ closeHabit.getTitle() + "\" created and will occur in: " + TimeUnit.MILLISECONDS.toMinutes(fullDaysInMillis + timeToNote) + " min");
+                Log.d("Notification", "Notification for: \""+ closeHabit.getTitle() + "\" created and will occur in: " + TimeUnit.MILLISECONDS.toMinutes(timeLeft) + " min");
             }
         }
     }
