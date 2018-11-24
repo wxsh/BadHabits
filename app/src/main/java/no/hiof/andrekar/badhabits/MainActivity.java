@@ -70,6 +70,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import model.DateHabit;
@@ -267,18 +268,23 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 mAlarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         }
 
+        TimeZone tz = TimeZone.getTimeZone("CET");
+        Date now = new Date();
+
         if (Habit.habits != null && preferences.getBoolean(GlobalConstants.KEY_PREF_NOT_ON, false)) {
 
             long timeLeft = 0;
             boolean first = true;
             DateHabit closeHabit = null;
 
-            Calendar rightNow = Calendar.getInstance();
+            Calendar rightNow =  Calendar.getInstance();
+            long offsetFromUtc = tz.getOffset(rightNow.getTimeInMillis());
+
             int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY); // return the hour in 24 hrs format (ranging from 0-23)
             int currentMin = rightNow.get(Calendar.MINUTE);
 
             long desiredTime = (long)((preferences.getFloat(GlobalConstants.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
-            //TODO: Find out why I need plus 1 hour and others don't
+            //TODO: Find out why some need - 1 hour and others don't
             long timeToNote = (desiredTime) - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
             long fullDaysInMillis = 0;
 
@@ -305,7 +311,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 }
             }
             if(closeHabit != null) {
-                Log.d("Notification", "Notification for: \"" + closeHabit.getTitle() + "\" would occur in: " + TimeUnit.MILLISECONDS.toMinutes(timeLeft) + " min");
 
                 Intent intent = new Intent(context, NotificationUpdate.class);
                 intent.putExtra("habitName", closeHabit.getTitle());
@@ -313,14 +318,15 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1234,
                         intent, 0);
 
-                long accurateTime = System.currentTimeMillis() + timeLeft;
+                long accurateTime = System.currentTimeMillis() + timeLeft + offsetFromUtc;
+
 
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
                 }else
                     mAlarmManager.set(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
 
-                Log.d("Notification", "Notification for: \""+ closeHabit.getTitle() + "\" created and will occur in: " + TimeUnit.MILLISECONDS.toMinutes(timeLeft) + " min");
+                Log.d("Notification", "Notification for: \""+ closeHabit.getTitle() + "\" created and will occur in: " +  (TimeUnit.MILLISECONDS.toMinutes(timeLeft)) + " min");
             }
         }
     }
