@@ -59,6 +59,8 @@ public class rec_SwipeDelete extends ItemTouchHelper.SimpleCallback {
         int itemHeight = foregroundView.getBottom() - foregroundView.getTop();
         boolean isCancelled = dX == 0f && !isCurrentlyActive;
 
+        //Based on kotlin example from https://medium.com/@kitek/recyclerview-swipe-to-delete-easier-than-you-thought-cff67ff5e5f6
+
         if (isCancelled) {
             //clearCanvas(c, foregroundView.right + dX, foregroundView.top.toFloat(), foregroundView.right.toFloat(), foregroundView.bottom.toFloat())
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
