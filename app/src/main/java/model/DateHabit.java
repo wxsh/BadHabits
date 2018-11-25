@@ -1,15 +1,10 @@
 package model;
 
-import android.util.Log;
 
 import com.google.firebase.firestore.Exclude;
-
-import org.threeten.bp.temporal.ChronoUnit;
-
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
+
 
 import static org.threeten.bp.temporal.ChronoUnit.DAYS;
 
@@ -42,6 +37,7 @@ public class DateHabit extends Habit {
     public void setHabitType(String habitType) {
         this.habitType = habitType;
     }
+
 
     @Exclude
     public String getDateGoal(){
@@ -79,5 +75,9 @@ public class DateHabit extends Habit {
         //long t = (getDateDiff(new Date().getTime(), c.getTimeInMillis(), ChronoUnit.MILLIS));
         //if (t < 0)
         return a;
+    }
+    public long getToday(){
+        long dateGoalL = Habit.getDateDiff(this.getFailDate(), new Date().getTime(), DAYS);
+        return dateGoalL;
     }
 }

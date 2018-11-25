@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -234,7 +235,11 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                                     public void onClick(DialogInterface dialog, int id) {
 
                                         Date currentTime = Calendar.getInstance().getTime();
-                                        habit.setFailDate(currentTime.getTime());
+                                        if(((DateHabit) habit).getToday() == 0){
+                                            Toast.makeText(mContext, "Already failed this habit today.", Toast.LENGTH_SHORT).show();
+                                        } else{
+                                            habit.setFailDate(currentTime.getTime());
+                                        }
                                         SaveData saveData = new SaveData();
                                         saveData.saveData(Habit.habits.get(position), 2);
 

@@ -249,7 +249,13 @@ public class ShowHabitActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
 
                             Date currentTime = Calendar.getInstance().getTime();
-                            habit.setFailDate(currentTime.getTime());
+                            if(((DateHabit) habit).getToday() == 0){
+                                Toast.makeText(ShowHabitActivity.this, "Already failed this habit today.", Toast.LENGTH_SHORT).show();
+                            } else{
+                                habit.setFailDate(currentTime.getTime());
+                            }
+
+
                             SaveData saveData = new SaveData();
                             saveData.saveData(Habit.habits.get(currentNumber), 2);
 
