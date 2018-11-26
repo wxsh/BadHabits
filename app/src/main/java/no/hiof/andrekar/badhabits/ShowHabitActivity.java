@@ -139,6 +139,7 @@ public class ShowHabitActivity extends AppCompatActivity {
         }
 
         if (habit.getFailDate() == 0) {
+            //Don't show fail information if there are no fails.
             ImageView failText = findViewById(R.id.failTextView);
             failedView.setVisibility(View.GONE);
             failText.setVisibility(View.GONE);
@@ -197,6 +198,7 @@ public class ShowHabitActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //DONE: editButton onclick
                 Intent intent = new Intent(getBaseContext(), HabitActivity.class);
+                //Send placement in dataset and a title to edit activity.
                 intent.putExtra("TITLE", "Editing: " + Habit.habits.get(currentNumber).getTitle());
                 intent.putExtra("CURRENT_HABIT_INDEX", currentNumber);
                 startActivityForResult(intent, 500);

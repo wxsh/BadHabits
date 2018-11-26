@@ -235,7 +235,8 @@ public class Habit {
     }
 
     public static long convertMillisToDays(long milliseconds) {
-        return TimeUnit.MILLISECONDS.toDays(milliseconds);
+        LocalDate ldt = Instant.ofEpochMilli(milliseconds).atZone(ZoneId.systemDefault()).toLocalDate();
+        return ldt.toEpochDay();
     }
 
     public static long convertDaysToMillis(long days) {
