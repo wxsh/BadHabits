@@ -1,18 +1,13 @@
 package model;
-
-
 import com.google.firebase.firestore.Exclude;
 import java.util.Calendar;
 import java.util.Date;
 
-
 import static org.threeten.bp.temporal.ChronoUnit.DAYS;
 
 //DONE: Implement maths in class? IE: getters for progress?
-
 public class DateHabit extends Habit {
     private Integer dateGoalValue;
-
     //Empty constructor for firestore.
     public DateHabit() {}
 
@@ -40,45 +35,33 @@ public class DateHabit extends Habit {
         this.habitType = habitType;
     }
 
-
+    //Gets amount of days until finished.
     @Exclude
-    public String getDateGoal(){
-        String dateGoal;
+    public long getDateGoal(){
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(this.getStartDate()));
         c.add(Calendar.DATE,this.getDateGoalValue());
         long dateGoalL = Habit.getDateDiff(new Date().getTime(), c.getTimeInMillis(), DAYS);
-        dateGoal = Long.toString(dateGoalL);
-        if (Long.valueOf(dateGoalL) > 0) {
-            return dateGoal + " Remaining";
-        }
-        else return "Goal achieved";
+        return dateGoalL;
     }
 
+    //Get amount of days since start
     @Exclude
-    public String getDaysSinceStart(){
-        String dateGoal;
+    public long getDaysSinceStart(){
         long dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), DAYS);
-        dateGoal = Long.toString(dateGoalL);
-        if(Long.valueOf(dateGoalL) > 0){
-            return dateGoal + " Days since start";
-        }
-        else return "Has not started yet.";
+        return dateGoalL;
     }
-
+    //Gets the time until finished in milliseconds
     public long getDateGoalMillis() {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(this.getStartDate()));
         c.add(Calendar.DATE, this.getDateGoalValue());
-        //TODO: Double check this conversion
-
+        //DONE: Double check this conversion
         long a = c.getTimeInMillis() - new Date().getTime();
-
-        //long t = (getDateDiff(new Date().getTime(), c.getTimeInMillis(), ChronoUnit.MILLIS));
-        //if (t < 0)
         return a;
     }
-    public long getToday(){
+    //gets amount of days between failed date and today.
+    public long getFailedDays(){
         long dateGoalL = Habit.getDateDiff(this.getFailDate(), new Date().getTime(), DAYS);
         return dateGoalL;
     }

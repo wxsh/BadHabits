@@ -89,7 +89,7 @@ public class FailedListener implements OnClickListener {
                 public void onClick(DialogInterface dialog, int id) {
 
                     Date currentTime = Calendar.getInstance().getTime();
-                    if(((DateHabit) habit).getToday() == 0){
+                    if(((DateHabit) habit).getFailedDays() == 0){
                         Toast.makeText(mContext, mContext.getString(R.string.popup_failed_date_multiple), Toast.LENGTH_SHORT).show();
                     } else{
                         habit.setFailDate(currentTime.getTime());
