@@ -137,18 +137,18 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
         try {
             if( key.equals(GlobalConstants.KEY_PREF_GOOGLE)){
 
-                if(sharedPreferences.getString(key,"").equals("Registrier")){
+                if(sharedPreferences.getString(key,"").equals("Register")){
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().enableAnonymousUsersAutoUpgrade().setAvailableProviders(providers).setTheme(R.style.AppTheme).setLogo(R.mipmap.ic_launcher).build(), 200);
                 }
                 else if(sharedPreferences.getString(key,"").equals("Login")){
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(R.style.AppTheme).setLogo(R.mipmap.ic_launcher).build(), 200);
                 }
                 else {
-                    preference.setSummary("Login with google");
+                    preference.setSummary(getString(R.string.settings_google_signinwith));
                 }
 
             }else if (key.equals(GlobalConstants.KEY_PREF_THEME)) {
-                Toast.makeText(getActivity(), "Restart app", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "Restart app", Toast.LENGTH_LONG).show();
                 preference.setSummary(sharedPreferences.getString(key,""));
                 GlobalConstants.update(getContext());
                 restartSnackbar();
@@ -181,11 +181,11 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user != null) {
                     //userIdTW.setText("Du er logget inn som " + FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                    googlePref.setSummary("Signed in with "+FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    googlePref.setSummary(getString(R.string.settings_signed_in) +FirebaseAuth.getInstance().getCurrentUser().getEmail());
                     SaveData saveData = new SaveData();
                     saveData.readFromFile();
                 } else {
-                    googlePref.setSummary("Something went wrong.");
+                    googlePref.setSummary(getString(R.string.settings_google_somethingwentwrong));
                 }
                 // ...
             } else {
@@ -201,8 +201,8 @@ public class MySettingsFragment extends PreferenceFragmentCompat implements Shar
     private void restartSnackbar() {
         // showing snack bar with restart  option
         Snackbar snackbar = Snackbar
-                .make(getListView(), "Restart message here", Snackbar.LENGTH_LONG);
-        snackbar.setAction("Restart Now", new View.OnClickListener() {
+                .make(getListView(), getString(R.string.settings_restartdesc), Snackbar.LENGTH_LONG);
+        snackbar.setAction(getString(R.string.settings_restartnow), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Restarting app", Toast.LENGTH_SHORT).show();

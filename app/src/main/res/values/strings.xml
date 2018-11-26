@@ -51,7 +51,7 @@
     <string name="channel_description">notification channel</string>
     <string name="action_sort">Sort</string>
     <string name="ecohabitFail_trailing">day streak</string>
-    <string name="settings_signed_in">"Signed in as"</string>
+    <string name="settings_signed_in">"Signed in as "</string>
     <string name="habit_would_have_used">Would have used</string>
     <string name="habit_alternative_would_have_cost">The alternative have cost</string>
     <string name="habit_yes_confirm">Yes, I confirm</string>
@@ -99,5 +99,10 @@
     <string name="test_habit_3_description">Stop with smoking, use nicotine gum instead</string>
     <string name="test_habit_4_description">Stop having fun</string>
     <string name="test_habit_5_description">They are ruining your life</string>
+
+    <string name="settings_google_signinwith">Sign in with google</string>
+    <string name="settings_google_somethingwentwrong">Something went wrong</string>
+    <string name="settings_restartnow">Restart now</string>
+    <string name="settings_restartdesc">Some settings need a restart to be applied.</string>
 
 </resources>
