@@ -66,6 +66,8 @@ public class Habit {
         //habits.add(this);
     }
 
+
+    //Empty constructor for firestore.
     public Habit() {
     }
 

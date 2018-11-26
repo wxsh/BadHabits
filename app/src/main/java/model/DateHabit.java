@@ -13,7 +13,9 @@ import static org.threeten.bp.temporal.ChronoUnit.DAYS;
 public class DateHabit extends Habit {
     private Integer dateGoalValue;
 
+    //Empty constructor for firestore.
     public DateHabit() {}
+    
     private String habitType = "DATE_HABIT";
 
     public DateHabit(String title, String description, long startDate, Integer dateGoalValue, boolean isFavourite) {
