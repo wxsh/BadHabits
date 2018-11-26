@@ -73,6 +73,7 @@
     <string name="newhabit_no_type_selected">Please select a type of habit</string>
     <string name="newhabit_title_editing">Editing </string>
 
+    <string name="notification_reached_goal">Congratulations, you reached your goal!</string>
 
     <string name="text_main_no_internet">You do not have internet access. </string>
     <string name="text_main_no_internet_sub">Bad habits will not work unless you launch it with internet access the first time, so we can set up a few things. </string>
