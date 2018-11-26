@@ -63,7 +63,10 @@ import com.takusemba.spotlight.shape.Circle;
 import com.takusemba.spotlight.target.SimpleTarget;
 
 import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.ChronoUnit;
 
 import model.SaveData;
@@ -321,14 +324,18 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                         intent, 0);
 
                 //long accurateTime = System.currentTimeMillis() + timeLeft + offsetFromUtc;
-                long accurateTime = Instant.now().atZone(ZoneId.systemDefault()).toEpochSecond() + timeLeft;
+                ZonedDateTime zdt = LocalDateTime.now().atZone(ZoneId.systemDefault());
+                long accurateTime = zdt.toInstant().toEpochMilli() + timeLeft;
+
+                //Instant.now().atZone(ZoneId.systemDefault()).toLocalDateTime().toInstant() + timeLeft;
 
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
+                    mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, new Date(accurateTime).getTime(), pendingIntent);
                 }else
-                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
+                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, new Date(accurateTime).getTime(), pendingIntent);
 
                 Log.d("Notification", "Notification for: \""+ closeHabit.getTitle() + "\" created and will occur in: " +  (TimeUnit.MILLISECONDS.toMinutes(timeLeft)) + " min");
+                Log.d("Notification", "Notification for: \""+ closeHabit.getTitle() + "\" created and will occur at: " +  new Date(accurateTime).toString());
             }
         }
     }
