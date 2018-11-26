@@ -66,6 +66,8 @@ public class Habit {
         //habits.add(this);
     }
 
+
+    //Empty constructor for firestore.
     public Habit() {
     }
 
@@ -235,7 +237,8 @@ public class Habit {
     }
 
     public static long convertMillisToDays(long milliseconds) {
-        return TimeUnit.MILLISECONDS.toDays(milliseconds);
+        LocalDate ldt = Instant.ofEpochMilli(milliseconds).atZone(ZoneId.systemDefault()).toLocalDate();
+        return ldt.toEpochDay();
     }
 
     public static long convertDaysToMillis(long days) {

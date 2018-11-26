@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -42,23 +41,26 @@ public class FailedListener implements OnClickListener {
     @Override
     public void onClick(View view) {
         final Habit habit = Habit.habits.get(mPosition);
-        Log.d("TAG", "clicked on failed button");
 
         if (habit instanceof EconomicHabit) {
+            //Build alert dialog.
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setTitle("Don't worry, even if you fail, you can still do this! How much did you spend?");
+            builder.setMessage(mContext.getString(R.string.popup_failed_ecohabit));
+            builder.setTitle(mContext.getString(R.string.popup_failed_title));
+            //Create inputfield for amount failed
             final EditText input = new EditText(view.getContext());
             input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
             builder.setView(input);
 
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(mContext.getString(R.string.popup_positive_eco), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     SaveData saveData = new SaveData();
                     failedAmount = input.getText().toString();
-                    ((EconomicHabit) habit).increaseFailedTotal(Integer.parseInt(failedAmount));
+                    //Float parse and rounding to get an integer
+                    ((EconomicHabit) habit).increaseFailedTotal(Math.round(Float.parseFloat(failedAmount)));
                     habit.setFailDate(new Date().getTime());
-                    saveData.saveData(Habit.habits.get(mPosition), 1);
+                    saveData.saveData(Habit.habits.get(mPosition), GlobalConstants.ECO_HABIT);
 
                     if(mReload) {
                         mActivity.recreate();
@@ -67,32 +69,33 @@ public class FailedListener implements OnClickListener {
                     MainActivity.favAdapter.notifyDataSetChanged();
                 }
             });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(mContext.getString(R.string.popup_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }
             });
 
+            //Show built alertdialog.
             AlertDialog ecoAlert = builder.create();
             ecoAlert.show();
 
         } else if (habit instanceof DateHabit) {
 
-
-            //DONE: editButton onclick
             final AlertDialog.Builder failedBuilder = new AlertDialog.Builder(mContext);
-            failedBuilder.setMessage("Don't worry, even if you fail, you can still do this! Do you want to reset the days since last fail?").setTitle("Failed habit?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            failedBuilder.setMessage(mContext.getString(R.string.popup_failed_datehabit))
+                    .setTitle(mContext.getString(R.string.popup_failed_title))
+                    .setPositiveButton(mContext.getString(R.string.popup_positive_date), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
 
                     Date currentTime = Calendar.getInstance().getTime();
                     if(((DateHabit) habit).getToday() == 0){
-                        Toast.makeText(mContext, "Already failed this habit today.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, mContext.getString(R.string.popup_failed_date_multiple), Toast.LENGTH_SHORT).show();
                     } else{
                         habit.setFailDate(currentTime.getTime());
                     }
                     SaveData saveData = new SaveData();
-                    saveData.saveData(Habit.habits.get(mPosition), 2);
+                    saveData.saveData(Habit.habits.get(mPosition), GlobalConstants.DATE_HABIT);
 
                     if(mReload) {
                         mActivity.recreate();
@@ -101,17 +104,14 @@ public class FailedListener implements OnClickListener {
                     MainActivity.favAdapter.notifyDataSetChanged();
 
                 }
-            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            }).setNegativeButton(mContext.getString(R.string.popup_cancel), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // CANCEL AND DO NOTHING
                 }
             });
             // Create the AlertDialog object and return it
             AlertDialog dialog = failedBuilder.create();
-            //ecoAlert.show();
             dialog.show();
-            //dialog.show();
-
         }
     }
 }

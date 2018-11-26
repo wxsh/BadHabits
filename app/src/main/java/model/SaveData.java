@@ -58,17 +58,14 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 
+import no.hiof.andrekar.badhabits.GlobalConstants;
 import no.hiof.andrekar.badhabits.MainActivity;
 import no.hiof.andrekar.badhabits.MyAdapter;
 
 public class SaveData  {
     //NOT NEEDED: Change this into internal storage, no need to use Downloads
-    String filename = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/TestGSon";
     FirebaseAuth fbAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    final CountDownLatch latch = new CountDownLatch(1);
-    volatile boolean ecoHabitsOk;
-    volatile boolean dateHabitsOk;
     //DONE: Fix duplication problem.
     //DONE: Make Adapter refresh after sync
 
@@ -78,10 +75,7 @@ public class SaveData  {
     }
 
     public void readFromFile(final boolean animate) {
-        Log.d("Firestoreread", "Reading file");
         final String TAG = "Firestoreread";
-        ecoHabitsOk = false;
-        dateHabitsOk = false;
         if (Habit.habits.size() > 0) {
             Habit.habits.clear();
             MainActivity.adapter.notifyDataSetChanged();
@@ -161,17 +155,17 @@ public class SaveData  {
 
 
     public void saveData(Habit habit, int typeHabit) {
-        if (typeHabit == 1) {
+        if (typeHabit == GlobalConstants.ECO_HABIT) {
             db.collection(fbAuth.getUid()).document(habit.getUid()).set(habit);
-        } else if (typeHabit == 2) {
+        } else if (typeHabit == GlobalConstants.DATE_HABIT) {
             db.collection(fbAuth.getUid()).document(habit.getUid()).set(habit);
         }
     }
 
     public void removeData(Habit habit, int typeHabit) {
-        if (typeHabit == 1) {
+        if (typeHabit == GlobalConstants.ECO_HABIT) {
             db.collection(fbAuth.getUid()).document(habit.getUid()).delete();
-        } else if (typeHabit == 2) {
+        } else if (typeHabit == GlobalConstants.DATE_HABIT) {
             db.collection(fbAuth.getUid()).document(habit.getUid()).delete();
         }
     }

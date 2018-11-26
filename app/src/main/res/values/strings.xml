@@ -61,6 +61,18 @@
     <string name="chart_successful_days">Successful days</string>
     <string name="chart_failed_days">Failed days</string>
 
+    <string name="popup_failed_ecohabit">Don\'t worry, even if you fail, you can still do this! How much did you spend?</string>
+    <string name="popup_failed_datehabit">"Don\'t worry, even if you fail, you can still do this! Do you want to reset the days since last fail?"</string>
+    <string name="popup_failed_title">Failed habit?</string>
+    <string name="popup_cancel">Cancel</string>
+    <string name="popup_positive_eco">OK</string>
+    <string name="popup_positive_date">Yes</string>
+    <string name="popup_failed_date_multiple">Already failed this habit today</string>
+
+    <string name="newhabit_empty_fields">Fields are empty</string>
+    <string name="newhabit_no_type_selected">Please select a type of habit</string>
+    <string name="newhabit_title_editing">Editing </string>
+
 
     <string name="text_main_no_internet">You do not have internet access. </string>
     <string name="text_main_no_internet_sub">Bad habits will not work unless you launch it with internet access the first time, so we can set up a few things. </string>

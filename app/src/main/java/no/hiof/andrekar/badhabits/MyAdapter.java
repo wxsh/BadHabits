@@ -132,9 +132,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                     }
                     SaveData saveData = new SaveData();
                     if (Habit.habits.get(position).getClass() == DateHabit.class) {
-                        saveData.saveData(Habit.habits.get(position), 2);
+                        saveData.saveData(Habit.habits.get(position), GlobalConstants.DATE_HABIT);
                     } else if (Habit.habits.get(position).getClass() == EconomicHabit.class) {
-                        saveData.saveData(Habit.habits.get(position), 1);
+                        saveData.saveData(Habit.habits.get(position), GlobalConstants.ECO_HABIT);
                     }
 
                     //Collections.sort(Habit.habits, Habit.HabitComparator);

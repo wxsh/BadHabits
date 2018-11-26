@@ -33,6 +33,7 @@ public class EconomicHabit extends Habit {
         this.price = price;
     }
 
+    //Empty constructor for firestore.
     public EconomicHabit() {}
 
     public float getPrice() { return price; }
