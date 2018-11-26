@@ -52,6 +52,26 @@
     <string name="action_sort">Sort</string>
     <string name="ecohabitFail_trailing">day streak</string>
     <string name="settings_signed_in">"Signed in as"</string>
+    <string name="habit_would_have_used">Would have used</string>
+    <string name="habit_alternative_would_have_cost">The alternative have cost</string>
+    <string name="habit_yes_confirm">Yes, I confirm</string>
+    <string name="habit_cannot_be_reversed">This can not be reversed!</string>
+    <string name="delete_habit">Delete habit?</string>
+    <string name="cancel">Cancel</string>
+    <string name="chart_successful_days">Successful days</string>
+    <string name="chart_failed_days">Failed days</string>
+
+    <string name="popup_failed_ecohabit">Don\'t worry, even if you fail, you can still do this! How much did you spend?</string>
+    <string name="popup_failed_datehabit">"Don\'t worry, even if you fail, you can still do this! Do you want to reset the days since last fail?"</string>
+    <string name="popup_failed_title">Failed habit?</string>
+    <string name="popup_cancel">Cancel</string>
+    <string name="popup_positive_eco">OK</string>
+    <string name="popup_positive_date">Yes</string>
+    <string name="popup_failed_date_multiple">Already failed this habit today</string>
+
+    <string name="newhabit_empty_fields">Fields are empty</string>
+    <string name="newhabit_no_type_selected">Please select a type of habit</string>
+    <string name="newhabit_title_editing">Editing </string>
 
 
     <string name="text_main_no_internet">You do not have internet access. </string>
