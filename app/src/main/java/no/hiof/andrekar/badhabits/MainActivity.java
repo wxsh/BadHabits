@@ -813,18 +813,17 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                         .setAnimation(new DecelerateInterpolator(2f))
                         .setTargets(firstTarget, thirdTarget, secondTarget, fourthTarget)
                         .setClosedOnTouchedOutside(true)
-                        /*.setOnSpotlightStateListener(
+                        .setOnSpotlightStateListener(
                                 new OnSpotlightStateChangedListener() {
                             @Override
                             public void onStarted() {
-                                Toast.makeText(MainActivity.this, "spotlight is started", Toast.LENGTH_SHORT)
-                                        .show();
+                                //Toast.makeText(MainActivity.this, "spotlight is started", Toast.LENGTH_SHORT).show();
                                 populateData(false);
                             }
 
                             @Override
                             public void onEnded() {
-                                Toast.makeText(MainActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(MainActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                                 SharedPreferences.Editor editor = sharedPref.edit();
                                 editor.putBoolean(GlobalConstants.KEY_PREF_ONBOARD, true);
@@ -837,7 +836,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
                             }
                         })
-                        */
                         .start();
             }
         });
