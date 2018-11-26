@@ -61,8 +61,8 @@
     <string name="chart_successful_days">Successful days</string>
     <string name="chart_failed_days">Failed days</string>
 
-    <string name="popup_failed_ecohabit">Don\'t worry, even if you fail, you can still do this! How much did you spend?</string>
-    <string name="popup_failed_datehabit">"Don\'t worry, even if you fail, you can still do this! Do you want to reset the days since last fail?"</string>
+    <string name="popup_failed_ecohabit">Don\'t worry, you can still do this! How much did you spend?</string>
+    <string name="popup_failed_datehabit">"Don\'t worry, you can still do this! Do you want to reset the days since last fail?"</string>
     <string name="popup_failed_title">Failed habit?</string>
     <string name="popup_cancel">Cancel</string>
     <string name="popup_positive_eco">OK</string>

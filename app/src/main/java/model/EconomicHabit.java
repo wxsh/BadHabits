@@ -36,6 +36,7 @@ public class EconomicHabit extends Habit {
     //Empty constructor for firestore.
     public EconomicHabit() {}
 
+    //Getters
     public float getPrice() { return price; }
 
     public String getHabitType() {
@@ -52,10 +53,12 @@ public class EconomicHabit extends Habit {
         return alternativePrice;
     }
 
+    //Setters
     public void setAlternativePrice(float alternativePrice) {
         this.alternativePrice = alternativePrice;
     }
 
+    //Setters
     public void setPrice(float price) {
         this.price = price;
     }
@@ -64,6 +67,7 @@ public class EconomicHabit extends Habit {
         this.goalValue = goalValue;
     }
 
+    //Map date to fails
     public Map<String, Integer> getMappedFail() {
         return failedMap;
     }
@@ -74,12 +78,12 @@ public class EconomicHabit extends Habit {
 
     @Exclude
     public float getProgress() {
-        DecimalFormat df = new DecimalFormat("#######.##");
+        //Return progress towards goal
         float dateGoalL = Habit.getDateDiff(this.getStartDate(), new Date().getTime(), ChronoUnit.DAYS);
+        //Maths
         float saved = (( - this.getGoalValue() - (dateGoalL*this.getAlternativePrice()) ) + (dateGoalL*this.getPrice()) - this.getFailedTotal());
         int temp = (int)(100*saved);
         saved = ((float)temp/100);
-
         if (saved < 0) {
             return saved;
         }
@@ -98,7 +102,7 @@ public class EconomicHabit extends Habit {
     }
     
     public void increaseFailedTotal(int failedAmout){
-        //long newdate = (new Date().getTime() - TimeUnit.DAYS.toMillis(2));
+        //Put the fail into a Map with the current date.
         failedMap.put(Long.toString(new Date().getTime()), failedAmout);
         this.failedTotal += failedAmout;
     }

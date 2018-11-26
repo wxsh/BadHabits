@@ -66,16 +66,20 @@ public class rec_SwipeDelete extends ItemTouchHelper.SimpleCallback {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             return;
         }
+
+        //Set delete icon
         Drawable deleteIcon = ContextCompat.getDrawable(recyclerView.getContext(), R.drawable.ic_delete);
         int iconWidth = deleteIcon.getIntrinsicWidth();
         int iconHeight = deleteIcon.getIntrinsicHeight();
 
+        //Set margins and placement for delete icon
         int deleteIconTop = foregroundView.getTop() + (itemHeight - iconHeight) / 2;
         int deleteIconMargin = (itemHeight - iconHeight) / 2;
         int deleteIconLeft = (foregroundView.getRight() - deleteIconMargin - iconWidth);
         int deleteIconRight = foregroundView.getRight() - deleteIconMargin;
         int deleteIconBottom = deleteIconTop + iconHeight;
 
+        //Draw background and icon
         getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
                 actionState, isCurrentlyActive);
         background.setColor(Color.parseColor("#f44336"));
