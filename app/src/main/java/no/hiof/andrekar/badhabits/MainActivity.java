@@ -550,7 +550,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 favAdapter.notifyItemInserted(habits.size());
                 favAdapter.notifyDataSetChanged();
                 if(save) {
-                    saveData.saveData(habit, 2);
+                    saveData.saveData(habit, GlobalConstants.DATE_HABIT);
                 }
             } else if (habit instanceof EconomicHabit) {
                 habits.add((EconomicHabit) habit);
@@ -558,7 +558,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 favAdapter.notifyItemInserted(habits.size());
                 favAdapter.notifyDataSetChanged();
                 if(save) {
-                    saveData.saveData(habit, 1);
+                    saveData.saveData(habit, GlobalConstants.ECO_HABIT);
                 }
             }
         }
@@ -572,9 +572,9 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             SaveData saveData = new SaveData();
             for (Habit habit: habits) {
                 if(habit instanceof EconomicHabit) {
-                    saveData.removeData(habit, 1);
+                    saveData.removeData(habit, GlobalConstants.ECO_HABIT);
                 } else if(habit instanceof DateHabit) {
-                    saveData.removeData(habit, 2);
+                    saveData.removeData(habit, GlobalConstants.DATE_HABIT);
                 }
             }
             adapter.notifyItemRangeRemoved(0, habits.size());
@@ -911,13 +911,13 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             // backup of removed item for undo purpose
             final Habit deletedHabit = Habit.habits.get(viewHolder.getAdapterPosition());
             if (deletedHabit instanceof DateHabit) {
-                habitType = 2;
+                habitType = GlobalConstants.DATE_HABIT;
             } else if (deletedHabit instanceof EconomicHabit) {
-                habitType = 1;
+                habitType = GlobalConstants.ECO_HABIT;
             }
             final int deletedIndex = viewHolder.getAdapterPosition();
 
-            // remove the item from recycler view
+            // remove the item from recycler view, and Habit arraylist.
             Habit.habits.remove(viewHolder.getAdapterPosition());
             final SaveData saveData = new SaveData();
             saveData.removeData(deletedHabit, habitType);
@@ -932,11 +932,11 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                     if(deletedHabit instanceof DateHabit) {
                         Habit.habits.add((DateHabit) deletedHabit);
                         adapter.notifyItemInserted(Habit.habits.size());
-                        saveData.saveData(deletedHabit, 2);
+                        saveData.saveData(deletedHabit, GlobalConstants.DATE_HABIT);
                     } else if (deletedHabit instanceof EconomicHabit) {
                         Habit.habits.add((EconomicHabit) deletedHabit);
                         adapter.notifyItemInserted(Habit.habits.size());
-                        saveData.saveData(deletedHabit, 1);
+                        saveData.saveData(deletedHabit, GlobalConstants.ECO_HABIT);
                     }
                     // undo is selected, restore the deleted item
 

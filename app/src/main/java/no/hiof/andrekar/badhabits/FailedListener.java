@@ -58,7 +58,7 @@ public class FailedListener implements OnClickListener {
                     failedAmount = input.getText().toString();
                     ((EconomicHabit) habit).increaseFailedTotal(Integer.parseInt(failedAmount));
                     habit.setFailDate(new Date().getTime());
-                    saveData.saveData(Habit.habits.get(mPosition), 1);
+                    saveData.saveData(Habit.habits.get(mPosition), GlobalConstants.ECO_HABIT);
 
                     if(mReload) {
                         mActivity.recreate();
@@ -92,7 +92,7 @@ public class FailedListener implements OnClickListener {
                         habit.setFailDate(currentTime.getTime());
                     }
                     SaveData saveData = new SaveData();
-                    saveData.saveData(Habit.habits.get(mPosition), 2);
+                    saveData.saveData(Habit.habits.get(mPosition), GlobalConstants.DATE_HABIT);
 
                     if(mReload) {
                         mActivity.recreate();

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -178,9 +179,9 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
                             }
                             SaveData saveData = new SaveData();
                             if (Habit.habits.get(position).getClass() == DateHabit.class) {
-                                saveData.saveData(Habit.habits.get(position), 2);
+                                saveData.saveData(Habit.habits.get(position), GlobalConstants.DATE_HABIT);
                             } else if (Habit.habits.get(position).getClass() == EconomicHabit.class) {
-                                saveData.saveData(Habit.habits.get(position), 1);
+                                saveData.saveData(Habit.habits.get(position), GlobalConstants.ECO_HABIT);
                             }
 
                             //Collections.sort(Habit.habits, Habit.HabitComparator);

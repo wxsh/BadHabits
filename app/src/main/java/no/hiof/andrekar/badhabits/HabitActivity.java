@@ -130,13 +130,13 @@ public class HabitActivity extends AppCompatActivity {
             //DONE: Get start date.
             if(editHabit instanceof DateHabit) {
                 typeHabitRG.check(R.id.newHabit_radioDate);
-                typeHabit = 2;
-                updateUI(2);
+                typeHabit = GlobalConstants.DATE_HABIT;
+                updateUI(GlobalConstants.DATE_HABIT);
                 dateGoalEditText.setText(((DateHabit) editHabit).getDateGoalValue().toString());
             } else if(editHabit instanceof EconomicHabit) {
                 typeHabitRG.check(R.id.newHabit_radioEconomic);
-                typeHabit = 1;
-                updateUI(1);
+                typeHabit = GlobalConstants.ECO_HABIT;
+                updateUI(GlobalConstants.ECO_HABIT);
                 economicAlternativePriceEditText.setText(Float.toString(((EconomicHabit) editHabit).getAlternativePrice()));
                 economicGoalEditText.setText(Float.toString(((EconomicHabit) editHabit).getGoalValue()));
                 economicPriceEditText.setText(Float.toString(((EconomicHabit) editHabit).getPrice()));
@@ -155,11 +155,11 @@ public class HabitActivity extends AppCompatActivity {
                 //DONE: Show fields when selecting habit, and create a variable to hold type of Habit
                 if (checkedId == R.id.newHabit_radioEconomic) {
                     showTextNotification("Economic Checked");
-                    typeHabit = 1;
+                    typeHabit = GlobalConstants.ECO_HABIT;
                     updateUI(typeHabit);
                 } else if (checkedId == R.id.newHabit_radioDate) {
                     showTextNotification("Date Checked");
-                    typeHabit = 2;
+                    typeHabit = GlobalConstants.DATE_HABIT;
                     updateUI(typeHabit);
                 }
             }
@@ -176,9 +176,9 @@ public class HabitActivity extends AppCompatActivity {
                 description = editDesc.getText().toString();
                 startDate = convertToDate(dateEditText.getText().toString());
                 boolean fieldsOK = false;
-                if(typeHabit == 1) {
+                if(typeHabit == GlobalConstants.ECO_HABIT) {
                     fieldsOK = checkFields(new EditText[]{economicAlternativePriceEditText, economicGoalEditText, economicPriceEditText, editTitle, editDesc, dateEditText});
-                } else if (typeHabit == 2) {
+                } else if (typeHabit == GlobalConstants.DATE_HABIT) {
                     fieldsOK = checkFields(new EditText[]{dateGoalEditText, editTitle, editDesc, dateEditText});
                 }
 
@@ -221,14 +221,14 @@ public class HabitActivity extends AppCompatActivity {
     }
 
     private void updateUI(int typeHabit) {
-        if (typeHabit == 1) {
+        if (typeHabit == GlobalConstants.ECO_HABIT) {
             dateGoalIT.setVisibility(View.INVISIBLE);
             economicGoalIT.setVisibility(View.VISIBLE);
             economicPriceIT.setVisibility(View.VISIBLE);
             economicAlternativePriceIT.setVisibility(View.VISIBLE);
             economicPeriodSpinner.setVisibility(View.VISIBLE);
             economicAlterntivePeriodSpinner.setVisibility(View.VISIBLE);
-        } else if (typeHabit == 2) {
+        } else if (typeHabit == GlobalConstants.DATE_HABIT) {
             dateGoalIT.setVisibility(View.VISIBLE);
             economicPriceIT.setVisibility(View.INVISIBLE);
             economicGoalIT.setVisibility(View.INVISIBLE);
@@ -285,7 +285,7 @@ public class HabitActivity extends AppCompatActivity {
 
     private void saveHabit(int typeHabit) {
         SaveData saveData = new SaveData();
-        if (typeHabit == 1) {
+        if (typeHabit == GlobalConstants.ECO_HABIT) {
             pricePeriod = economicPeriodSpinner.getSelectedItem().toString();
             alternativePricePeriod = economicAlterntivePeriodSpinner.getSelectedItem().toString();
             price = convertPrice(Float.parseFloat(economicPriceEditText.getText().toString()), economicPeriodSpinner);
@@ -308,7 +308,7 @@ public class HabitActivity extends AppCompatActivity {
                 habit.setPrice(price);
                 saveData.saveData(habit, typeHabit);
             }
-        } else if (typeHabit == 2) {
+        } else if (typeHabit == GlobalConstants.DATE_HABIT) {
             dateGoalValue = Integer.parseInt(dateGoalEditText.getText().toString());
             if (editMode == false) {
                 DateHabit habit = new DateHabit(title, description, startDate, dateGoalValue, false);
@@ -331,6 +331,9 @@ public class HabitActivity extends AppCompatActivity {
     }
 
     private void findviews() {
+        //Populate views.
+
+        //For all habits
         editTitle = findViewById(R.id.newHabit_name);
         editDesc = findViewById(R.id.newHabit_description);
         typeHabitRG = findViewById(R.id.radiogroup_typeHabit);
@@ -350,28 +353,19 @@ public class HabitActivity extends AppCompatActivity {
 
     private float convertPrice(float price, Spinner spinner) {
         if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[0])) {
-            return round(price, 2);
+            return round(price);
         } else if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[1])) {
-            return round(price/7, 2);
+            return round(price/7);
         } else if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[2])) {
-            return round(price/30, 2);
+            return round(price/30);
         } else if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getStringArray(R.array.period_array)[3])) {
-            return round(price/30, 2);
+            return round(price/30);
         } else return 0;
     }
 
-    public static float round(float value, int scale) {
-        int pow = 10;
-        for (int i = 1; i < scale; i++) {
-            pow *= 10;
-        }
-        float tmp = value * pow;
-        float tmpSub = tmp - (int) tmp;
-        return ( (float) ( (int) (
-                value >= 0
-                        ? (tmpSub >= 0.5f ? tmp + 1 : tmp)
-                        : (tmpSub >= -0.5f ? tmp : tmp - 1)
-        ) ) ) / pow;
+    public static float round(float value) {
+        int temp = (int) (100 * value);
+        return ((float) temp / 100);
     }
 }
 

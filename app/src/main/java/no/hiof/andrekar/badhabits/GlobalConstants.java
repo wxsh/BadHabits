@@ -18,6 +18,10 @@ public class GlobalConstants {
     public final static String CHANNEL_ID = "habitNotifications";
     public final static String CHANNEL_NAME = "Bad habit notifier";
 
+    // Habit identifiers.
+    public final static int ECO_HABIT = 1;
+    public final static int DATE_HABIT = 2;
+
 
     private static GlobalConstants single_instance = null;
     private static Context mContext;
