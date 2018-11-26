@@ -96,7 +96,8 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
     public static MyAdapter adapter;
     public static MyFavoriteAdapter favAdapter;
-    private static float totalSaved, totalDays, longestStreakEco,longestStreakDate,failedTotal, daysTillFinishedDate,daysTillFinishedEco,longestDateHabit;
+    private static float totalSaved, totalDays, failedTotal, daysTillFinishedDate,daysTillFinishedEco,longestDateHabit;
+    private static long longestStreakEco,longestStreakDate;
     private static TextView ecoBottomText, dateBottomText, longestStreakEcoText,longestStreakDateText,failedTotalText, daysTillFinishedDateText,daysTillFinishedEcoText,longestDateHabitText;
     private static SwipeRefreshLayout swipeContainer;
     private static String longestStreakName,longestDateName;
@@ -651,16 +652,16 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 if(failedTotal > 0){
                     failedTotalText.setText(context.getString(R.string.total_spent) + failedTotal);
                 } else {
-                    failedTotalText.setText(R.string.no_fails);
+                    failedTotalText.setText(context.getString(R.string.no_fails));
                 }
                 entriesEco.add(new PieEntry(abs(((EconomicHabit) habit).getProgress()), habit.getTitle()));
 
                 if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), ChronoUnit.DAYS) > longestStreakEco && habit.getFailDate() != 0) {
                     longestStreakEco = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  ChronoUnit.DAYS);
-                    //Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
+                    //Log.d("BottomSheet", Long.toString(longestStreakEco));
                     longestStreakName = habit.getTitle();
                     if (longestStreakEco == -1) {
-                        longestStreakEcoText.setText(R.string.no_fails);
+                        longestStreakEcoText.setText(context.getString(R.string.no_fails));
                     }else {
                         longestStreakEcoText.setText(context.getString(R.string.days_since_last_fail) + longestStreakEco + " (" + longestStreakName + ")");
                     }
@@ -683,19 +684,19 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 entriesDate.add(new PieEntry(Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS), habit.getTitle()));
                 if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), ChronoUnit.DAYS) > longestStreakDate && habit.getFailDate() != 0) {
                     longestStreakDate = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  ChronoUnit.DAYS);
-                    //Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
+                    Log.d("BottomSheet", Long.toString(longestStreakDate));
                     longestStreakName = habit.getTitle();
                     if (longestStreakDate == -1) {
-                        longestStreakDateText.setText(R.string.no_fails);
+                        longestStreakDateText.setText(context.getString(R.string.no_fails));
                     }else {
-                        longestStreakDateText.setText(R.string.days_since_last_fail + longestStreakDate + " (" + longestStreakName + ")");
+                        longestStreakDateText.setText(context.getString(R.string.days_since_last_fail) + longestStreakDate + " (" + longestStreakName + ")");
                     }
                 }
                 if (Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS) > longestDateHabit && habit.getStartDate() != 0) {
                     longestDateHabit = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(),  ChronoUnit.DAYS);
                     longestDateName = habit.getTitle();
                     if (longestDateHabit == -1) {
-                        longestDateHabitText.setText(R.string.no_date_habits);
+                        longestDateHabitText.setText(context.getString(R.string.no_date_habits));
                     }else {
                         longestDateHabitText.setText(context.getString(R.string.longest_habit) + longestDateHabit + " (" + longestDateName + ")");
                     }
@@ -916,7 +917,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
                     .make(recyclerView, name + " " + getString(R.string.removed), Snackbar.LENGTH_LONG);
-            snackbar.setAction(R.string.undo, new View.OnClickListener() {
+            snackbar.setAction(getString(R.string.undo), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(deletedHabit instanceof DateHabit) {
