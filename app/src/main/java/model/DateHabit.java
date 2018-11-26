@@ -15,7 +15,7 @@ public class DateHabit extends Habit {
 
     //Empty constructor for firestore.
     public DateHabit() {}
-    
+
     private String habitType = "DATE_HABIT";
 
     public DateHabit(String title, String description, long startDate, Integer dateGoalValue, boolean isFavourite) {
