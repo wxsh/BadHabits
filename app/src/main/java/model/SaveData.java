@@ -1,66 +1,17 @@
 package model;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Environment;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.CountDownLatch;
 
 import no.hiof.andrekar.badhabits.GlobalConstants;
 import no.hiof.andrekar.badhabits.MainActivity;
-import no.hiof.andrekar.badhabits.MyAdapter;
 
 public class SaveData  {
     //NOT NEEDED: Change this into internal storage, no need to use Downloads
@@ -76,11 +27,15 @@ public class SaveData  {
 
     public void readFromFile(final boolean animate) {
         final String TAG = "Firestoreread";
+
+        //Clear existing arraylist if there are habits saved
         if (Habit.habits.size() > 0) {
             Habit.habits.clear();
             MainActivity.adapter.notifyDataSetChanged();
             MainActivity.favAdapter.notifyDataSetChanged();
         }
+
+        //Start firebase pull
         db.collection(fbAuth.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -88,67 +43,48 @@ public class SaveData  {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                Log.d(TAG, Boolean.toString(document.getData().containsValue("DATE_HABIT")));
+                                        //Log.d(TAG, document.getId() + " => " + document.getData());
+                                        //Log.d(TAG, Boolean.toString(document.getData().containsValue("DATE_HABIT")));
+                                //Iterate through received data
                                 if(document.getData().containsValue("DATE_HABIT")) {
-                                    Log.d(TAG, "Found date");
+                                    //Log.d(TAG, "Found date");
+                                    //If the document is a date habit, add as a date habit.
                                     DateHabit tempHabit = document.toObject(DateHabit.class);
                                     Habit habit = (DateHabit) tempHabit;
                                     Habit.habits.add(habit);
                                         if(habit.getIsFavourite()) {
+                                            //Update favourite adapter if it is a favourite.
                                             MainActivity.favAdapter.notifyDataSetChanged();
                                         } else {
+                                            //Else update the main adapter.
                                             MainActivity.adapter.addP(Habit.habits.size());
                                         }
                                 } else if (document.getData().containsValue("ECO_HABIT")) {
-                                        EconomicHabit tempHabit = document.toObject(EconomicHabit.class);
+                                    //If the document is an eco habit, add as a eco habit.
+                                    EconomicHabit tempHabit = document.toObject(EconomicHabit.class);
                                         Habit habit = (EconomicHabit) tempHabit;
                                         Habit.habits.add(habit);
                                         if(habit.getIsFavourite()) {
+                                            //Update favourite adapter if it is a favourite.
                                             MainActivity.favAdapter.notifyDataSetChanged();
                                         } else {
+                                            //Else update the main adapter.
                                             MainActivity.adapter.addP(Habit.habits.size());
                                         }
                                         MainActivity.favAdapter.notifyDataSetChanged();
                                 }
                             }
-                            Log.d(TAG, "Refreshing");
+                            //Log.d(TAG, "Refreshing");
+                            //Update main ui again since we are done.
                             MainActivity.refreshUi();
+                            //Create notification since we have fresh data.
                             MainActivity.createNotificationChannel();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-
-        /*
-        db.collection(fbAuth.getUid()).document("habits").collection("EcoHabits")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                EconomicHabit tempHabit = document.toObject(EconomicHabit.class);
-                                Habit habit = (EconomicHabit) tempHabit;
-                                Habit.habits.add(habit);
-                                Log.d(TAG, "Adding habit");
-                                if(habit.getIsFavourite()) {
-                                    MainActivity.favAdapter.notifyDataSetChanged();
-                                } else {
-                                    MainActivity.adapter.addP(Habit.habits.size());
-                                }
-                                MainActivity.favAdapter.notifyDataSetChanged();
-                            }
-                            //This is where our main reading process is finished.
-                            MainActivity.refreshUi();
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-                //*/
+                //Set mainActivity swipe to refresh to done
                 MainActivity.setRefreshing();
 
         }
@@ -156,6 +92,7 @@ public class SaveData  {
 
     public void saveData(Habit habit, int typeHabit) {
         if (typeHabit == GlobalConstants.ECO_HABIT) {
+            //Save into correct UID and on the correct habit.
             db.collection(fbAuth.getUid()).document(habit.getUid()).set(habit);
         } else if (typeHabit == GlobalConstants.DATE_HABIT) {
             db.collection(fbAuth.getUid()).document(habit.getUid()).set(habit);
@@ -164,6 +101,7 @@ public class SaveData  {
 
     public void removeData(Habit habit, int typeHabit) {
         if (typeHabit == GlobalConstants.ECO_HABIT) {
+            //Remove the data for the provided habit.
             db.collection(fbAuth.getUid()).document(habit.getUid()).delete();
         } else if (typeHabit == GlobalConstants.DATE_HABIT) {
             db.collection(fbAuth.getUid()).document(habit.getUid()).delete();
