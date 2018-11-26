@@ -56,5 +56,26 @@
 
     <string name="text_main_no_internet">You do not have internet access. </string>
     <string name="text_main_no_internet_sub">Bad habits will not work unless you launch it with internet access the first time, so we can set up a few things. </string>
+    <string name="left_for_goals">Left for goals:</string>
+    <string name="total_spent">Total spent:</string>
+    <string name="no_fails">NO FAILS! Hooray!</string>
+    <string name="days_since_last_fail">Days since last fail:</string>
+    <string name="days_till_finished">Days till finished:</string>
+    <string name="no_date_habits">No Date habits</string>
+    <string name="days_without">Days without:</string>
+    <string name="days">days</string>
+    <string name="longest_habit">Longest habit:</string>
+    <string name="removed">removed</string>
+    <string name="undo">UNDO</string>
+    <string name="test_habit_1">Gum</string>
+    <string name="test_habit_2">Drink less soda</string>
+    <string name="test_habit_3">Smokes</string>
+    <string name="test_habit_4">Having fun</string>
+    <string name="test_habit_5">Stop playing video games</string>
+    <string name="test_habit_1_description">Stop with gum</string>
+    <string name="test_habit_2_description">Stop drinking soda, it is not good for you, and it is expensive</string>
+    <string name="test_habit_3_description">Stop with smoking, use nicotine gum instead</string>
+    <string name="test_habit_4_description">Stop having fun</string>
+    <string name="test_habit_5_description">They are ruining your life</string>
 
 </resources>

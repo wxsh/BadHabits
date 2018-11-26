@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
     public static AlarmManager mAlarmManager;
     public static NotificationChannel notificationChannel = null;
 
+    //Checking if network is available
     public boolean isNetworkAvailable(Context context) {
         final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
         String userTheme = preferences.getString("key_theme", "");
         AndroidThreeTen.init(this);
 
-
+        //Setting theme depending on what is stored in shared preferences
         if (userTheme.equals("Light")){
             setTheme(R.style.LightTheme);
         }
@@ -265,11 +266,10 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             if (manager != null) manager.createNotificationChannel(notificationChannel);
-                mAlarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         }
+        mAlarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
         TimeZone tz = TimeZone.getTimeZone("CET");
-        Date now = new Date();
 
         if (Habit.habits != null && preferences.getBoolean(GlobalConstants.KEY_PREF_NOT_ON, false)) {
 
@@ -427,7 +427,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             refreshUi();
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        createNotificationChannel();
     }
 
     @Override
@@ -452,8 +451,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
             startActivity(intent);
 
-//            Snackbar.make(findViewById(android.R.id.content), "Not yet implemented", Snackbar.LENGTH_LONG).show();
-//            return true;
         }
         if (id == R.id.action_populate) {
             populateData(true);
@@ -522,11 +519,11 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
         ArrayList<Habit> testHabits = new ArrayList<Habit>();
         Date date = new Date();
         long dayms = 86400000;
-        Habit gumHabit = new EconomicHabit("Gum", "Stop with gum", (date.getTime() - (dayms*8)), 0, 800, 10, false);
-        Habit sodaHabit = new EconomicHabit("Drink less soda", "Stop drinking soda, it is not good for you, and it is expensive", (date.getTime() - (dayms*15)), 10, 500, 20, true);
-        Habit poop = new EconomicHabit("Smokes", "Stop with smoking, use nicotine gum instead", (date.getTime() - (dayms*4)), 10, 100, 100, false);
-        Habit scoop = new DateHabit("Having fun", "Stop having fun", (date.getTime() - (dayms*15)), 60, false);
-        Habit date2 = new DateHabit("Stop playing video games", "They are ruining your life", (date.getTime() - (dayms*12)), 20, false);
+        Habit gumHabit = new EconomicHabit(getString(R.string.test_habit_1), getString(R.string.test_habit_1_description), (date.getTime() - (dayms*8)), 0, 800, 10, false);
+        Habit sodaHabit = new EconomicHabit(getString(R.string.test_habit_2), getString(R.string.test_habit_2_description), (date.getTime() - (dayms*15)), 10, 500, 20, true);
+        Habit poop = new EconomicHabit(getString(R.string.test_habit_3), getString(R.string.test_habit_3_description), (date.getTime() - (dayms*4)), 10, 100, 100, false);
+        Habit scoop = new DateHabit(getString(R.string.test_habit_4), getString(R.string.test_habit_4_description), (date.getTime() - (dayms*15)), 60, false);
+        Habit date2 = new DateHabit(getString(R.string.test_habit_5), getString(R.string.test_habit_5_description), (date.getTime() - (dayms*12)), 20, false);
         date2.setFailureTimes(3);
         date2.setFailDate(date.getTime()-(dayms*7));
         scoop.setFailureTimes(6);
@@ -606,300 +603,284 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
 
     public static void setRefreshing() {
-            if(swipeContainer.isRefreshing()) {
-                swipeContainer.setRefreshing(false);
-            }
-        }
-
-    public static void runLayoutAnimation(boolean animatefav) {
-        if(!favoriteRecyclerView.isAnimating() && !recyclerView.isAnimating()) {
-            final Context context = recyclerView.getContext();
-
-            final LayoutAnimationController controller =
-                    AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
-            recyclerView.setLayoutAnimation(controller);
-            recyclerView.scheduleLayoutAnimation();
-
-            if (animatefav) {
-                final Context favContext = favoriteRecyclerView.getContext();
-                final LayoutAnimationController favController =
-                        AnimationUtils.loadLayoutAnimation(favContext, R.anim.layout_animation_from_right);
-                favoriteRecyclerView.setLayoutAnimation(favController);
-                favoriteRecyclerView.scheduleLayoutAnimation();
-            }
+        if(swipeContainer.isRefreshing()) {
+            swipeContainer.setRefreshing(false);
         }
     }
 
-        public static void updateBottomSheet() {
-            totalSaved = 0;
-            totalDays = 0;
-            failedTotal = 0;
-            longestDateHabit = 0;
-            daysTillFinishedDate = -1 ;
-            daysTillFinishedEco = -1 ;
-            longestStreakEco = -1;
-            longestStreakDate = -1;
-            ArrayList<PieEntry> entriesEco = new ArrayList<>();
-            ArrayList<PieEntry> entriesDate = new ArrayList<>();
 
-            //Currency from sharedPrefs
-            SharedPreferences sharedPref =
-                    PreferenceManager.getDefaultSharedPreferences(context);
+    public static void updateBottomSheet() {
+        totalSaved = 0;
+        totalDays = 0;
+        failedTotal = 0;
+        longestDateHabit = 0;
+        daysTillFinishedDate = -1 ;
+        daysTillFinishedEco = -1 ;
+        longestStreakEco = -1;
+        longestStreakDate = -1;
+        ArrayList<PieEntry> entriesEco = new ArrayList<>();
+        ArrayList<PieEntry> entriesDate = new ArrayList<>();
 
-            String currency = sharedPref.getString
-                    (GlobalConstants.KEY_PREF_CURRENCY, "");
+        //Currency from sharedPrefs
+        SharedPreferences sharedPref =
+                PreferenceManager.getDefaultSharedPreferences(context);
+
+        String currency = sharedPref.getString
+                (GlobalConstants.KEY_PREF_CURRENCY, "");
 
 
-            for (Habit habit: habits) {
-                if (habit instanceof EconomicHabit) {
-                    if (((EconomicHabit) habit).getProgress() < 0) {
-                        totalSaved += ((EconomicHabit) habit).getProgress();
-                    } else {
-                        totalSaved += 0;
+        for (Habit habit: habits) {
+            if (habit instanceof EconomicHabit) {
+                if (((EconomicHabit) habit).getProgress() < 0) {
+                    totalSaved += ((EconomicHabit) habit).getProgress();
+                } else {
+                    totalSaved += 0;
+                }
+                //totalSaved += ((EconomicHabit) habit).getProgress();
+                failedTotal += (((EconomicHabit) habit).getFailedTotal());
+                ecoBottomText.setText(context.getString(R.string.left_for_goals) + Math.abs(totalSaved) + " " + currency) ;
+                if(failedTotal > 0){
+                    failedTotalText.setText(context.getString(R.string.total_spent) + failedTotal);
+                } else {
+                    failedTotalText.setText(R.string.no_fails);
+                }
+                entriesEco.add(new PieEntry(abs(((EconomicHabit) habit).getProgress()), habit.getTitle()));
+
+                if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), ChronoUnit.DAYS) > longestStreakEco && habit.getFailDate() != 0) {
+                    longestStreakEco = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  ChronoUnit.DAYS);
+                    //Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
+                    longestStreakName = habit.getTitle();
+                    if (longestStreakEco == -1) {
+                        longestStreakEcoText.setText(R.string.no_fails);
+                    }else {
+                        longestStreakEcoText.setText(context.getString(R.string.days_since_last_fail) + longestStreakEco + " (" + longestStreakName + ")");
                     }
-                    //totalSaved += ((EconomicHabit) habit).getProgress();
-                    failedTotal += (((EconomicHabit) habit).getFailedTotal());
-                    ecoBottomText.setText("Left for goals: " + Math.abs(totalSaved) + " " + currency) ;
-                    if(failedTotal > 0){
-                        failedTotalText.setText("Total spent: " + failedTotal);
-                    } else {
-                        failedTotalText.setText("NO FAILS! Hooray!");
-                    }
-                    entriesEco.add(new PieEntry(abs(((EconomicHabit) habit).getProgress()), habit.getTitle()));
-
-                    if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), ChronoUnit.DAYS) > longestStreakEco && habit.getFailDate() != 0) {
-                        longestStreakEco = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  ChronoUnit.DAYS);
-                        //Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
-                        longestStreakName = habit.getTitle();
-                        if (longestStreakEco == -1) {
-                            longestStreakEcoText.setText("NO FAILS! Hooray!");
-                        }else {
-                            longestStreakEcoText.setText("Days since last fail: " + longestStreakEco + " (" + longestStreakName + ")");
-                        }
-                    }
-                    //TODO: double check that the math here is correct.
-                    float dateGoalL = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS);
-                    float saved = (( ((EconomicHabit) habit).getGoalValue() + (dateGoalL*((EconomicHabit) habit).getAlternativePrice()) ) - (dateGoalL*((EconomicHabit) habit).getPrice()) + ((EconomicHabit) habit).getFailedTotal());
-                    float pricePerDay = ( ((EconomicHabit) habit).getPrice() - ((EconomicHabit) habit).getAlternativePrice());
-                    float daysRemaining = (saved/pricePerDay);
-                    if (daysRemaining > daysTillFinishedEco && ((EconomicHabit) habit).getGoalValue() != 0) {
-                        daysTillFinishedEco = daysRemaining;
-                        daysTillFinishedEcoText.setText("Days till finished: " + Math.round(daysRemaining));
-                    }
-
-
-
-                } if (habit instanceof DateHabit) {
-                    totalDays += habit.getDaysFromStart();
-                    dateBottomText.setText("Days without: " + totalDays + " days");
-                    entriesDate.add(new PieEntry(Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS), habit.getTitle()));
-                    if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), ChronoUnit.DAYS) > longestStreakDate && habit.getFailDate() != 0) {
-                        longestStreakDate = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  ChronoUnit.DAYS);
-                        //Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
-                        longestStreakName = habit.getTitle();
-                        if (longestStreakDate == -1) {
-                            longestStreakDateText.setText("NO FAILS! Hooray!");
-                        }else {
-                            longestStreakDateText.setText("Days since last fail: " + longestStreakDate + " (" + longestStreakName + ")");
-                        }
-                    }
-                    if (Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS) > longestDateHabit && habit.getStartDate() != 0) {
-                        longestDateHabit = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(),  ChronoUnit.DAYS);
-                        longestDateName = habit.getTitle();
-                        if (longestDateHabit == -1) {
-                            longestDateHabitText.setText("No Date habits");
-                        }else {
-                            longestDateHabitText.setText("Longest habit: " + longestDateHabit + " (" + longestDateName + ")");
-                        }
-                    }
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(new Date(habit.getStartDate()));
-                    c.add(Calendar.DATE,((DateHabit)habit).getDateGoalValue());
-                    if (Habit.getDateDiff(new Date().getTime(),c.getTimeInMillis() , ChronoUnit.DAYS) > daysTillFinishedDate && ((DateHabit) habit).getDateGoalValue() != 0) {
-                        daysTillFinishedDate = Habit.getDateDiff(new Date().getTime(),c.getTimeInMillis(),  ChronoUnit.DAYS);
-                        daysTillFinishedDateText.setText("Days till finished: " + daysTillFinishedDate);
-                    }
+                }
+                //TODO: double check that the math here is correct.
+                float dateGoalL = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS);
+                float saved = (( ((EconomicHabit) habit).getGoalValue() + (dateGoalL*((EconomicHabit) habit).getAlternativePrice()) ) - (dateGoalL*((EconomicHabit) habit).getPrice()) + ((EconomicHabit) habit).getFailedTotal());
+                float pricePerDay = ( ((EconomicHabit) habit).getPrice() - ((EconomicHabit) habit).getAlternativePrice());
+                float daysRemaining = (saved/pricePerDay);
+                if (daysRemaining > daysTillFinishedEco && ((EconomicHabit) habit).getGoalValue() != 0) {
+                    daysTillFinishedEco = daysRemaining;
+                    daysTillFinishedEcoText.setText(context.getString(R.string.days_till_finished) + Math.round(daysRemaining));
                 }
 
 
 
-
+            } if (habit instanceof DateHabit) {
+                totalDays += habit.getDaysFromStart();
+                dateBottomText.setText(context.getString(R.string.days_without) + totalDays + context.getString(R.string.days));
+                entriesDate.add(new PieEntry(Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS), habit.getTitle()));
+                if (Habit.getDateDiff(habit.getFailDate(), new Date().getTime(), ChronoUnit.DAYS) > longestStreakDate && habit.getFailDate() != 0) {
+                    longestStreakDate = Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  ChronoUnit.DAYS);
+                    //Log.d("BottomSheet", Long.toString(Habit.getDateDiff(habit.getFailDate(), new Date().getTime(),  TimeUnit.DAYS)));
+                    longestStreakName = habit.getTitle();
+                    if (longestStreakDate == -1) {
+                        longestStreakDateText.setText(R.string.no_fails);
+                    }else {
+                        longestStreakDateText.setText(R.string.days_since_last_fail + longestStreakDate + " (" + longestStreakName + ")");
+                    }
+                }
+                if (Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS) > longestDateHabit && habit.getStartDate() != 0) {
+                    longestDateHabit = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(),  ChronoUnit.DAYS);
+                    longestDateName = habit.getTitle();
+                    if (longestDateHabit == -1) {
+                        longestDateHabitText.setText(R.string.no_date_habits);
+                    }else {
+                        longestDateHabitText.setText(context.getString(R.string.longest_habit) + longestDateHabit + " (" + longestDateName + ")");
+                    }
+                }
+                Calendar c = Calendar.getInstance();
+                c.setTime(new Date(habit.getStartDate()));
+                c.add(Calendar.DATE,((DateHabit)habit).getDateGoalValue());
+                if (Habit.getDateDiff(new Date().getTime(),c.getTimeInMillis() , ChronoUnit.DAYS) > daysTillFinishedDate && ((DateHabit) habit).getDateGoalValue() != 0) {
+                    daysTillFinishedDate = Habit.getDateDiff(new Date().getTime(),c.getTimeInMillis(),  ChronoUnit.DAYS);
+                    daysTillFinishedDateText.setText(context.getString(R.string.days_till_finished) + daysTillFinishedDate);
+                }
             }
-            PieDataSet dataSetEco = new PieDataSet(entriesEco, "");
-            PieData dataEco = new PieData(dataSetEco);
-            PieDataSet dataSetDate = new PieDataSet(entriesDate, "");
-            PieData dataDate = new PieData(dataSetDate);
-            ArrayList<Integer> colors = new ArrayList<>();
 
-            for (int c : ColorTemplate.JOYFUL_COLORS)
-                colors.add(c);
 
-            dataSetEco.setColors(colors);
-            dataSetEco.setDrawIcons(false);
 
-            dataSetDate.setColors(colors);
-            dataSetDate.setDrawIcons(false);
 
-            bottomSheetPieEco.getDescription().setEnabled(false);
+        }
+        PieDataSet dataSetEco = new PieDataSet(entriesEco, "");
+        PieData dataEco = new PieData(dataSetEco);
+        PieDataSet dataSetDate = new PieDataSet(entriesDate, "");
+        PieData dataDate = new PieData(dataSetDate);
+        ArrayList<Integer> colors = new ArrayList<>();
+
+        for (int c : ColorTemplate.JOYFUL_COLORS)
+            colors.add(c);
+
+        dataSetEco.setColors(colors);
+        dataSetEco.setDrawIcons(false);
+
+        dataSetDate.setColors(colors);
+        dataSetDate.setDrawIcons(false);
+
+        bottomSheetPieEco.getDescription().setEnabled(false);
 //            bottomSheetPieEco.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
-            bottomSheetPieEco.getLegend().setWordWrapEnabled(true);
-            bottomSheetPieEco.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-            bottomSheetPieEco.setDrawEntryLabels(false);
-            bottomSheetPieEco.setDragDecelerationFrictionCoef(2f);
-            bottomSheetPieEco.setDrawHoleEnabled(false);
-            bottomSheetPieEco.setData(dataEco);
-            bottomSheetPieEco.highlightValue(null);
-            bottomSheetPieEco.invalidate();
+        bottomSheetPieEco.getLegend().setWordWrapEnabled(true);
+        bottomSheetPieEco.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        bottomSheetPieEco.setDrawEntryLabels(false);
+        bottomSheetPieEco.setDragDecelerationFrictionCoef(2f);
+        bottomSheetPieEco.setDrawHoleEnabled(false);
+        bottomSheetPieEco.setData(dataEco);
+        bottomSheetPieEco.highlightValue(null);
+        bottomSheetPieEco.invalidate();
 
-            bottomSheetPieDate.getDescription().setEnabled(false);
-            bottomSheetPieDate.getLegend().setWordWrapEnabled(true);
-            bottomSheetPieDate.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-            bottomSheetPieDate.setDrawEntryLabels(false);
-            bottomSheetPieDate.setDrawHoleEnabled(false);
-            bottomSheetPieDate.setDragDecelerationFrictionCoef(2f);
-            bottomSheetPieDate.setData(dataDate);
-            bottomSheetPieDate.highlightValue(null);
-            bottomSheetPieDate.invalidate();
+        bottomSheetPieDate.getDescription().setEnabled(false);
+        bottomSheetPieDate.getLegend().setWordWrapEnabled(true);
+        bottomSheetPieDate.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        bottomSheetPieDate.setDrawEntryLabels(false);
+        bottomSheetPieDate.setDrawHoleEnabled(false);
+        bottomSheetPieDate.setDragDecelerationFrictionCoef(2f);
+        bottomSheetPieDate.setData(dataDate);
+        bottomSheetPieDate.highlightValue(null);
+        bottomSheetPieDate.invalidate();
 
+    }
+
+    public void onBoard(final View view) {
+
+
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                // make an
+                SimpleTarget firstTarget = new SimpleTarget.Builder(MainActivity.this)
+                        .setPoint(findViewById(R.id.fab_addHabit))
+                        .setShape(new Circle(200f))
+                        .setTitle(getString(R.string.tutorial_main_title_welcome))
+                        .setDescription(getString(R.string.tutorial_main_desc_newhabit))
+                        .build();
+
+                //View two = findViewById(R.id.favorite_recycler_view);
+                View two = findViewById(R.id.favorite_recycler_view);
+
+                int[] twoLocation = new int[2];
+                two.getLocationInWindow(twoLocation);
+                float twoX = twoLocation[0] + 150;
+                float twoY = twoLocation[1] + 150;
+
+                SimpleTarget secondTarget = new SimpleTarget.Builder(MainActivity.this)
+                        .setPoint(twoX, twoY)
+                        .setShape(new Circle(250f))
+                        .setTitle(getString(R.string.tutorial_main_title_favourite))
+                        .setDescription(getString(R.string.tutorial_main_desc_favdisplay))
+                        .build();
+
+
+
+                //View three = recyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.favoriteBtn);
+                View three = findViewById(R.id.recycler_view);
+                int[] threeLocation = new int[2];
+                three.getLocationInWindow(threeLocation);
+                float threeX = threeLocation[0] + 1015;
+                float threeY = threeLocation[1] + 55;
+
+                SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(threeX, threeY)
+                        .setShape(new Circle(100f))
+                        .setTitle(getString(R.string.tutorial_main_title_favourite))
+                        .setDescription(getString(R.string.tutorial_main_desc_favadd))
+                        .build();
+
+                float fourX = 1025;
+                float fourY = 125;
+
+                SimpleTarget fourthTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(fourX, fourY)
+                        .setShape(new Circle(50f))
+                        .setTitle(getString(R.string.tutorial_main_title_settings))
+                        .setDescription(getString(R.string.tutorial_main_desc_settings))
+                        .build();
+
+                Spotlight.with(MainActivity.this)
+                        .setOverlayColor(R.color.background)
+                        .setDuration(100L)
+                        .setAnimation(new DecelerateInterpolator(2f))
+                        .setTargets(firstTarget, thirdTarget, secondTarget, fourthTarget)
+                        .setClosedOnTouchedOutside(true)
+                        /*.setOnSpotlightStateListener(
+                                new OnSpotlightStateChangedListener() {
+                            @Override
+                            public void onStarted() {
+                                Toast.makeText(MainActivity.this, "spotlight is started", Toast.LENGTH_SHORT)
+                                        .show();
+                                populateData(false);
+                            }
+
+                            @Override
+                            public void onEnded() {
+                                Toast.makeText(MainActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
+                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putBoolean(GlobalConstants.KEY_PREF_ONBOARD, true);
+                                editor.commit();
+                                ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
+                                params.height = 0;
+                                favoriteRecyclerView.setLayoutParams(params);
+                                SaveData saveData = new SaveData();
+                                saveData.readFromFile();
+
+                            }
+                        })
+                        */
+                        .start();
+            }
+        });
+    }
+
+    private void themefunc() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String userTheme = preferences.getString("key_theme", "");
+        context = getBaseContext();
+
+        if (userTheme.equals("Light")){
+            setTheme(R.style.LightTheme);
         }
+        else if (userTheme.equals("Dark")){
+            setTheme(R.style.DarkTheme);
+        }
+        else
+            setTheme(R.style.AppTheme);
 
-        public void onBoard(final View view) {
+    }
 
+    public static void refreshUi() {
 
-            view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+    //TODO: Look into bug if
+        updateBottomSheet();
+        final int Height = 350;
+        if (!Habit.getHaveFavorite() && (favoriteRecyclerView.getLayoutParams().height != 0)) {
+            Animation a = new Animation() {
                 @Override
-                public void onGlobalLayout() {
-                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                    // make an
-                    SimpleTarget firstTarget = new SimpleTarget.Builder(MainActivity.this)
-                            .setPoint(findViewById(R.id.fab_addHabit))
-                            .setShape(new Circle(200f))
-                            .setTitle(getString(R.string.tutorial_main_title_welcome))
-                            .setDescription(getString(R.string.tutorial_main_desc_newhabit))
-                            .build();
-
-                    //View two = findViewById(R.id.favorite_recycler_view);
-                    View two = findViewById(R.id.favorite_recycler_view);
-
-                    int[] twoLocation = new int[2];
-                    two.getLocationInWindow(twoLocation);
-                    float twoX = twoLocation[0] + 150;
-                    float twoY = twoLocation[1] + 150;
-
-                    SimpleTarget secondTarget = new SimpleTarget.Builder(MainActivity.this)
-                            .setPoint(twoX, twoY)
-                            .setShape(new Circle(250f))
-                            .setTitle(getString(R.string.tutorial_main_title_favourite))
-                            .setDescription(getString(R.string.tutorial_main_desc_favdisplay))
-                            .build();
-
-
-
-                    //View three = recyclerView.getLayoutManager().findViewByPosition(1).findViewById(R.id.favoriteBtn);
-                    View three = findViewById(R.id.recycler_view);
-                    int[] threeLocation = new int[2];
-                    three.getLocationInWindow(threeLocation);
-                    float threeX = threeLocation[0] + 1015;
-                    float threeY = threeLocation[1] + 55;
-
-                    SimpleTarget thirdTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(threeX, threeY)
-                            .setShape(new Circle(100f))
-                            .setTitle(getString(R.string.tutorial_main_title_favourite))
-                            .setDescription(getString(R.string.tutorial_main_desc_favadd))
-                            .build();
-
-                    float fourX = 1025;
-                    float fourY = 125;
-
-                    SimpleTarget fourthTarget = new SimpleTarget.Builder(MainActivity.this).setPoint(fourX, fourY)
-                            .setShape(new Circle(50f))
-                            .setTitle(getString(R.string.tutorial_main_title_settings))
-                            .setDescription(getString(R.string.tutorial_main_desc_settings))
-                            .build();
-
-                    Spotlight.with(MainActivity.this)
-                            .setOverlayColor(R.color.background)
-                            .setDuration(100L)
-                            .setAnimation(new DecelerateInterpolator(2f))
-                            .setTargets(firstTarget, thirdTarget, secondTarget, fourthTarget)
-                            .setClosedOnTouchedOutside(true)
-                            .setOnSpotlightStateListener(new OnSpotlightStateChangedListener() {
-                                @Override
-                                public void onStarted() {
-                                    Toast.makeText(MainActivity.this, "spotlight is started", Toast.LENGTH_SHORT)
-                                            .show();
-                                    populateData(false);
-                                }
-
-                                @Override
-                                public void onEnded() {
-                                    Toast.makeText(MainActivity.this, "spotlight is ended", Toast.LENGTH_SHORT).show();
-                                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                                    SharedPreferences.Editor editor = sharedPref.edit();
-                                    editor.putBoolean(GlobalConstants.KEY_PREF_ONBOARD, true);
-                                    editor.commit();
-                                    ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
-                                    params.height = 0;
-                                    favoriteRecyclerView.setLayoutParams(params);
-                                    SaveData saveData = new SaveData();
-                                    saveData.readFromFile();
-
-                                }
-                            })
-                            .start();
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
+                    params.height = (int) (Height - (Height * interpolatedTime));
+                    favoriteRecyclerView.setLayoutParams(params);
                 }
-            });
-        }
-
-        private void themefunc() {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String userTheme = preferences.getString("key_theme", "");
-            context = getBaseContext();
-
-            if (userTheme.equals("Light")){
-                setTheme(R.style.LightTheme);
-            }
-            else if (userTheme.equals("Dark")){
-                setTheme(R.style.DarkTheme);
-            }
-            else
-                setTheme(R.style.AppTheme);
-
-        }
-
-        public static void refreshUi() {
-
-        //TODO: Look into bug if
-            updateBottomSheet();
-            final int Height = 350;
-            if (!Habit.getHaveFavorite() && (favoriteRecyclerView.getLayoutParams().height != 0)) {
+            };
+            a.setDuration(500);
+            favoriteRecyclerView.startAnimation(a);
+        } else if (Habit.getHaveFavorite()){
+            if (favoriteRecyclerView.getLayoutParams().height == 0) {
                 Animation a = new Animation() {
                     @Override
                     protected void applyTransformation(float interpolatedTime, Transformation t) {
                         ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
-                        params.height = (int) (Height - (Height * interpolatedTime));
+                        params.height = (int) ((Height * interpolatedTime));
+                        favoriteRecyclerView.setAlpha(1 * interpolatedTime);
                         favoriteRecyclerView.setLayoutParams(params);
                     }
                 };
                 a.setDuration(500);
                 favoriteRecyclerView.startAnimation(a);
-            } else if (Habit.getHaveFavorite()){
-                if (favoriteRecyclerView.getLayoutParams().height == 0) {
-                    Animation a = new Animation() {
-                        @Override
-                        protected void applyTransformation(float interpolatedTime, Transformation t) {
-                            ViewGroup.LayoutParams params = favoriteRecyclerView.getLayoutParams();
-                            params.height = (int) ((Height * interpolatedTime));
-                            favoriteRecyclerView.setAlpha(1 * interpolatedTime);
-                            favoriteRecyclerView.setLayoutParams(params);
-                        }
-                    };
-                    a.setDuration(500);
-                    favoriteRecyclerView.startAnimation(a);
-                }
             }
-        };
+        }
+    };
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
@@ -925,8 +906,8 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
-                    .make(recyclerView, name + " removed", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
+                    .make(recyclerView, name + " " + getString(R.string.removed), Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.undo, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(deletedHabit instanceof DateHabit) {
