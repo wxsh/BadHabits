@@ -33,7 +33,7 @@ public class NotificationUpdate extends BroadcastReceiver {
 
         Notification notification = new Notification.Builder(context.getApplicationContext(), GlobalConstants.CHANNEL_ID)
                 .setContentTitle(extras.getString("habitName"))
-                .setContentText(context.getString((R.string.habit_yes_confirm)))
+                .setContentText(context.getString((R.string.notification_reached_goal)))
                 .setSmallIcon(R.drawable.ic_calendar_today)
                 .setAutoCancel(true)
                 .setContentIntent(resultPendingIntent)

@@ -184,9 +184,8 @@ public class Habit {
                 } else if (h2 instanceof DateHabit && h1 instanceof EconomicHabit) {
                     return 1;
                 } else if (h2 instanceof DateHabit && h1 instanceof DateHabit) {
-                    //TODO: Fix crash when goal is reached and sorting by Goal.
-                    // Holy stringtrimming batman
-                    if (Integer.parseInt((((DateHabit) h2).getDateGoal().substring(0, ((DateHabit) h2).getDateGoal().indexOf(" ")))) > (Integer.parseInt((((DateHabit) h1).getDateGoal().substring(0, ((DateHabit) h1).getDateGoal().indexOf(" ")))))) {
+                    //TODO: Fix crash when goal is reached and sorting by Goal
+                    if ((((DateHabit) h2).getDateGoal() > (((DateHabit) h1).getDateGoal()))) {
                         return -1;
                     } else {
                         return 1;

@@ -75,6 +75,11 @@
 
     <string name="notification_reached_goal">Congratulations, you reached your goal!</string>
 
+    <string name="date_habit_not_started">Has not started yet.</string>
+    <string name="date_habit_days_since_start">Days since start</string>
+    <string name="date_habit_remaining">Remaining</string>
+    <string name="date_habit_goal_achieved">Goal achieved</string>
+
     <string name="text_main_no_internet">You do not have internet access. </string>
     <string name="text_main_no_internet_sub">Bad habits will not work unless you launch it with internet access the first time, so we can set up a few things. </string>
     <string name="left_for_goals">Left for goals:</string>

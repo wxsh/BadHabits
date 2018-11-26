@@ -102,8 +102,18 @@ public class ShowHabitActivity extends AppCompatActivity {
         Habit habit = Habit.habits.get(currentNumber);
         //Sets up fields with information from the chosen habit
         if (habit instanceof DateHabit) {
-            goalView.setText(((DateHabit)habit).getDaysSinceStart());
-            progressView.setText(((DateHabit)habit).getDateGoal());
+            Long daysSinceStart = ((DateHabit) habit).getDaysSinceStart();
+            if (daysSinceStart > 0){
+                goalView.setText(daysSinceStart.toString() + " " + getString(R.string.date_habit_days_since_start) );
+            } else {
+                goalView.setText(getString(R.string.date_habit_not_started));
+            }
+            Long dateGoal = ((DateHabit) (habit)).getDateGoal();
+            if (dateGoal > 0){
+                progressView.setText(dateGoal.toString() + " " + getString(R.string.date_habit_remaining));
+            } else {
+                progressView.setText(getString(R.string.date_habit_goal_achieved));
+            }
             Date date = new Date(habit.getStartDate());
             String dateText = df2.format(date);
             startView.setText(dateText);

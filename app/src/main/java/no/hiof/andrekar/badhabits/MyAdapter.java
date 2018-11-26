@@ -83,7 +83,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                 holder.habitGoal.setText(Float.toString(((EconomicHabit) Habit.habits.get(position)).getProgress()) +" "+currency);
                 holder.habitIcon.setImageResource(R.drawable.ic_coin);
             } else if (Habit.habits.get(position).getClass() == DateHabit.class) {
-                holder.habitGoal.setText(((DateHabit) Habit.habits.get(position)).getDateGoal());
+                Long dateGoal = ((DateHabit) (Habit.habits.get(position))).getDateGoal();
+                if (dateGoal > 0){
+                    holder.habitGoal.setText(dateGoal.toString() + " " + mContext.getString(R.string.date_habit_remaining) );
+                } else {
+                    holder.habitGoal.setText(mContext.getString(R.string.date_habit_goal_achieved));
+                }
+
                 holder.habitIcon.setImageResource(R.drawable.ic_calendar_today);
             }
 
