@@ -61,8 +61,8 @@
     <string name="chart_successful_days">Successful days</string>
     <string name="chart_failed_days">Failed days</string>
 
-    <string name="popup_failed_ecohabit">Don\'t worry, even if you fail, you can still do this! How much did you spend?</string>
-    <string name="popup_failed_datehabit">"Don\'t worry, even if you fail, you can still do this! Do you want to reset the days since last fail?"</string>
+    <string name="popup_failed_ecohabit">Don\'t worry, you can still do this! How much did you spend?</string>
+    <string name="popup_failed_datehabit">"Don\'t worry, you can still do this! Do you want to reset the days since last fail?"</string>
     <string name="popup_failed_title">Failed habit?</string>
     <string name="popup_cancel">Cancel</string>
     <string name="popup_positive_eco">OK</string>
@@ -80,11 +80,7 @@
     <string name="total_spent">Total spent:</string>
     <string name="no_fails">NO FAILS! Hooray!</string>
     <string name="days_since_last_fail">Days since last fail:</string>
-    <string name="days_till_finished">Days till finished:</string>
     <string name="no_date_habits">No Date habits</string>
-    <string name="days_without">Days without:</string>
-    <string name="days">days</string>
-    <string name="longest_habit">Longest habit:</string>
     <string name="removed">removed</string>
     <string name="undo">UNDO</string>
     <string name="test_habit_1">Gum</string>
