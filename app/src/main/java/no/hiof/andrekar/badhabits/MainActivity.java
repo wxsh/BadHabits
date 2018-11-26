@@ -62,6 +62,8 @@ import com.takusemba.spotlight.Spotlight;
 import com.takusemba.spotlight.shape.Circle;
 import com.takusemba.spotlight.target.SimpleTarget;
 
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneId;
 import org.threeten.bp.temporal.ChronoUnit;
 
 import model.SaveData;
@@ -318,8 +320,8 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1234,
                         intent, 0);
 
-                long accurateTime = System.currentTimeMillis() + timeLeft + offsetFromUtc;
-
+                //long accurateTime = System.currentTimeMillis() + timeLeft + offsetFromUtc;
+                long accurateTime = Instant.now().atZone(ZoneId.systemDefault()).toEpochSecond() + timeLeft;
 
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     mAlarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, accurateTime, pendingIntent);
