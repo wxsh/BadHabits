@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-//TODO: Handle merging if account exits and data is present for anon user in database?
+//NO TIME: Handle merging if account exits and data is present for anon user in database?
 //DONE change this to preferenceactivity
 
 

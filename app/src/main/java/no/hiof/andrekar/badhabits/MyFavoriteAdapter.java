@@ -69,7 +69,7 @@ public class MyFavoriteAdapter extends RecyclerView.Adapter<MyFavoriteAdapter.Vi
             return holder;
         }
 
-        //TODO: fix some bugs, like clickable when empty
+        //DONE: fix some bugs, like clickable when empty
         //DONE: Empty item view does not show if you remove the last favourite.
     @Override
         public void onBindViewHolder(final MyFavoriteAdapter.ViewHolder holder, final int position) {

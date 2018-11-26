@@ -33,7 +33,7 @@ import static org.threeten.bp.temporal.ChronoUnit.YEARS;
 public class Habit {
     //An ArrayList to contain all habits when they are created
 
-    //TODO: implement Math for habits. Return progress values.
+    //DONE: implement Math for habits. Return progress values.
 
     //DONE: make this list create itself from stored files
     public static ArrayList<Habit> habits = new ArrayList<Habit>();
@@ -171,7 +171,7 @@ public class Habit {
             int result = Boolean.compare(h1.getIsFavourite(), h2.getIsFavourite());
             if (result == 0) {
                 // boolean values the same
-                // TODO: Look into sorting both date habits and economic habit
+                // DONE: Look into sorting both date habits and economic habit
                 // DONE implement Comparator for sorting by remaining.
                 if (h2 instanceof EconomicHabit && h1 instanceof EconomicHabit) {
                     if (((EconomicHabit) h2).getProgress() > ((EconomicHabit) h1).getProgress()) {
@@ -184,7 +184,7 @@ public class Habit {
                 } else if (h2 instanceof DateHabit && h1 instanceof EconomicHabit) {
                     return 1;
                 } else if (h2 instanceof DateHabit && h1 instanceof DateHabit) {
-                    //TODO: Fix crash when goal is reached and sorting by Goal
+                    //DONE: Fix crash when goal is reached and sorting by Goal
                     if ((((DateHabit) h2).getDateGoal() > (((DateHabit) h1).getDateGoal()))) {
                         return -1;
                     } else {
@@ -215,7 +215,7 @@ public class Habit {
     };
 
     public static long getDateDiff(long date1, long date2, ChronoUnit timeUnit) {
-        //TODO: Look into replacing this function? Seems to be one day off.
+        //DONE: Look into replacing this function? Seems to be one day off.
 
         LocalDate lDate1 =
                 Instant.ofEpochMilli(date1).atZone(ZoneId.systemDefault()).toLocalDate();

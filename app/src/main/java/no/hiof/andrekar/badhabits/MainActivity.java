@@ -85,8 +85,8 @@ import model.Habit;
 import static java.lang.Math.abs;
 import static model.Habit.habits;
 
-//TODO: Verify days till finished maths (-65 with test dataset)
-//TODO: Verify days till finnished maths (44 with dataset, should be 51)
+//DONE: Verify days till finished maths (-65 with test dataset)
+//DONE: Verify days till finnished maths (44 with dataset, should be 51)
 
 
 public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.RecyclerItemTouchHelperListener {
@@ -290,14 +290,14 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
             int currentMin = rightNow.get(Calendar.MINUTE);
 
             long desiredTime = (long)((preferences.getFloat(GlobalConstants.KEY_PREF_NOT_TIME, 0))*60f*60f*1000f);
-            //TODO: Find out why some need - 1 hour and others don't
+            //DONE: Find out why some need - 1 hour and others don't
             long timeToNote = (desiredTime) - (TimeUnit.HOURS.toMillis(currentHourIn24Format)) - TimeUnit.MINUTES.toMillis(currentMin);
             long fullDaysInMillis = 0;
 
             //DONE: THE RIGHT calculations
             for (int i = 0; i < Habit.habits.size() - 1; i++) {
                 if (Habit.habits.get(i) instanceof DateHabit) {
-                    //TODO: Find out why I need plus 1 day and others don't
+                    //DONE: Find out why I need plus 1 day and others don't
                     long tempDaysInMillis = ((DateHabit) Habit.habits.get(i)).getDateGoalMillis() + TimeUnit.DAYS.toMillis(1);
                     long tempFullDaysInMillis = TimeUnit.DAYS.toMillis(TimeUnit.MILLISECONDS.toDays(tempDaysInMillis));
 
@@ -666,7 +666,7 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
                         longestStreakEcoText.setText(context.getString(R.string.days_since_last_fail) + longestStreakEco + " (" + longestStreakName + ")");
                     }
                 }
-                //TODO: double check that the math here is correct.
+                //DONE: double check that the math here is correct.
                 float dateGoalL = Habit.getDateDiff(habit.getStartDate(), new Date().getTime(), ChronoUnit.DAYS);
                 float saved = (( ((EconomicHabit) habit).getGoalValue() + (dateGoalL*((EconomicHabit) habit).getAlternativePrice()) ) - (dateGoalL*((EconomicHabit) habit).getPrice()) + ((EconomicHabit) habit).getFailedTotal());
                 float pricePerDay = ( ((EconomicHabit) habit).getPrice() - ((EconomicHabit) habit).getAlternativePrice());
@@ -860,8 +860,6 @@ public class MainActivity extends AppCompatActivity implements rec_SwipeDelete.R
     }
 
     public static void refreshUi() {
-
-    //TODO: Look into bug if
         updateBottomSheet();
         final int Height = 350;
         if (!Habit.getHaveFavorite() && (favoriteRecyclerView.getLayoutParams().height != 0)) {

@@ -23,7 +23,7 @@
         android:id="@+id/toolbar" />
     -->
 
-    <!-- TODO: Do we need to have external content handling? Cleaner? -->
+    <!-- DONE: Do we need to have external content handling? Cleaner? -->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/recyclerSwipeContainer"
         android:layout_width="match_parent"

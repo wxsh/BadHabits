@@ -1,20 +1,16 @@
 package model;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.Exclude;
 
 import org.threeten.bp.temporal.ChronoUnit;
 
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-//TODO: Implement maths in class? IE: getters for progress?
+//DONe: Implement maths in class? IE: getters for progress?
 //DONE: Rename variables? ie. Price and InitialValue / GoalValue? - DO we need both or should ie. initialValue be renamed to price for alternative?
-//TODO: Clean up unused functions.
+//DONE: Clean up unused functions.
 
 public class EconomicHabit extends Habit {
     static private String currency;
