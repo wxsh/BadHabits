@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 
 import androidx.annotation.RequiresApi;
 
@@ -23,7 +24,6 @@ public class NotificationUpdate extends BroadcastReceiver {
         updateNotification(context);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void updateNotification(Context context){
         Intent resultIntent = new Intent(context, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -31,7 +31,7 @@ public class NotificationUpdate extends BroadcastReceiver {
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification notification = new Notification.Builder(context.getApplicationContext(), GlobalConstants.CHANNEL_ID)
+        Notification notification = new NotificationCompat.Builder(context.getApplicationContext(), GlobalConstants.CHANNEL_ID)
                 .setContentTitle(extras.getString("habitName"))
                 .setContentText(context.getString((R.string.notification_reached_goal)))
                 .setSmallIcon(R.drawable.ic_calendar_today)
